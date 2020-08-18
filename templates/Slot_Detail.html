@@ -1,24 +1,29 @@
 {% extends 'warehouse_base.html' %}
 {% load static %}
 {% block content %}
-<a href="{% url 'slot:slot_list' %}">Back</a>
-    <body class="text-left">
-        <form class="form-signin" action="{% url 'login' %}" method="post">
-            {% csrf_token %}
-            <div>
-                <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-                <label for="inputEmail" class="sr-only">Email address</label>
-                {{ object.workdate }}
-                {{ object.slottime }}
-                <label class="sr-only" for="inputPassword" >Password</label>
-                {{ object.deliveryref }}
-                {{ object.vehiclereg }}
-                {{ object.status }}
-                {{ object.havetime }}
-            </div>
-            <input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign in">
-            <p class="mt-5 mb-3 text-muted">&copy; 2020-2021</p>
-
-        </form>
-
+    <form class="form-group" action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <div class="text-center">
+            <h1 class="h3 mb-3 font-weight-normal">Booking Detail</h1>
+        </div>
+        <div>
+            <label class="sr-only" >Delivery Ref. :{{ object.deliveryref }} ( {{ object.status }} )</label>
+            <label class="sr-only">
+                {% if  object.havetime == 1 %}Date :
+            {{ object.workdate }}   Time: {{ object.slottime }}
+                {% else %}No Slot Time {% endif %}
+            </label>
+            <label class="sr-only" >vehicle Reg. :{{ object.deliveryref }}</label>
+            <label class="sr-only" >status. :{{ object.progress }}</label>
+            <label class="sr-only" >Operator: :{{ object.op }}</label>
+            <label class="sr-only" >OP datetime :{{ object.op_datetime }}</label>
+            <label class="sr-only" >status. :{{ object.progress }}</label>
+            <label class="sr-only" >Haulier :{{ object.hailerid }}</label>
+        </div>
+        <!-- if request.user_usernaem = object.op then can do delete -->
+        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Delete">
+    </form>
+    <a href="{% url 'slot:slot_list' %}">Back</a>
+    <!-- if is manager or warehouse  then can do update status -->
+    <a href="#">Update Status</a>
 {% endblock %}
