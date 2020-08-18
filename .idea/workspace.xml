@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="7f24e8fe-943a-4f25-be3a-8c127a10d022" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/warehouse.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/warehouse.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Readme.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/manage.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/slot/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/slot/admin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/slot/apps.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/slot/forms.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/slot/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/slot/migrations/0002_auto_20200816_1734.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/slot/migrations/0003_auto_20200816_1741.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/slot/migrations/0004_haulier_is_use.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/slot/migrations/0005_auto_20200817_1616.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/slot/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/slot/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/slot/tests.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/slot/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/slot/views.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/assets/js/holder.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/assets/js/holder.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/assets/js/ie-emulation-modes-warning.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/assets/js/ie10-viewport-bug-workaround.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/assets/js/jquery.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/assets/js/popper.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/bootstrap/css/bootstrap.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/bootstrap/css/bootstrap.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/bootstrap/fonts/glyphicons-halflings-regular.eot" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/bootstrap/fonts/glyphicons-halflings-regular.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/bootstrap/fonts/glyphicons-halflings-regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/bootstrap/fonts/glyphicons-halflings-regular.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/bootstrap/fonts/glyphicons-halflings-regular.woff2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/bootstrap/js/bootstrap.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/bootstrap/js/bootstrap.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/bootstrap/js/jquery.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/bootstrap/js/npm.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/bootstrap/js/popper.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/bootstrap/js/scripts.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/animate.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/aui.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/aui_iconfont.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/login.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/lq.datetimepick.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/mooc.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/muke/base.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/muke/common-less.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/muke/course/common-less.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/muke/course/course-comment.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/muke/course/learn-less.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/reset.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/sign-in.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/images/default_person.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/images/top_down.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/images/uklogo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/AdrInputPopDiv.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/area.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/autocomplete-init.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/bootstrap.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/comment.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/deco-comment.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/deco-common.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/deco-user.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/fastclick.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/fliplightbox.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/fold.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/jQuery.artTxtCount.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/jcarousel.connected-carousels.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/jquery-migrate-1.2.1.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/jquery-powerFloat-min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/jquery-xmenu.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/jquery.autocomplete.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/jquery.cookie.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/jquery.formset.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/jquery.imagezoom.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/jquery.jcarousel.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/jquery.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/jquery.uploadify.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/login.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/lq.datetimepick.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/datePicker/mobiscroll.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/datePicker/mobiscroll.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/jquery.flexslider-min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/jquery.raty.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/jquery.scrollLoading.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/jquery.timer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/jquery.upload.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/laydate/laydate.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/laydate/need/laydate.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/laydate/skins/default/icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/laydate/skins/default/laydate.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/layer/extend/layer.ext.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/layer/layer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/layer/skin/default/icon-ext.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/layer/skin/default/icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/layer/skin/default/loading-0.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/layer/skin/default/loading-1.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/layer/skin/default/loading-2.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/layer/skin/layer.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/layer/skin/layer.ext.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/queryCity/css/cityLayout.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/queryCity/images/bg_mc_0113_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/queryCity/images/bg_mc_0113_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/queryCity/images/bg_mc_0113_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/queryCity/images/bg_mc_0113_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/queryCity/images/bg_mc_0130_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/queryCity/images/bg_mc_0130_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/queryCity/images/ts-indexcity.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/queryCity/js/public.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/queryCity/js/public2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/queryCity/js/queryAllAreas.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/queryCity/js/queryAllProvinces.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/queryCity/js/queryCities.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/plugins/upload.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/select.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/selectUi.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/unslider.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/validate.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/validateDialog.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/wechat.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/SlotList.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/Slot_Detail.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/Slot_Save_Error.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/Slot_Save_Success.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/forgetpwd.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/modifypwd_success.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/password_reset.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/register.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/register_mail_success.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/send_resetPwd_success.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/sign-in.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/warehouse_base.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_password.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/admin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/apps.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/forms.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/migrations/0002_auto_20200817_1616.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/migrations/0003_auto_20200818_1003.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/tests.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/views.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/email_send.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/warehouse" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1gGsxihrkRMEjvsPMs9CH1ScXry" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../GitHub/warehouse" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7f24e8fe-943a-4f25-be3a-8c127a10d022" name="Default Changelist" comment="" />
+      <created>1597752511260</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1597752511260</updated>
+      <workItem from="1597752513963" duration="31000" />
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1597752542118">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597752542118" />
+  </component>
+</project>
