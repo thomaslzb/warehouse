@@ -5,7 +5,7 @@
 {% block search %}
 <!--  搜索框 -->
 <div class="row">
-    <table class="table">
+    <table class="table table-hover">
         <td>&nbsp;&nbsp;User: <a href ="">{{ request.user }}</a>&nbsp-&nbsp<a href="{% url 'logout' %}">Logout</a></td>
         <td>
             <div>
@@ -124,6 +124,7 @@
             <tr>
                 <td>06:00</td>
                 <td>
+				    <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Hooray!">Bottom</a></li>
                     {% for slottime in all_slots0600 %}
                         <!-- <a href ="{% url 'slot:slot_Detail' slottime.deliveryref %}"> -->
                         <a href ="#">
