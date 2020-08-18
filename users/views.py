@@ -61,8 +61,8 @@ class LoginView(View):
 
             filter_result = User.objects.filter(email__exact=InputEmail)
             if filter_result:
-                username = filter_result[0].username
-            user = authenticate(username=username, password=pass_word)
+                get_username = filter_result[0].username
+            user = authenticate(username=get_username, password=pass_word)
             if user is not None:
                 if user.is_active:
                     login(request, user)
