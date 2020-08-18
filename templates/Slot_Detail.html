@@ -1,0 +1,24 @@
+{% extends 'warehouse_base.html' %}
+{% load static %}
+{% block content %}
+<a href="{% url 'slot:slot_list' %}">Back</a>
+    <body class="text-left">
+        <form class="form-signin" action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            <div>
+                <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+                <label for="inputEmail" class="sr-only">Email address</label>
+                {{ object.workdate }}
+                {{ object.slottime }}
+                <label class="sr-only" for="inputPassword" >Password</label>
+                {{ object.deliveryref }}
+                {{ object.vehiclereg }}
+                {{ object.status }}
+                {{ object.havetime }}
+            </div>
+            <input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign in">
+            <p class="mt-5 mb-3 text-muted">&copy; 2020-2021</p>
+
+        </form>
+
+{% endblock %}
