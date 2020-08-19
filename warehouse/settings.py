@@ -149,4 +149,4 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "thomaslzbuk@gmail.com"
 EMAIL_FROM = "thomaslzbuk@gmail.com"
-EMAIL_HOST_PASSWORD = "Lzb646767="
+EMAIL_HOST_PASSWORD = ""
