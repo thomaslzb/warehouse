@@ -28,3 +28,7 @@ class SoltTimeForm(forms.ModelForm):
     """
 
 
+class SoltTimeUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Warehouse
+        exclude = ["progress", "op_user", "position", "status", "op_datetime", "hailerid", "havetime"]

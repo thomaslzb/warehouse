@@ -2,8 +2,8 @@ import datetime
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
 from django.views import View
-from django.views.generic import DetailView
-from .forms import SoltTimeForm
+from django.views.generic import DetailView, UpdateView
+from .forms import SoltTimeForm, SoltTimeUpdateForm
 from .models import Warehouse, Haulier, WarehouseProfile, FixWeekday
 from users.models import UserProfile
 
@@ -409,3 +409,18 @@ class SoltDetailView(DetailView):
         object = super().get_object()
 
         return object
+
+
+# https://blog.csdn.net/tmpbook/article/details/43191177
+class SoltUpdateView(UpdateView):
+    model = Warehouse
+    template_name = 'Slot_Save_Success.html'
+    form_class = SoltTimeUpdateForm
+
+    # def get_form_kwargs(self):
+    #     kwargs = super(SoltUpdateView, self).get_form_kwargs()
+    #     kwargs.update({
+    #         'deliveryref': self.deliveryref
+    #     })
+    #     return kwargs
+

@@ -11,7 +11,7 @@
 """
 
 from django.urls import path
-from .views import SoltListView,SoltDetailView
+from .views import SoltListView, SoltDetailView, SoltUpdateView
 from django.contrib.auth.decorators import login_required
 
 
@@ -20,6 +20,7 @@ app_name = 'slot'
 urlpatterns = [
     path('', login_required(SoltListView.as_view()), name='slot_list'),
     path('deliveryRef=<pk>', login_required(SoltDetailView.as_view()), name='slot_Detail'),
+    path('<pk>/Update', login_required(SoltUpdateView.as_view()), name='slot_Update'),
     # re_path(r'^slot/(?P<pk>\d+)/slot_profile/$', views.profile, name='slot_profile'),
     # re_path(r'^slot/(?P<pk>\d+)/slot_profile/update/$', views.profile_update, name='slot_update'),
     # re_path(r'^slot/(?P<pk>\d+)/slot_change/$', views.pwd_change, name='slot_change'),

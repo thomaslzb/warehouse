@@ -32,8 +32,12 @@
           <tr>
             <td>DateTime</td>
             <td>
-                {{ object.workdate|date:"j-m-Y" }}&nbsp;
-                {{ object.slottime|time:"H:i"}}
+                {% if object.havetime == 1 %}
+                    {{ object.workdate|date:"j-m-Y" }}&nbsp;
+                    {{ object.slottime|time:"H:i"}}
+                {% else %}
+                    <span class="alert-danger well-sm"> Haven't slot time</span>
+                {% endif %}
             </td>
           </tr>
           <tr>
@@ -68,13 +72,25 @@
       </table>
         </div>
     <div>
+        <!-- 如何是状态还是Booked, 则可以更改时间或做删除操作 -->
         {% if object.progress == 1 %}
-            <form role="form" action="{% url 'slot:slot_list' %}" method="post" >
-                <div class="form-group col-sm-1">
+            <form role="form" action="{% url 'slot:slot_Update'  object.deliveryref %}" method="post" >
+                {% csrf_token %}
+                <tr>
+                <tr class="form-group col-sm-2">
+                <div class="form-group">
+                    <input type="checkbox" class="form-check-input" name="haveTime" value="1" id="NotHaveSlotTime">
+                    <label class="form-check-label" for="NotHaveSlotTime">&nbspHaven't Slot Time</label>
+                </div>
+                </tr>
+                <tr>
+                <div class="form-group col-sm-2">
+                <div class="form-group">
                     <label>&nbsp;Date</label>
                     <span >
                         <input class="form-control" name="workdate" id="PickingDate" max="2025-12-31" min="2020-08-01" value="{{ object.workdate|date:"d-m-Y" }}">
                     </span>
+                </div>
                 </div>
                 <div class="form-group col-sm-1">
                     <label>&nbsp;Time</label>
@@ -82,8 +98,10 @@
                         <input class="form-control" name="slottime" id="PickingTime" max="20:30" min="06:00"   value = "{{ object.slottime|time:"H:i"}}" required>
                     </span>
                 </div>
-                <br>
-                <div class="form-group col-sm-1">
+                    </tr>
+                <tr>
+                <div class="form-group col-sm-2">
+                    <label>&nbsp;Status</label>
                     <select name = "progress" class="form-control">
                         <option>Booked</option>
                         <option>Arrived</option>
@@ -98,14 +116,17 @@
                         <input type="text" class="form-control" id="remark" value="{{ object.remark }}">
                     </label>
                 </div>
-                {% if object.progress == 1 %}
-                    <a href="#" class="form-inline btn btn-danger" role="button">Delete</a>
-                {% endif %}
-                <!-- if request.user_usernaem = object.op then can do delete -->
-                <input class="form-inline btn btn-info" type="submit" value="Update">
+                    </tr>
+                <div><br></div>
+                <div class="panel-footer text-left">
+                  <div class="panel-body">
+                    <span class="text-left"><input class="form-inline btn btn-info lef" type="submit" value="Update"></span>
+                    <span class="text-right"><a href="#" class="pull-right btn btn-danger" role="button">Delete</a></span>
+
+                    </div>
+                </div>
             </form>
-                    {% endif %}
-          </tr>
+        {% endif %}
     </div>
     </div>
     <a href="{% url 'slot:slot_list' %}">Let me Back</a>
