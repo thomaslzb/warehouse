@@ -11,7 +11,7 @@ class UserProfile(models.Model):
     op_position = models.CharField('Op_position', max_length=2, blank=True)
     telephone = models.CharField('Telephone', max_length=100, blank=True)
     mod_date = models.DateTimeField('Last modified', auto_now=True)
-    staff_role = models.CharField('Staff_row', max_length=10, blank=True)
+    staff_role = models.CharField('Staff_role', max_length=10, blank=True)
 
     class Meta:
         verbose_name = 'User Profile'

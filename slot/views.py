@@ -2,7 +2,7 @@ import datetime
 from django.shortcuts import render, reverse
 from django.http import HttpResponseRedirect
 from django.views import View
-from django.views.generic import DateDetailView
+from django.views.generic import DetailView
 from .forms import SoltTimeForm
 from .models import Warehouse, Haulier, WarehouseProfile, FixWeekday
 from users.models import UserProfile
@@ -12,6 +12,7 @@ from users.models import UserProfile
 class SoltListView(View):
     def get(self, request):
         search_date = request.GET.get("searching_date")
+
         if search_date is None or search_date == "":
             search_date = datetime.date.today()
 
@@ -396,11 +397,16 @@ class SoltListView(View):
                            "ErrorMsg": strError})
 
 
-class SoltDetailView(DateDetailView):
-    model = Warehouse
+class SoltDetailView(DetailView):
+    queryset = Warehouse.objects.all()
     template_name = "Slot_Detail.html"
-    pk_url_kwarg = "deliveryref"
+    delivery_field = "deliveryref"
 
-    def get(self, request, *args, **kwargs):
-        context = super(SoltDetailView, self).get_context_data(**kwargs)
-        return context
+    def get_object(self):
+        # get_object() 默认时返回通过 pk 或 slug 筛选出的对象（该视图需要操作的对象）
+        # Call the superclass
+        object = super().get_object()
+        # Record the last accessed date
+         # 当有人访问该页面时，更新最后访问时间
+        # Return the object
+        return object

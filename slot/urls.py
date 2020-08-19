@@ -19,7 +19,7 @@ app_name = 'slot'
 
 urlpatterns = [
     path('', login_required(SoltListView.as_view()), name='slot_list'),
-    path('<pk>/', login_required(SoltDetailView.as_view()), name='slot_Detail'),
+    path('deliveryRef=<pk>', login_required(SoltDetailView.as_view()), name='slot_Detail'),
     # re_path(r'^slot/(?P<pk>\d+)/slot_profile/$', views.profile, name='slot_profile'),
     # re_path(r'^slot/(?P<pk>\d+)/slot_profile/update/$', views.profile_update, name='slot_update'),
     # re_path(r'^slot/(?P<pk>\d+)/slot_change/$', views.pwd_change, name='slot_change'),
