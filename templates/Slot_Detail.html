@@ -76,8 +76,7 @@
         {% if object.progress == 1 %}
             <form role="form" action="{% url 'slot:slot_Update'  object.deliveryref %}" method="post" >
                 {% csrf_token %}
-                <tr>
-                <tr class="form-group col-sm-2">
+                  <tr class="form-group col-sm-2">
                 <div class="form-group">
                     <input type="checkbox" class="form-check-input" name="haveTime" value="1" id="NotHaveSlotTime">
                     <label class="form-check-label" for="NotHaveSlotTime">&nbspHaven't Slot Time</label>
