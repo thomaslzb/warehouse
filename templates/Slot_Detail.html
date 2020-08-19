@@ -4,7 +4,7 @@
     <div class="container">
       <h2>Delivery Reference Detail</h2>
         <div>
-      <table class="table table-condensed">
+            <table class="table table-condensed">
         <tbody>
           <tr>
             <td class="col-lg-2">Delivery Ref.</td>
@@ -71,34 +71,24 @@
         </tbody>
       </table>
         </div>
-    <div>
+    </div>
+    <div class="container">
         <!-- 如何是状态还是Booked, 则可以更改时间或做删除操作 -->
         {% if object.progress == 1 %}
-            <form role="form" action="{% url 'slot:slot_Update'  object.deliveryref %}" method="post" >
+            <form action="{% url 'slot:slot_Update'  object.deliveryref %}" method="post" >
                 {% csrf_token %}
-                  <tr class="form-group col-sm-2">
-                <div class="form-group">
+                <div class="form-group" >
                     <input type="checkbox" class="form-check-input" name="haveTime" value="1" id="NotHaveSlotTime">
                     <label class="form-check-label" for="NotHaveSlotTime">&nbspHaven't Slot Time</label>
                 </div>
-                </tr>
-                <tr>
                 <div class="form-group col-sm-2">
-                <div class="form-group">
-                    <label>&nbsp;Date</label>
-                    <span >
+                        <label>&nbsp;Date</label>
                         <input class="form-control" name="workdate" id="PickingDate" max="2025-12-31" min="2020-08-01" value="{{ object.workdate|date:"d-m-Y" }}">
-                    </span>
-                </div>
                 </div>
                 <div class="form-group col-sm-1">
                     <label>&nbsp;Time</label>
-                    <span class="controls input-append date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" >
                         <input class="form-control" name="slottime" id="PickingTime" max="20:30" min="06:00"   value = "{{ object.slottime|time:"H:i"}}" required>
-                    </span>
                 </div>
-                    </tr>
-                <tr>
                 <div class="form-group col-sm-2">
                     <label>&nbsp;Status</label>
                     <select name = "progress" class="form-control">
@@ -109,25 +99,19 @@
                         <option>Abnormal</option>
                     </select>
                 </div>
-                <div class="form-inline">
-                    <label class="form-group" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Remark :
-                        &nbsp;&nbsp;
-                        <input type="text" class="form-control" id="remark" value="{{ object.remark }}">
-                    </label>
+                <div class="form-group">
+                    <label class="form-group" >Remark :</label>
+                    <input type="text" class="form-control" id="remark" value="{{ object.remark }}">
                 </div>
-                    </tr>
-                <div><br></div>
                 <div class="panel-footer text-left">
                   <div class="panel-body">
-                    <span class="text-left"><input class="form-inline btn btn-info lef" type="submit" value="Update"></span>
-                    <span class="text-right"><a href="#" class="pull-right btn btn-danger" role="button">Delete</a></span>
-
+                    <a href="{% url 'slot:slot_list' %}" class="btn btn-default" role="button">Back</a>
+                    <input class="form-inline btn btn-info" type="submit" value="Update">
+                    <a href="#" class="pull-right btn btn-danger" role="button">Delete</a>
                     </div>
                 </div>
             </form>
         {% endif %}
     </div>
-    </div>
-    <a href="{% url 'slot:slot_list' %}">Let me Back</a>
 {% endblock %}
 

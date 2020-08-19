@@ -31,7 +31,7 @@
     <!--  主页面 -->
     <div class="row">
         <!-- 左侧的输入框 -->
-        <div class="col-md-2">
+        <div class="col-md-3">
             <form role="form" action="{% url 'slot:slot_list' %}" method="post" >
                 {% csrf_token %}
                 <div class="form-group" >
@@ -108,7 +108,7 @@
                 <thead>
                     <tr>
                         <th>
-                            <p class="text-muted ">{{ search_date }}</P>
+                            <p class="text-muted ">{{ search_date|date:"d M" }}</P>
                         </th>
                         <th>
                             <p><span class="text-primary alert-info well-sm"> Inbound</span>
@@ -122,8 +122,8 @@
                 <!-- 列出当前时间的所有 slot -->
                 <tbody>
                     <tr>
-                        <td>06:00</td>
-                        <td >
+                        <td class="col-md-2">06:00</td>
+                        <td class="col-md-6>
                             {% for slottime in all_slots0600 %}
                                 {% if slottime.status == 'INBOUND' %}
                                     <span class="alert-info well-sm">
@@ -151,7 +151,7 @@
                                 </font>
                             {% endfor %}
                         </td>
-                        <td>
+                        <td class="col-md-2">
                             {% if all_slots0600.count >= max_slot_number %}
                                 <font color="Red">Full</font>
                             {% else %}
@@ -809,7 +809,7 @@
                 <thead>
                     <tr>
                         <th>
-                            <p class="text-muted">{{ search_date }}</P>
+                            <p class="text-muted">{{ search_date|date:"d-m-Y" }}</P>
                         </th>
                         <th>
                             <p class="text-muted">Inbound</P>
@@ -841,7 +841,7 @@
                 <thead>
                     <tr>
                         <th>
-                            <p class="text-muted">{{ search_date }}</P>
+                            <p class="text-muted">{{ search_date|date:"d-m-Y" }}</P>
                         </th>
                         <th>
                             <p class="text-muted">Outbound</P>
