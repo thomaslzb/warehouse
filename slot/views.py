@@ -33,6 +33,7 @@ class SoltListView(View):
                                                  slottime__hour=6,
                                                  slottime__minute=0,
                                                  ).order_by("status")
+
         all_slots0630 = Warehouse.objects.filter(workdate=search_date,
                                                  havetime__exact=1,
                                                  slottime__hour=6,
@@ -406,7 +407,5 @@ class SoltDetailView(DetailView):
         # get_object() 默认时返回通过 pk 或 slug 筛选出的对象（该视图需要操作的对象）
         # Call the superclass
         object = super().get_object()
-        # Record the last accessed date
-         # 当有人访问该页面时，更新最后访问时间
-        # Return the object
+
         return object

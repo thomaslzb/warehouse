@@ -1,33 +1,113 @@
 {% extends 'warehouse_base.html' %}
 {% load static %}
 {% block content %}
-<<<<<<< HEAD
-<a href="{% url 'slot:slot_list' %}">Back</a>
-=======
->>>>>>> 8cc0fd28a88f647dbf5b7f4dd6a4547e5cec2103
-    <form class="form-group" action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-        <div class="text-center">
-            <h1 class="h3 mb-3 font-weight-normal">Booking Detail</h1>
-        </div>
+    <div class="container">
+      <h2>Delivery Reference Detail</h2>
         <div>
-            <label class="sr-only" >Delivery Ref. :{{ object.deliveryref }} ( {{ object.status }} )</label>
-            <label class="sr-only">
-                {% if  object.havetime == 1 %}Date :
-            {{ object.workdate }}   Time: {{ object.slottime }}
-                {% else %}No Slot Time {% endif %}
-            </label>
-            <label class="sr-only" >vehicle Reg. :{{ object.deliveryref }}</label>
-            <label class="sr-only" >status. :{{ object.progress }}</label>
-            <label class="sr-only" >Operator: :{{ object.op }}</label>
-            <label class="sr-only" >OP datetime :{{ object.op_datetime }}</label>
-            <label class="sr-only" >status. :{{ object.progress }}</label>
-            <label class="sr-only" >Haulier :{{ object.hailerid }}</label>
+      <table class="table table-condensed">
+        <tbody>
+          <tr>
+            <td class="col-lg-2">Delivery Ref.</td>
+            <td>{{ object.deliveryref }}</td>
+          <tr>
+            <td>IN/OUTBOUND</td>
+            <td>{{ object.status }}</td>
+          </tr>
+          <tr>
+            <td>Vehicle Reg.</td>
+            <td>{{ object.vehiclereg }}</td>
+          </tr>
+          <tr>
+            <td>Haulier</td>
+            <td>{{ object.hailerid }}</td>
+          </tr>
+          <tr>
+            <td>Operator</td>
+            <td>{{ object.op_user }}
+                &nbsp;&nbsp;{{ object.op_datetime|date:"j-m-Y H:i" }}
+                &nbsp;&nbsp;Tel: {{ request.profile.tel }}
+                &nbsp;&nbsp;Email: {{ request.user.email }}
+            </td>
+          </tr>
+          <tr>
+            <td>DateTime</td>
+            <td>
+                {{ object.workdate|date:"j-m-Y" }}&nbsp;
+                {{ object.slottime|time:"H:i"}}
+            </td>
+          </tr>
+          <tr>
+            <td>Status</td>
+            <td>
+             {% if object.progress == 1 %}
+                <span>Booked</span>
+             {% endif %}
+             {% if object.progress == 2 %}
+                <span class="alert-danger well-sm">Abnormal</span>
+             {% endif %}
+             {% if object.progress == 3 %}
+                <span class="alert-info well-sm">Arrived</span>
+             {% endif %}
+             {% if object.progress == 4 %}
+                <span class="alert-warning well-sm">Loading</span>
+             {% endif %}
+             {% if object.progress == 5 %}
+                <span class="alert-success well-sm">Finished</span>
+                {% endif %}
+            <td>
+          </tr>
+          <tr>
+            <td>Remark</td>
+             <td>{{ object.remark }}</td>
+          </tr>
+          <tr>
+              <td></td>
+              <td></td>
+          </tr>
+        </tbody>
+      </table>
         </div>
-        <!-- if request.user_usernaem = object.op then can do delete -->
-        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Delete">
-    </form>
-    <a href="{% url 'slot:slot_list' %}">Back</a>
-    <!-- if is manager or warehouse  then can do update status -->
-    <a href="#">Update Status</a>
+    <div>
+        {% if object.progress == 1 %}
+            <form role="form" action="{% url 'slot:slot_list' %}" method="post" >
+                <div class="form-group col-sm-1">
+                    <label>&nbsp;Date</label>
+                    <span >
+                        <input class="form-control" name="workdate" id="PickingDate" max="2025-12-31" min="2020-08-01" value="{{ object.workdate|date:"d-m-Y" }}">
+                    </span>
+                </div>
+                <div class="form-group col-sm-1">
+                    <label>&nbsp;Time</label>
+                    <span class="controls input-append date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" >
+                        <input class="form-control" name="slottime" id="PickingTime" max="20:30" min="06:00"   value = "{{ object.slottime|time:"H:i"}}" required>
+                    </span>
+                </div>
+                <br>
+                <div class="form-group col-sm-1">
+                    <select name = "progress" class="form-control">
+                        <option>Booked</option>
+                        <option>Arrived</option>
+                        <option>Loading</option>
+                        <option>Finished</option>
+                        <option>Abnormal</option>
+                    </select>
+                </div>
+                <div class="form-inline">
+                    <label class="form-group" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Remark :
+                        &nbsp;&nbsp;
+                        <input type="text" class="form-control" id="remark" value="{{ object.remark }}">
+                    </label>
+                </div>
+                {% if object.progress == 1 %}
+                    <a href="#" class="form-inline btn btn-danger" role="button">Delete</a>
+                {% endif %}
+                <!-- if request.user_usernaem = object.op then can do delete -->
+                <input class="form-inline btn btn-info" type="submit" value="Update">
+            </form>
+                    {% endif %}
+          </tr>
+    </div>
+    </div>
+    <a href="{% url 'slot:slot_list' %}">Let me Back</a>
 {% endblock %}
+

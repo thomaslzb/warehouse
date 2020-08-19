@@ -6,11 +6,11 @@
 <!--  搜索框 -->
 <div class="row">
     <table class="table">
-        <td>&nbsp;&nbsp;User: <a href ="">{{ request.user }}</a>&nbsp-&nbsp<a href="{% url 'logout' %}">Logout</a></td>
+        <td>&nbsp;&nbsp;User: <a href ="">{{ request.user }}</a>&nbsp-&nbsp<a href="{% url 'users:logout' %}">Logout</a></td>
         <td>
             <div>
                 <!-- Searching date -->
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <form role="form" action="{% url 'slot:slot_list' %}" method="get" >
                         <div class="form-group">
                             <div class="controls input-append date form_date" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
@@ -71,15 +71,15 @@
 
                 <div class="form-group">
                     <label class="control-label">Date</label>
-                    <div class="controls input-append date form_date" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                    <span class="controls input-append date form_date" data-date-format="dd MM yyyy" data-link-field="dtp_input2" >
                         <input type="date" name="workdate" id="PickingDate" max="3000-12-31" min="2020-08-01" class="form-control" value="{{ search_date }}">
-                    </div>
+                    </span>
                  </div>
                  <div class="form-group">
                     <label class="control-label">Slot Time</label>
-                    <div class="controls input-append date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                    <span class="controls input-append date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" >
                         <input type="Time" name="slottime" id="PickingTime" max="20:30" min="06:00"  class="form-control" value = "08:00" required>
-                    </div>
+                    </span>
                  </div>
             </form>
             <!-- 删除按钮 -->
@@ -108,11 +108,11 @@
                 <thead>
                     <tr>
                         <th>
-                            <p class="text-muted">{{ search_date }}</P>
+                            <p class="text-muted ">{{ search_date }}</P>
                         </th>
                         <th>
-                            <p class="text-primary"> <font color="Green">Inbound / </font>
-                            <font color="Blown">Outbound</font></p>
+                            <p><span class="text-primary alert-info well-sm"> Inbound</span>
+                            <span class="text-primary alert-success well-sm"> Outbound </span></p>
                         </th>
                         <th>
                             <p class="text-muted">Status</p>
@@ -123,18 +123,32 @@
                 <tbody>
                     <tr>
                         <td>06:00</td>
-                        <td>
+                        <td >
                             {% for slottime in all_slots0600 %}
-                                <!-- <a href ="{% url 'slot:slot_Detail' slottime.deliveryref %}"> -->
-                                <a href ="#">
                                 {% if slottime.status == 'INBOUND' %}
-
-                                    <font color="Green">
+                                    <span class="alert-info well-sm">
                                 {% else %}
-                                    <font color="Blown">
+                                    <span class="alert-success well-sm">
                                 {% endif %}
-                                {{ slottime.deliveryref }}&nbsp;&nbsp;
-                                </font></a>
+                                <a href ="{% url 'slot:slot_Detail' slottime.deliveryref %}">
+                                    {% if slottime.progress == 1 %}
+                                        <span data-toggle="popover" title="{{ slottime.op_user }}">{{ slottime.deliveryref }}-Booked</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 2 %}
+                                        <span data-toggle="popover" title="{{ slottime.op_user }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 3 %}
+                                        <span data-toggle="popover" title="{{ slottime.op_user }}">{{ slottime.deliveryref }}-Arrived</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 4 %}
+                                        <span data-toggle="popover" title="{{ slottime.op_user }}">{{ slottime.deliveryref }}-Loading</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 5 %}
+                                        <span data-toggle="popover" title="{{ slottime.op_user }}">{{ slottime.deliveryref }}-Finished</span>
+                                    {% endif %}
+                                </a>
+                                </span>
+                                </font>
                             {% endfor %}
                         </td>
                         <td>
@@ -221,7 +235,9 @@
                                 {% else %}
                                     <font color="Blown">
                                 {% endif %}
-                                {{ slottime.deliveryref }}&nbsp;&nbsp;
+                                    {% if slottime.progress == 1 %}
+                                        {{ slottime.deliveryref }}-Booked
+                                    {% endif %}
                                 </font></a>
                             {% endfor %}
                         </td>

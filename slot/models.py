@@ -62,7 +62,7 @@ class Warehouse(models.Model):
     position = models.IntegerField(default=1, null=False)
     op_user = models.CharField(max_length=20, null=False, default="")
     op_datetime = models.DateTimeField(auto_now=True, blank=True)
-
+    remark = models.CharField(max_length=200, null=True, blank=True, default="")
     class Meta:
         db_table = "warehouse"
 

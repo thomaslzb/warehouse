@@ -67,7 +67,7 @@ class LoginView(View):
                 if user.is_active:
                     login(request, user)
                     # return render(request, "slotList.html", {"username": username})
-                    return redirect("slot/")
+                    return redirect("/slot")
                 else:
                     return render(request, "sign-in.html", {"form": "User is Activated!"})
             else:
