@@ -38,7 +38,7 @@ class WarehouseProfile(models.Model):
 
 
 class FixWeekday(models.Model):
-    hailer = models.ForeignKey('Haulier', to_field='id', on_delete=models.CASCADE, related_name='list_haulier')
+    hailer = models.ForeignKey('Haulier', to_field='id', on_delete=models.CASCADE,)
     weekday = models.IntegerField(default=1, )
     time = models.TimeField(blank=True, null=False, )
     status = models.PositiveIntegerField(default=1)
@@ -66,6 +66,4 @@ class Warehouse(models.Model):
     class Meta:
         db_table = "warehouse"
 
-    def __str__(self):
-        return self.deliveryref
 

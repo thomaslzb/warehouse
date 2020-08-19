@@ -16,8 +16,9 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls import url
 from django.contrib.auth import logout
-from django.views.generic.base import TemplateView
+from django.views.generic import TemplateView
 from django.contrib import admin
+from django.views.generic.base import TemplateView
 from django.urls import path, include, re_path
 from users.views import LoginView, LogoutView
 
@@ -26,9 +27,8 @@ urlpatterns = [
     path('', LoginView.as_view(), name="login"),
     path('logout/', LogoutView.as_view(), name="logout"),
     path('slot/', include('slot.urls')),
-    # path('test/', TemplateView.as_view(template_name="Slot_Detail.html"), name="test"),
+    path('test/', TemplateView.as_view(template_name="Slot_Detail.html"), name="test"),
     path('admin/', admin.site.urls),
     # path("user/", include('users.urls'))
-
 ]
 

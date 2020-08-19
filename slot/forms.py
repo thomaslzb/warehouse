@@ -17,7 +17,6 @@ class SoltTimeForm(forms.ModelForm):
     class Meta:
         model = Warehouse
         exclude = ["progress", "op_user", "position", "status", "op_datetime", "hailerid", "havetime"]
-
     """
     def clean_deliveryref(self):
         deliveryref = self.cleaned_data.get('deliveryref')
@@ -27,6 +26,5 @@ class SoltTimeForm(forms.ModelForm):
             raise forms.ValidationError("This Delivery Ref. is exist, please check it.")
         return deliveryref
     """
-
 
 

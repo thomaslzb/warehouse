@@ -5,7 +5,7 @@
 {% block search %}
 <!--  搜索框 -->
 <div class="row">
-    <table class="table table-hover">
+    <table class="table">
         <td>&nbsp;&nbsp;User: <a href ="">{{ request.user }}</a>&nbsp-&nbsp<a href="{% url 'logout' %}">Logout</a></td>
         <td>
             <div>
@@ -27,8 +27,8 @@
     </table>
 </div>
 {% endblock %}
-<!--  主页面 -->
 {% block content %}
+    <!--  主页面 -->
     <div class="row">
         <!-- 左侧的输入框 -->
         <div class="col-md-2">
@@ -36,8 +36,8 @@
                 {% csrf_token %}
                 <div class="form-group" >
                     <label class="form-inline">
-                        Hailer :
-                        <select name = "haulier" class="form-control">
+                        Haulier :
+                        <select name = "hailer" class="form-control">
                             {% for hailer in all_Hailers %}
                                 <option>{{ hailer.code }}</option>
                             {% endfor %}
@@ -102,7 +102,6 @@
             </div>
             -->
         </div>
-<<<<<<< HEAD
         <!-- 列出所有有时间的 slot -->
         <div class="col-md-5">
             <table class="table">
@@ -127,40 +126,8 @@
                         <td>
                             {% for slottime in all_slots0600 %}
                                 <!-- <a href ="{% url 'slot:slot_Detail' slottime.deliveryref %}"> -->
-                                <a href ="{% url 'slot:slot_Detail' slottime.deliveryref %}" name="deliveryref">
+                                <a href ="#">
                                 {% if slottime.status == 'INBOUND' %}
-=======
-    </div>
-    -->
-</div>
-<!-- 列出所有有时间的 slot -->
-<div class="col-md-5">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    <p class="text-muted">{{ search_date }}</P>
-                </th>
-                <th>
-                    <p class="text-primary"> <font color="Green">Inbound / </font>
-                    <font color="Blown">Outbound</font></p>
-                </th>
-                <th>
-                    <p class="text-muted">Status</p>
-                </th>
-            </tr>
-        </thead>
-        <!-- 列出当前时间的所有 slot -->
-        <tbody>
-            <tr>
-                <td>06:00</td>
-                <td>
-				    <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Hooray!">Bottom</a></li>
-                    {% for slottime in all_slots0600 %}
-                        <!-- <a href ="{% url 'slot:slot_Detail' slottime.deliveryref %}"> -->
-                        <a href ="#">
-                        {% if slottime.status == 'INBOUND' %}
->>>>>>> 8cc0fd28a88f647dbf5b7f4dd6a4547e5cec2103
 
                                     <font color="Green">
                                 {% else %}
