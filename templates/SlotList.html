@@ -871,8 +871,13 @@
     </div>
 {% endblock %}
 {% block  myscript %}
-    <script>
 
+    <script>
+         var datevalue = {{ search_date }}
+         document.getElementById("SearchingDate").innerHTML = datevalue
+    </script>
+
+    <script>
     $(document).ready(function () {
         var time = new Date();
         var day = ("0" + time.getDate()).slice(-2);
