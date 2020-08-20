@@ -1,0 +1,9 @@
+{% extends 'warehouse_base.html' %}
+{% load static %}
+{% block content %}
+<form action="{% url 'slot:slot_delete' object.id %}  "  method="post">
+    {% csrf_token %}
+    <p>Are you sure you want to delete "{{ object }}"?</p>
+    <input type="submit" value="Confirm">
+</form>
+{% endblock %}

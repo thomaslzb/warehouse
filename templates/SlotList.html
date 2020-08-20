@@ -108,7 +108,7 @@
                 <thead>
                     <tr>
                         <th>
-                            <p class="text-muted ">{{ search_date }}</P>
+                            <p class="text-muted ">{{ search_date|date:"d M" }}</P>
                         </th>
                         <th>
                             <p><span class="text-primary alert-info well-sm"> Inbound</span>
@@ -123,28 +123,28 @@
                 <tbody>
                     <tr>
                         <td>06:00</td>
-                        <td >
+                        <td>
                             {% for slottime in all_slots0600 %}
                                 {% if slottime.status == 'INBOUND' %}
                                     <span class="alert-info well-sm">
                                 {% else %}
                                     <span class="alert-success well-sm">
                                 {% endif %}
-                                <a href ="{% url 'slot:slot_Detail' slottime.deliveryref %}">
+                                <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                     {% if slottime.progress == 1 %}
-                                        <span data-toggle="popover" title="{{ slottime.op_user }}">{{ slottime.deliveryref }}-Booked</span>
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Booked</span>
                                     {% endif %}
                                     {% if slottime.progress == 2 %}
-                                        <span data-toggle="popover" title="{{ slottime.op_user }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Abnormal</span>
                                     {% endif %}
                                     {% if slottime.progress == 3 %}
-                                        <span data-toggle="popover" title="{{ slottime.op_user }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Arrived</span>
                                     {% endif %}
                                     {% if slottime.progress == 4 %}
-                                        <span data-toggle="popover" title="{{ slottime.op_user }}">{{ slottime.deliveryref }}-Loading</span>
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Loading</span>
                                     {% endif %}
                                     {% if slottime.progress == 5 %}
-                                        <span data-toggle="popover" title="{{ slottime.op_user }}">{{ slottime.deliveryref }}-Finished</span>
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Finished</span>
                                     {% endif %}
                                 </a>
                                 </span>
@@ -163,14 +163,30 @@
                         <td>06:30</td>
                         <td>
                             {% for slottime in all_slots0630 %}
-                                <a href ="">
                                 {% if slottime.status == 'INBOUND' %}
-                                    <font color="Green">
+                                    <span class="alert-info well-sm">
                                 {% else %}
-                                    <font color="Blown">
+                                    <span class="alert-success well-sm">
                                 {% endif %}
-                                {{ slottime.deliveryref }}&nbsp;&nbsp;
-                                </font></a>
+                                <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                    {% if slottime.progress == 1 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Booked</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 2 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 3 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Arrived</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 4 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Loading</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 5 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Finished</span>
+                                    {% endif %}
+                                </a>
+                                </span>
+                                </font>
                             {% endfor %}
                         </td>
                         <td>
@@ -185,14 +201,30 @@
                         <td>07:00</td>
                         <td>
                             {% for slottime in all_slots0700 %}
-                                <a href ="">
                                 {% if slottime.status == 'INBOUND' %}
-                                    <font color="Green">
+                                    <span class="alert-info well-sm">
                                 {% else %}
-                                    <font color="Blown">
+                                    <span class="alert-success well-sm">
                                 {% endif %}
-                                {{ slottime.deliveryref }}&nbsp;&nbsp;
-                                </font></a>
+                                <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                    {% if slottime.progress == 1 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Booked</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 2 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 3 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Arrived</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 4 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Loading</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 5 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Finished</span>
+                                    {% endif %}
+                                </a>
+                                </span>
+                                </font>
                             {% endfor %}
                         </td>
                         <td>
@@ -207,14 +239,30 @@
                         <td>07:30</td>
                         <td>
                             {% for slottime in all_slots0730 %}
-                                <a href ="">
                                 {% if slottime.status == 'INBOUND' %}
-                                    <font color="Green">
+                                    <span class="alert-info well-sm">
                                 {% else %}
-                                    <font color="Blown">
+                                    <span class="alert-success well-sm">
                                 {% endif %}
-                                {{ slottime.deliveryref }}&nbsp;&nbsp;
-                                </font></a>
+                                <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                    {% if slottime.progress == 1 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Booked</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 2 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 3 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Arrived</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 4 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Loading</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 5 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Finished</span>
+                                    {% endif %}
+                                </a>
+                                </span>
+                                </font>
                             {% endfor %}
                         </td>
                         <td>
@@ -229,16 +277,30 @@
                         <td>08:00</td>
                         <td>
                             {% for slottime in all_slots0800 %}
-                                <a href ="">
                                 {% if slottime.status == 'INBOUND' %}
-                                    <font color="Green">
+                                    <span class="alert-info well-sm">
                                 {% else %}
-                                    <font color="Blown">
+                                    <span class="alert-success well-sm">
                                 {% endif %}
+                                <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                     {% if slottime.progress == 1 %}
-                                        {{ slottime.deliveryref }}-Booked
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Booked</span>
                                     {% endif %}
-                                </font></a>
+                                    {% if slottime.progress == 2 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 3 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Arrived</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 4 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Loading</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 5 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Finished</span>
+                                    {% endif %}
+                                </a>
+                                </span>
+                                </font>
                             {% endfor %}
                         </td>
                         <td>
@@ -253,14 +315,30 @@
                         <td>08:30</td>
                         <td>
                             {% for slottime in all_slots0830 %}
-                                <a href ="">
                                 {% if slottime.status == 'INBOUND' %}
-                                    <font color="Green">
+                                    <span class="alert-info well-sm">
                                 {% else %}
-                                    <font color="Blown">
+                                    <span class="alert-success well-sm">
                                 {% endif %}
-                                {{ slottime.deliveryref }}&nbsp;&nbsp;
-                                </font></a>
+                                <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                    {% if slottime.progress == 1 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Booked</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 2 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 3 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Arrived</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 4 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Loading</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 5 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Finished</span>
+                                    {% endif %}
+                                </a>
+                                </span>
+                                </font>
                             {% endfor %}
                         </td>
                         <td>
@@ -275,14 +353,30 @@
                         <td>09:00</td>
                         <td>
                             {% for slottime in all_slots0900 %}
-                                <a href ="">
                                 {% if slottime.status == 'INBOUND' %}
-                                    <font color="Green">
+                                    <span class="alert-info well-sm">
                                 {% else %}
-                                    <font color="Blown">
+                                    <span class="alert-success well-sm">
                                 {% endif %}
-                                {{ slottime.deliveryref }}&nbsp;&nbsp;
-                                </font></a>
+                                <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                    {% if slottime.progress == 1 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Booked</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 2 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 3 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Arrived</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 4 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Loading</span>
+                                    {% endif %}
+                                    {% if slottime.progress == 5 %}
+                                        <span data-toggle="popover" title="{{ request.user.username }}">{{ slottime.deliveryref }}-Finished</span>
+                                    {% endif %}
+                                </a>
+                                </span>
+                                </font>
                             {% endfor %}
                         </td>
                         <td>
@@ -809,7 +903,7 @@
                 <thead>
                     <tr>
                         <th>
-                            <p class="text-muted">{{ search_date }}</P>
+                            <p class="text-muted">{{ search_date|date:"d-m-Y" }}</P>
                         </th>
                         <th>
                             <p class="text-muted">Inbound</P>
@@ -834,14 +928,14 @@
                     </tr>
                 </tbody>
             </table>
-            <br></br>
+            <br>
             {% endif %}
             {% if all_NoOutSlotsTimes.count > 0 %}
             <table class="table">
                 <thead>
                     <tr>
                         <th>
-                            <p class="text-muted">{{ search_date }}</P>
+                            <p class="text-muted">{{ search_date|date:"d-m-Y" }}</P>
                         </th>
                         <th>
                             <p class="text-muted">Outbound</P>

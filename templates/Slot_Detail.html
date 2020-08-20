@@ -4,7 +4,7 @@
     <div class="container">
       <h2>Delivery Reference Detail</h2>
         <div>
-      <table class="table table-condensed">
+            <table class="table table-condensed">
         <tbody>
           <tr>
             <td class="col-lg-2">Delivery Ref.</td>
@@ -23,14 +23,14 @@
           </tr>
           <tr>
             <td>Operator</td>
-            <td>{{ object.op_user }}
+            <td>{{ request.user.username }}
                 &nbsp;&nbsp;{{ object.op_datetime|date:"j-m-Y H:i" }}
-                &nbsp;&nbsp;Tel: {{ request.profile.tel }}
-                &nbsp;&nbsp;Email: {{ request.user.email }}
+                &nbsp;&nbsp;Tel: {{ object.op_telephone }}
+                &nbsp;&nbsp;Email: {{ object.op_email }}
             </td>
           </tr>
           <tr>
-            <td>DateTime</td>
+            <td>Delivery DateTime</td>
             <td>
                 {% if object.havetime == 1 %}
                     {{ object.workdate|date:"j-m-Y" }}&nbsp;
@@ -71,63 +71,71 @@
         </tbody>
       </table>
         </div>
-    <div>
+    </div>
+    <div class="container">
         <!-- 如何是状态还是Booked, 则可以更改时间或做删除操作 -->
-        {% if object.progress == 1 %}
-            <form role="form" action="{% url 'slot:slot_Update'  object.deliveryref %}" method="post" >
+        {% if object.progress != 4 %}
+            <form action="{% url 'slot:slot_update' %}" method="post" >
                 {% csrf_token %}
-                  <tr class="form-group col-sm-2">
-                <div class="form-group">
-                    <input type="checkbox" class="form-check-input" name="haveTime" value="1" id="NotHaveSlotTime">
+                <input type="hidden" name="deliveryref" value="{{ object.deliveryref }}">
+                {% if object.op_role == 1 or object.op_role == 3 %}
+                <div class="form-group" >
+                    <input type="checkbox" class="form-check-input" name="new_haveTime" value="1">
                     <label class="form-check-label" for="NotHaveSlotTime">&nbspHaven't Slot Time</label>
                 </div>
-                </tr>
-                <tr>
                 <div class="form-group col-sm-2">
-                <div class="form-group">
-                    <label>&nbsp;Date</label>
-                    <span >
-                        <input class="form-control" name="workdate" id="PickingDate" max="2025-12-31" min="2020-08-01" value="{{ object.workdate|date:"d-m-Y" }}">
-                    </span>
+                        <label>Date</label>
+                        <input type="date" class="form-control" name="workdate" id="PickingDate" max="2025-12-31"
+                               min="2020-08-01" value="{{ object.workdate|date:"d-m-Y" }}">
                 </div>
-                </div>
-                <div class="form-group col-sm-1">
+                <div class="form-group col-sm-2">
                     <label>&nbsp;Time</label>
-                    <span class="controls input-append date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" >
-                        <input class="form-control" name="slottime" id="PickingTime" max="20:30" min="06:00"   value = "{{ object.slottime|time:"H:i"}}" required>
-                    </span>
+                        <input type="time" class="form-control" name="slottime" id="PickingTime" max="20:30" min="06:00"   value = "{{ object.slottime|time:"H:i"}}" required>
                 </div>
-                    </tr>
-                <tr>
-                <div class="form-group col-sm-2">
-                    <label>&nbsp;Status</label>
-                    <select name = "progress" class="form-control">
-                        <option>Booked</option>
-                        <option>Arrived</option>
-                        <option>Loading</option>
-                        <option>Finished</option>
-                        <option>Abnormal</option>
-                    </select>
+                    <div class="form-group col-sm-2">
+                        <label>&nbsp;Status</label>
+                        <select name = "progress" class="form-control">
+                            <option value="1">Booked</option>
+                            <option value="2">Arrived</option>
+                            <option value="3">Loading</option>
+                            <option value="4">Finished</option>
+                            <option value="5">Abnormal</option>
+                        </select>
+                    </div>
+                {% endif %}
+<!--                {% if object.op_role == 2 or object.op_role == 3 %} -->
+<!--                {% endif %} -->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="remark" value="{{ object.remark }}" placeholder="Remark">
                 </div>
-                <div class="form-inline">
-                    <label class="form-group" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Remark :
-                        &nbsp;&nbsp;
-                        <input type="text" class="form-control" id="remark" value="{{ object.remark }}">
-                    </label>
-                </div>
-                    </tr>
-                <div><br></div>
                 <div class="panel-footer text-left">
                   <div class="panel-body">
-                    <span class="text-left"><input class="form-inline btn btn-info lef" type="submit" value="Update"></span>
-                    <span class="text-right"><a href="#" class="pull-right btn btn-danger" role="button">Delete</a></span>
-
+                    <a href="{% url 'slot:slot_list' %}" class="btn btn-default" role="button">Back</a>
+                    <input class="form-inline btn btn-info" type="submit" value="Update">`
+                    <a href="{% url 'slot:slot_delete' object.id %}" class="pull-right btn btn-danger" role="button">Delete</a>
                     </div>
                 </div>
             </form>
+        {% else %}
+            <div class="panel-footer text-left">
+              <div class="panel-body">
+                <a href="{% url 'slot:slot_list' %}" class="btn btn-default" role="button">Back</a>
+              </div>
+            </div>
         {% endif %}
     </div>
-    </div>
-    <a href="{% url 'slot:slot_list' %}">Let me Back</a>
+{% endblock %}
+{% block  myscript %}
+   <script>
+
+    $(document).ready(function () {
+        var time = new Date();
+        var day = ("0" + time.getDate()).slice(-2);
+        var month = ("0" + (time.getMonth() + 1)).slice(-2);
+        var today = time.getFullYear() + "-" + (month) + "-" + (day);
+        $('#PickingDate').val(today);
+    })
+
+    </script>
 {% endblock %}
 

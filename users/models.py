@@ -13,7 +13,7 @@ class UserProfile(models.Model):
     mod_date = models.DateTimeField('Last modified', auto_now=True)
 
     # OPERATOR  WAREHOUSE MANAGER
-    staff_role = models.CharField('Staff_role', max_length=10, blank=True, default="OPERATOR")
+    staff_role = models.IntegerField('Staff_role', max_length=10, blank=True, default="0")
 
     class Meta:
         verbose_name = 'User Profile'

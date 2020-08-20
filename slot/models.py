@@ -1,4 +1,5 @@
 from django.db import models
+from users.models import UserProfile
 
 
 # Create your models here.
@@ -9,12 +10,12 @@ class Haulier(models.Model):
     contact = models.CharField(max_length=100)
     telephone = models.CharField('Telephone', max_length=100, blank=True)
     email = models.CharField('Email', max_length=250, blank=True)
-    is_use = models.IntegerField(default=1,)
-    op_user = models.CharField(max_length=20, null=False, default="")
+    is_use = models.IntegerField(default=1, )
+    op_user = models.IntegerField(default=0)
     op_datetime = models.DateTimeField(auto_now=True, blank=True)
 
     class Meta:
-        db_table = "haulier"
+        db_table = "Haulier"
 
     def __str__(self):
         return '{0}({1})'.format(self.code, self.name)
@@ -27,31 +28,32 @@ class WarehouseProfile(models.Model):
     overworktime = models.TimeField(blank=True)
     maxslot = models.PositiveIntegerField(null=False, default="2")
     maxinbound = models.PositiveIntegerField(null=False, default="0")
-    op_user = models.CharField(max_length=20, null=False, default="Admin")
+    op_user = models.IntegerField(default=0)
     op_datetime = models.DateTimeField(auto_now=True, blank=True)
 
     class Meta:
-        db_table = "warehouse_profile"
+        db_table = "WarehouseProfile"
 
     def __str__(self):
         return self.position
 
 
 class FixWeekday(models.Model):
-    hailer = models.ForeignKey('Haulier', to_field='id', on_delete=models.CASCADE,)
+    Haulier = models.ForeignKey('Haulier', to_field='id', on_delete=models.CASCADE, )
     weekday = models.IntegerField(default=1, )
     time = models.TimeField(blank=True, null=False, )
     status = models.PositiveIntegerField(default=1)
-    op_user = models.CharField(max_length=20, null=False, default="")
+    op_user = models.IntegerField(default=0)
     op_datetime = models.DateTimeField(auto_now=True, blank=True)
 
     class Meta:
-        db_table = "fix_weekday"
-        unique_together = ("hailer", "weekday", "time")
+        db_table = "Haulier_FixTime"
+        unique_together = ("Haulier", "weekday", "time")
 
 
 class Warehouse(models.Model):
-    deliveryref = models.CharField(max_length=25, null=False, default="", primary_key=True)
+    id = models.AutoField(primary_key=True)
+    deliveryref = models.CharField(max_length=25, null=False, default="")
     workdate = models.DateField(null=False)
     slottime = models.TimeField(null=False)
     vehiclereg = models.CharField(max_length=15, null=True, blank=True, default="")
@@ -59,11 +61,30 @@ class Warehouse(models.Model):
     status = models.CharField(max_length=8, null=False, default="INBOUND")
     progress = models.PositiveIntegerField(null=False, default=1)
     havetime = models.PositiveIntegerField(default=1, null=False)
-    position = models.IntegerField(default=1, null=False)
-    op_user = models.CharField(max_length=20, null=False, default="")
+    position = models.CharField(max_length=2, default="UK", null=False)
+    op_user = models.IntegerField(default=0)
+    op_email = models.CharField(max_length=150, null=True, default="")
+    op_role = models.IntegerField(null=False, default="0")
+    op_telephone = models.CharField(max_length=50, null=True, default="")
     op_datetime = models.DateTimeField(auto_now=True, blank=True)
     remark = models.CharField(max_length=200, null=True, blank=True, default="")
+
     class Meta:
-        db_table = "warehouse"
+        db_table = "Warehouse"
 
 
+class ProgressRecord(models.Model):
+    id = models.AutoField(primary_key=True)
+    deliveryref = models.CharField(max_length=25, null=False, default="", )
+    progress = models.PositiveIntegerField(null=False, default=1)
+    progress_name = models.CharField(max_length=10, blank=True, default="")
+    position = models.CharField(max_length=2, default="UK", null=False)
+    remark = models.CharField(max_length=200, null=True, blank=True, default="")
+    op_user = models.IntegerField(default=0)
+    op_email = models.CharField(max_length=150, null=True, default="")
+    op_role = models.IntegerField(null=False, default="0")
+    op_telephone = models.CharField(max_length=50, null=True, default="")
+    op_datetime = models.DateTimeField(auto_now=True, blank=True)
+
+    class Meta:
+        db_table = "Progress_record"
