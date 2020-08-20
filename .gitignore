@@ -1,0 +1,7 @@
+
+*.pyc
+*.pyd
+*.tpl
+*.md
+venv/Lib/site-packages/werkzeug/wrappers/user_agent.py
+users/__pycache__/views.cpython-38.pyc
