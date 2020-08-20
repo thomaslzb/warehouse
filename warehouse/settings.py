@@ -88,9 +88,9 @@ DATABASES = {
     # 这个是本地开发设置
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # 数据库引擎
-        'NAME': 'ukdcg',    # 数据库名称
-        'USER': 'ukdcg',    # 链接数据库的用户名
-        'PASSWORD': 'ukthomas',     # 链接数据库的密码
+        'NAME': '',    # 数据库名称
+        'USER': '',    # 链接数据库的用户名
+        'PASSWORD': '',     # 链接数据库的密码
         'HOST': '127.0.0.1',    # mysql服务器的域名和ip地址
         'PORT': '3306',     # mysql的一个端口号,默认是3306
     }
@@ -149,4 +149,4 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "thomaslzbuk@gmail.com"
 EMAIL_FROM = "thomaslzbuk@gmail.com"
-EMAIL_HOST_PASSWORD = "Lzb646767="
+EMAIL_HOST_PASSWORD = ""
