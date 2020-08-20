@@ -32,6 +32,7 @@
       <change beforePath="$PROJECT_DIR$/users/migrations/0004_auto_20200819_0930.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/users/migrations/0005_auto_20200819_0935.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/warehouse/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/warehouse/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -149,7 +150,7 @@
       <workItem from="1597649029126" duration="22707000" />
       <workItem from="1597823244602" duration="360000" />
       <workItem from="1597824860921" duration="42364000" />
-      <workItem from="1597924264518" duration="16865000" />
+      <workItem from="1597924264518" duration="17129000" />
     </task>
     <task id="LOCAL-00001" summary="today">
       <created>1597329118319</created>
