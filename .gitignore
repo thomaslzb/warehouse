@@ -1,0 +1,11 @@
+
+warehouse/settings.py
+*.pyc
+*.pyc
+.idea/workspace.xml
+*.pyc
+users/migrations/0002_auto_20200821_0821.py
+*.pyc
+users/__pycache__/views.cpython-38.pyc
+*.pyc
+*.pyc

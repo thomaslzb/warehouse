@@ -3,7 +3,7 @@ from django.shortcuts import render, reverse
 from django.http import Http404
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import DetailView, UpdateView
+from django.views.generic import DetailView, UpdateView, DeleteView
 from .forms import SoltTimeForm, SoltTimeUpdateForm
 from .models import Warehouse, Haulier, WarehouseProfile, FixWeekday, ProgressRecord
 from users.models import UserProfile
@@ -255,22 +255,10 @@ class SoltListView(View):
                                "slottime": ""
                                })
 
-            username = request.user.username  # 用户名
-
             # 根据用户能够操作的地点， 判断仓库的位置
-            position_result = UserProfile.objects.filter(user_id=request.user.id)
-            position = "UK"
-            op_role = 1
-            op_telephone = ""
-            op_email = request.user.email
-            if position_result:
-                position = position_result[0].op_position  # 仓库位置
-                op_role = position_result[0].staff_role  # 角色
-                op_telephone = position_result[0].telephone  # 电话
-
+            position = request.user.profile.op_position  # 仓库位置
             workdate = request.POST.get("workdate", 0)  # 抵达日期
-            yesterday = datetime.datetime.now()+datetime.timedelta(days=-1)
-            str_yesterday = yesterday.strftime("%Y-%m-%d")
+            yesterday = datetime.datetime.now() + datetime.timedelta(days=-1)
             d_workdate = datetime.datetime.strptime(workdate, "%Y-%m-%d")
 
             if d_workdate < yesterday:
@@ -286,7 +274,6 @@ class SoltListView(View):
             hailer_id = 0
             if hailer_result:
                 hailer_id = hailer_result[0].id  # 承运人id
-
 
             # 判断时间，并转换成为整点 00 或 30
             slottime = request.POST.get("slottime", 0)  # 承运时间
@@ -313,12 +300,12 @@ class SoltListView(View):
                 if slot_mins > '30':
                     slot_hour = int(slot_hour) + 1
                     if slot_hour < 10:
-                        slot_hour = '0'+str(slot_hour)
+                        slot_hour = '0' + str(slot_hour)
                     slot_mins = '00'
                 else:
                     slot_mins = '30'
 
-            slottime = slot_hour+":"+slot_mins
+            slottime = slot_hour + ":" + slot_mins
 
             vehiclereg = request.POST.get("vehiclereg", 0)  # 车牌号码
             status = request.POST.get("status", 0)  # INBOUND OR OUTBOUND
@@ -334,7 +321,7 @@ class SoltListView(View):
                     max_inbound_count = warehouse_profile_result[0].maxinbound
 
                 # 检查是否有预留的公司时间
-                weekday = datetime.datetime.strptime(workdate, '%Y-%m-%d').weekday()+1
+                weekday = datetime.datetime.strptime(workdate, '%Y-%m-%d').weekday() + 1
                 check_date_result = FixWeekday.objects.filter(weekday=weekday,
                                                               time__hour=slot_hour,
                                                               time__minute=slot_mins,
@@ -372,7 +359,8 @@ class SoltListView(View):
                                                                 status="INBOUND")
                     count_inbound_order = warehouse_result.count()
                     if count_inbound_order >= max_inbound_count:
-                        strError = "INBOUND NUMBER IS FULL, Because We only can handle Max Inbound number is " + str(max_inbound_count)
+                        strError = "INBOUND NUMBER IS FULL, Because We only can handle Max Inbound number is " + str(
+                            max_inbound_count)
                         return render(request, "Slot_Save_Error.html",
                                       {"Warehouse_form": Warehouse_form,
                                        "workdate": workdate,
@@ -389,19 +377,14 @@ class SoltListView(View):
             warehouse.havetime = havetime
             warehouse.hailerid = hailer_id
             warehouse.position = position
-            warehouse.op_user = request.user.id
-            warehouse.op_telephone = op_telephone
-            warehouse.op_email = op_email
-            warehouse.op_role = op_role
+            warehouse.op_id = request.user.id
             warehouse.save()
 
             progressRecord = ProgressRecord()
             progressRecord.deliveryref = hailer + deliveryref.upper()
             progressRecord.progress = 1  # 1=Booked 2=Arrived 3=Loading 4=Finished 5=abnormal
             progressRecord.position = position
-            progressRecord.op_role = op_role
-            progressRecord.op_telephone = op_telephone
-            progressRecord.op_email =op_email
+            progressRecord.op_id = request.user.id
             progressRecord.progress_name = "Booked"
             progressRecord.remark = "Create Booked"
             progressRecord.save()
@@ -416,6 +399,18 @@ class SoltListView(View):
                            "ErrorMsg": strError})
 
 
+# class SoltDetailView(DetailView):
+#     queryset = Warehouse.objects.all()
+#     template_name = "Slot_Detail.html"
+#
+#     def get_object(self):
+#         # get_object() 默认时返回通过 pk 或 slug 筛选出的对象（该视图需要操作的对象）
+#         # Call the superclass
+#         object = super().get_object()
+#
+#         return object
+
+
 class SoltDetailView(DetailView):
     queryset = Warehouse.objects.all()
     template_name = "Slot_Detail.html"
@@ -424,152 +419,209 @@ class SoltDetailView(DetailView):
         # get_object() 默认时返回通过 pk 或 slug 筛选出的对象（该视图需要操作的对象）
         # Call the superclass
         object = super().get_object()
-
+        # object.haulier_name = Haulier.objects.filter(id=object.haulierid)
         return object
 
 
-# https://blog.csdn.net/tmpbook/article/details/43191177
 class SoltUpdateView(View):
     def post(self, request):
         Warehouse_Updateform = SoltTimeUpdateForm(request.POST)
         if Warehouse_Updateform.is_valid():
 
             deliveryref = request.POST.get("deliveryref", "")
-            progress = request.POST.get("progress", "")
             slot_result = Warehouse.objects.filter(deliveryref=deliveryref)
             if slot_result:
-                new_workdate = request.POST.get("workdate", 0)  # 新抵达日期
-                new_time = request.POST.get("slottime", 0)  # 新旧抵达时间
+                new_workdate = request.POST.get("new_workdate", 0)  # 新抵达日期
+                new_time = request.POST.get("new_slottime", 0)  # 新旧抵达时间
                 old_workdate = slot_result[0].workdate
                 old_time = slot_result[0].slottime
-                if not(new_workdate == old_workdate and new_time == old_time):
+                old_havetime = slot_result[0].havetime
+                status = slot_result[0].status
+                old_progress = str(slot_result[0].progress)
+                old_remark = slot_result[0].remark.strip()
+                new_remark = request.POST.get("new_remark", "").strip()  # 新状态
+                remark_reason = ""  # 记录修改的原因
+                progress_name = ""
+                if old_progress == '1':
+                    progress_name = str(old_progress) + "-Booked"
+                if old_progress == '2':
+                    progress_name = str(old_progress) + "-Arrived"
+                if old_progress == '3':
+                    progress_name = str(old_progress) + "-Loading"
+                if old_progress == '4':
+                    progress_name = str(old_progress) + "-Finished"
+                if old_progress == '5':
+                    progress_name = str(old_progress) + "-Abnormal"
+                progress = old_progress
+                if request.user.profile.staff_role != 1:  # 只有仓库人员或经理才能更新状态
+                    new_progress = request.POST.get("new_progress", 0)  # 新状态
+                    if new_progress != old_progress:
+                        old_progress_name = progress_name
+                        progress = new_progress
+                        if new_progress == '1':
+                            progress_name = str(new_progress) + "-Booked"
+                        if new_progress == '2':
+                            progress_name = str(new_progress) + "-Arrived"
+                        if new_progress == '3':
+                            progress_name = str(new_progress) + "-Loading"
+                        if new_progress == '4':
+                            progress_name = str(new_progress) + "-Finished"
+                        if new_progress == '5':
+                            progress_name = str(new_progress) + "-Abnormal"
+                        remark_reason = " | Modify Status: From " + old_progress_name + " To " + progress_name  # 记录修改状态
+                        if new_workdate == 0:  # 仓库人员进入后，日期读数将为0， 重置新日期及时间
+                            new_workdate = datetime.datetime.strftime(old_workdate,"%Y-%m-%d")
+                            new_time = old_time.strftime("%H:%M")
+                        # 判断进程的顺序， 如果顺序不对，则返回失败信息
+                        if new_progress != '5' and old_progress != '5':
+                            if new_progress < old_progress:  # 返回保存错误
+                                strError = "You can not change the progress from " + old_progress_name + \
+                                           " To " + progress_name + ". "
+                                return render(request, "Slot_Save_Error.html",
+                                              {"Warehouse_form": Warehouse_Updateform,
+                                               "workdate": new_workdate,
+                                               "slottime": new_time,
+                                               "ErrorMsg": strError,
+                                               })
 
-                    # 根据用户能够操作的地点， 判断仓库的位置
-                    position_result = UserProfile.objects.filter(user_id=request.user.id)
-                    position = "UK"
-                    position_id = 1
-                    if position_result:
-                        position = position_result[0].op_position  # 仓库位置
-                        position_id = position_result[0].id
 
-                    yesterday = datetime.datetime.now()+datetime.timedelta(days=-1)
-                    str_yesterday = yesterday.strftime("%Y-%m-%d")
-                    d_workdate = datetime.datetime.strptime(new_workdate, "%Y-%m-%d")
+                havetime = request.POST.get("new_haveTime", 1)  # 是否确定时间， 0 未确定， 1 确定
 
-                    if d_workdate < yesterday:
-                        strError = "You can not select the date before today. "
-                        return render(request, "Slot_Save_Error.html",
-                                      {"Warehouse_form": Warehouse_Updateform,
-                                       "workdate": "",
-                                       "slottime": "",
-                                       "ErrorMsg": strError,
-                                       })
+                if old_havetime != havetime:
+                    remark_reason = remark_reason + " | Modify Have Time: From " + str(old_havetime) \
+                                    + " To " + str(havetime)  # 记录修改是否确定时间
 
-                    # 根据用户能够操作的地点， 判断仓库的位置
-                    position_result = UserProfile.objects.filter(user_id=request.user.id)
-                    position = "UK"
-                    position_id = 1
+                if havetime == 1:  # 有确定的时间，才去判断仓库是否能够接受
+                    compare_olddate = datetime.datetime.strftime(old_workdate, "%Y-%m-%d")
+                    compare_oldtime = old_time.strftime("%H:%M")[0:5]
 
-                    # 判断时间，并转换成为整点 00 或 30
-                    slottime = request.POST.get("slottime", 0)  # 承运时间
-                    time_result = WarehouseProfile.objects.filter(position__exact=position)
-                    begin_time = datetime.time(0).strftime("%H:%M")
-                    over_time = datetime.time(0).strftime("%H:%M")
-                    if time_result:
-                        begin_time = time_result[0].beginworktime.strftime("%H:%M")
-                        over_time = time_result[0].overworktime.strftime("%H:%M")
-
-                    if slottime < begin_time or slottime > over_time:
-                        strError = "We are opening time is " + begin_time + " to  " + over_time + \
-                                   ", Please check your input time ( " + slottime + ")"
-                        return render(request, "Slot_Save_Error.html",
-                                      {"Warehouse_form": Warehouse_Updateform,
-                                       "workdate": old_workdate,
-                                       "slottime": slottime,
-                                       "ErrorMsg": strError,
-                                       })
-
-                    slot_hour = slottime[0:2]
-                    slot_mins = slottime[3:5]
-                    if slot_mins != '30' and slot_mins != '00':
-                        if slot_mins > '30':
-                            slot_hour = int(slot_hour) + 1
-                            if slot_hour < 10:
-                                slot_hour = '0'+str(slot_hour)
-                            slot_mins = '00'
-                        else:
-                            slot_mins = '30'
-
-                    slottime = slot_hour+":"+slot_mins
-
-                    vehiclereg = request.POST.get("vehiclereg", 0)  # 车牌号码
-                    status = request.POST.get("status", 0)  # INBOUND OR OUTBOUND
-
-                    havetime = request.POST.get("haveTime", 1)  # 是否确定时间， 0 未确定， 1 确定
-
-                    # 需要在此判断， 该时间段是否已经满了？
-                    if position == "UK" and havetime == 1:
-                        warehouse_profile_result = WarehouseProfile.objects.filter(position=position)
-                        max_count = 0
-                        max_inbound_count = 0
-                        if warehouse_profile_result:
-                            max_count = warehouse_profile_result[0].maxslot
-                            max_inbound_count = warehouse_profile_result[0].maxinbound
-
-                        # 检查是否有预留的公司时间
-                        weekday = datetime.datetime.strptime(new_workdate, '%Y-%m-%d').weekday()+1
-                        check_date_result = FixWeekday.objects.filter(weekday=weekday,
-                                                                      time__hour=slot_hour,
-                                                                      time__minute=slot_mins,
-                                                                      status=1)
-                        count_preserves = 0
-                        if check_date_result:
-                            count_preserves = check_date_result.count()
-
-                        # 检查该时间段， 有多少台车已经booking
-                        warehouse_result = Warehouse.objects.filter(workdate=new_workdate,
-                                                                    slottime__hour=slot_hour,
-                                                                    slottime__minute=slot_mins,
-                                                                    havetime__exact=1)
-                        count_orders = 0
-                        if warehouse_result:
-                            count_orders = warehouse_result.count()
-
-                        if count_orders + count_preserves >= max_count:
-                            strError = "Max handle number is " + str(max_count) + \
-                                       ". But System already have booking number is " + \
-                                       str(count_orders) + " and Preserves number is " + str(count_preserves)
+                    if not (new_workdate == compare_olddate and new_time == compare_oldtime):
+                        remark_reason = remark_reason + " | Modify DateTime: From " + compare_olddate + \
+                                         " " + compare_oldtime + " To " + new_workdate + " " + new_time  # 记录修改时间
+                        position = request.user.profile.op_position  # 仓库位置
+                        yesterday = datetime.datetime.now() + datetime.timedelta(days=-1)
+                        d_workdate = datetime.datetime.strptime(new_workdate, "%Y-%m-%d")
+                        if d_workdate < yesterday:
+                            strError = "You can not select the date before today. "
                             return render(request, "Slot_Save_Error.html",
                                           {"Warehouse_form": Warehouse_Updateform,
-                                           "workdate": old_workdate,
-                                           "slottime": slottime,
-                                           "ErrorMsg": strError
+                                           "workdate": "new_workdate",
+                                           "slottime": "new_time",
+                                           "ErrorMsg": strError,
                                            })
 
-                        if status == "INBOUND":
-                            # 检查该时间段， 最大的INBOUND的数量是否已经爆满
+                        # 判断时间，并转换成为整点 00 或 30
+                        time_result = WarehouseProfile.objects.filter(position__exact=position)
+                        begin_time = datetime.time(0).strftime("%H:%M")
+                        over_time = datetime.time(0).strftime("%H:%M")
+                        if time_result:
+                            begin_time = time_result[0].beginworktime.strftime("%H:%M")
+                            over_time = time_result[0].overworktime.strftime("%H:%M")
+
+                        if new_time < begin_time or new_time > over_time:
+                            strError = "We are opening time is " + begin_time + " to  " + over_time + \
+                                       ", Please check your input time ( " + new_time + ")"
+                            return render(request, "Slot_Save_Error.html",
+                                          {"Warehouse_form": Warehouse_Updateform,
+                                           "workdate": new_workdate,
+                                           "slottime": new_time,
+                                           "ErrorMsg": strError,
+                                           })
+
+                        slot_hour = new_time[0:2]
+                        slot_mins = new_time[3:5]
+                        if slot_mins != '30' and slot_mins != '00':
+                            if slot_mins > '30':
+                                slot_hour = int(slot_hour) + 1
+                                if slot_hour < 10:
+                                    slot_hour = '0' + str(slot_hour)
+                                slot_mins = '00'
+                            else:
+                                slot_mins = '30'
+
+                        new_time = slot_hour + ":" + slot_mins
+
+                        # 需要在此判断， 该时间段是否已经满了？
+                        if position == "UK" and havetime == 1:
+                            warehouse_profile_result = WarehouseProfile.objects.filter(position=position)
+                            max_count = 0
+                            max_inbound_count = 0
+                            if warehouse_profile_result:
+                                max_count = warehouse_profile_result[0].maxslot
+                                max_inbound_count = warehouse_profile_result[0].maxinbound
+
+                            # 检查是否有预留的公司时间
+                            weekday = datetime.datetime.strptime(new_workdate, '%Y-%m-%d').weekday() + 1
+                            check_date_result = FixWeekday.objects.filter(weekday=weekday,
+                                                                          time__hour=slot_hour,
+                                                                          time__minute=slot_mins,
+                                                                          status=1)
+                            count_preserves = 0
+                            if check_date_result:
+                                count_preserves = check_date_result.count()
+
+                            # 检查该时间段， 有多少台车已经booking
                             warehouse_result = Warehouse.objects.filter(workdate=new_workdate,
                                                                         slottime__hour=slot_hour,
                                                                         slottime__minute=slot_mins,
-                                                                        havetime__exact=1,
-                                                                        status="INBOUND")
-                            count_inbound_order = warehouse_result.count()
-                            if count_inbound_order >= max_inbound_count:
-                                strError = "INBOUND NUMBER IS FULL, Because We only can handle Max Inbound number is " + str(max_inbound_count)
+                                                                        havetime__exact=1)
+                            count_orders = 0
+                            if warehouse_result:
+                                count_orders = warehouse_result.count()
+
+                            if count_orders + count_preserves >= max_count:
+                                strError = "Max handle number is " + str(max_count) + \
+                                           ". But System already have booking number is " + \
+                                           str(count_orders) + " and Preserves number is " + str(count_preserves)
                                 return render(request, "Slot_Save_Error.html",
                                               {"Warehouse_form": Warehouse_Updateform,
-                                               "workdate": old_workdate,
-                                               "slottime": slottime,
-                                               "ErrorMsg": strError})
+                                               "workdate": new_workdate,
+                                               "slottime": new_time,
+                                               "ErrorMsg": strError
+                                               })
 
-            warehouse = Warehouse.objects.get(deliveryref=deliveryref)
-            warehouse.workdate = new_workdate
-            warehouse.slottime = new_time
-            warehouse.havetime = havetime
-            warehouse.progress = progress  # 1=Create 2=Arrived 3=Loading 4=Finished 5=abnormal
-            warehouse.save()
-            return render(request,"Slot_Save_Success.html", {"searching_date": new_workdate,
-                                                              })
+                            if status == "INBOUND":
+                                # 检查该时间段， 最大的INBOUND的数量是否已经爆满
+                                warehouse_result = Warehouse.objects.filter(workdate=new_workdate,
+                                                                            slottime__hour=slot_hour,
+                                                                            slottime__minute=slot_mins,
+                                                                            havetime__exact=1,
+                                                                            status="INBOUND")
+                                count_inbound_order = warehouse_result.count()
+                                if count_inbound_order >= max_inbound_count:
+                                    strError = "INBOUND NUMBER IS FULL, Because We only can handle Max Inbound number is " + str(
+                                        max_inbound_count)
+                                    return render(request, "Slot_Save_Error.html",
+                                                  {"Warehouse_form": Warehouse_Updateform,
+                                                   "workdate": new_workdate,
+                                                   "slottime": new_time,
+                                                   "ErrorMsg": strError})
+
+                if old_remark != new_remark:
+                    remark_reason = remark_reason + " | Modify Remark: From " + old_remark \
+                                    + " To " + new_remark  # 记录修改备注
+
+                if remark_reason != "":
+                    warehouse = Warehouse.objects.get(deliveryref=deliveryref)
+                    warehouse.workdate = new_workdate
+                    warehouse.slottime = new_time
+                    warehouse.havetime = havetime
+                    warehouse.progress = progress  # 1=Booked 2=Arrived 3=Loading 4=Finished 5=Abnormal
+                    warehouse.remark = new_remark
+                    warehouse.save()
+
+                    progressRecord = ProgressRecord()
+                    progressRecord.deliveryref = deliveryref
+                    progressRecord.progress = progress
+                    progressRecord.position = request.user.profile.op_position
+                    progressRecord.op_id = request.user.id
+                    progressRecord.progress_name = progress_name
+                    progressRecord.remark = remark_reason
+                    progressRecord.save()
+
+                    return render(request, "Slot_Save_Success.html", {"searching_date": new_workdate, })
+                else:
+                    return render(request, "Slot_Save_Success.html", {"searching_date": new_workdate, })
         else:
             strError = "Delivery Reference can not be repeated or empty. "
             return render(request, "Slot_Save_Error.html",
@@ -579,7 +631,7 @@ class SoltUpdateView(View):
                            "ErrorMsg": strError})
 
 
-class SlotTimeDeleteView(DetailView):
+class SlotTimeDeleteView(DeleteView):
     model = Warehouse
     template_name = "Slot_Confirm_Delete.html"
 
@@ -592,5 +644,3 @@ class SlotTimeDeleteView(DetailView):
 
     def get_success_url(self):
         return reverse('slot:slot_list')
-
-

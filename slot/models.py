@@ -11,7 +11,7 @@ class Haulier(models.Model):
     telephone = models.CharField('Telephone', max_length=100, blank=True)
     email = models.CharField('Email', max_length=250, blank=True)
     is_use = models.IntegerField(default=1, )
-    op_user = models.IntegerField(default=0)
+    op_id = models.IntegerField(default=0)
     op_datetime = models.DateTimeField(auto_now=True, blank=True)
 
     class Meta:
@@ -28,7 +28,7 @@ class WarehouseProfile(models.Model):
     overworktime = models.TimeField(blank=True)
     maxslot = models.PositiveIntegerField(null=False, default="2")
     maxinbound = models.PositiveIntegerField(null=False, default="0")
-    op_user = models.IntegerField(default=0)
+    op_id = models.IntegerField(default=0)
     op_datetime = models.DateTimeField(auto_now=True, blank=True)
 
     class Meta:
@@ -43,7 +43,7 @@ class FixWeekday(models.Model):
     weekday = models.IntegerField(default=1, )
     time = models.TimeField(blank=True, null=False, )
     status = models.PositiveIntegerField(default=1)
-    op_user = models.IntegerField(default=0)
+    op_id = models.IntegerField(default=0)
     op_datetime = models.DateTimeField(auto_now=True, blank=True)
 
     class Meta:
@@ -62,15 +62,13 @@ class Warehouse(models.Model):
     progress = models.PositiveIntegerField(null=False, default=1)
     havetime = models.PositiveIntegerField(default=1, null=False)
     position = models.CharField(max_length=2, default="UK", null=False)
-    op_user = models.IntegerField(default=0)
-    op_email = models.CharField(max_length=150, null=True, default="")
-    op_role = models.IntegerField(null=False, default="0")
-    op_telephone = models.CharField(max_length=50, null=True, default="")
+    op_id = models.IntegerField(default=0)
     op_datetime = models.DateTimeField(auto_now=True, blank=True)
-    remark = models.CharField(max_length=200, null=True, blank=True, default="")
+    remark = models.CharField(max_length=80, null=True, blank=True, default="")
 
     class Meta:
         db_table = "Warehouse"
+        unique_together = ("deliveryref", )
 
 
 class ProgressRecord(models.Model):
@@ -79,11 +77,8 @@ class ProgressRecord(models.Model):
     progress = models.PositiveIntegerField(null=False, default=1)
     progress_name = models.CharField(max_length=10, blank=True, default="")
     position = models.CharField(max_length=2, default="UK", null=False)
-    remark = models.CharField(max_length=200, null=True, blank=True, default="")
-    op_user = models.IntegerField(default=0)
-    op_email = models.CharField(max_length=150, null=True, default="")
-    op_role = models.IntegerField(null=False, default="0")
-    op_telephone = models.CharField(max_length=50, null=True, default="")
+    remark = models.CharField(max_length=400, null=True, blank=True, default="")
+    op_id = models.IntegerField(default=0)
     op_datetime = models.DateTimeField(auto_now=True, blank=True)
 
     class Meta:

@@ -10,9 +10,9 @@ from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from .models import EmailVerifyRecord, UserProfile
 from .forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm, ModifyPwdForm
+# from utils import send_register_email
 
-from slot.views import SoltListView
-#from utils import send_register_email
+
 @login_required
 def logout(request):
     auth.logout(request)
