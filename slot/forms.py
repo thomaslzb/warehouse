@@ -16,21 +16,21 @@ from .models import Warehouse
 class SoltTimeForm(forms.ModelForm):
     class Meta:
         model = Warehouse
-        exclude = ["progress", "op_user", "position", "status", "op_datetime", "hailerid", "havetime","op_id" ]
+        exclude = ["progress", "op_user", "position", "status", "op_datetime", "hailerid", "havetime", ]
 
-    """
+"""
     def clean_deliveryref(self):
-        deliveryref = self.cleaned_data.get('deliveryref')
+        deliveryref = self.cleaned_data.get('hailer')+self.cleaned_data.get('deliveryref')
 
         filter_result = Warehouse.objects.filter(deliveryref__exact=deliveryref)
         if filter_result:
-            raise forms.ValidationError("This Delivery Ref. is exist, please check it.")
+            raise forms.ValidationError("This Delivery Ref. is exist")
         return deliveryref
-    """
+"""
 
 
 class SoltTimeUpdateForm(forms.ModelForm):
     class Meta:
         model = Warehouse
         exclude = ["position", "status", "op_datetime", "hailerid", "workdate", "slottime",
-                   "deliveryref", "vehiclereg", "havetime", "op_id", "progress"]
+                   "deliveryref", "vehiclereg", "havetime", "op_user", "progress"]

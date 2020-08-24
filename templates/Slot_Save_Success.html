@@ -1,6 +1,15 @@
 {% extends 'warehouse_base.html' %}
 {% load static %}
 {% block content %}
-<h1><font color="green">Congratulations! Save Success. </font> </h1>
-<a href="{% url 'slot:slot_list' %}">Back</a>
+    <div class="container">
+    <table class="table table-condensed">
+        <h2><font color="green">Congratulations! Save Success. </font> </h2>
+        <div class="panel-footer text-left">
+          <div class="panel-body">
+            <a href="{% url 'slot:slot_list' %}" class="btn btn-primary" role="button">Back</a>
+          </div>
+        </div>
+    </table>
+    </div>
+    <br>
 {% endblock %}

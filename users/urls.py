@@ -15,11 +15,11 @@ from . import views
 
 app_name = 'users'
 urlpatterns = [
-    # re_path(r'^register/$', views.register, name='register'),
     path('login/', views.LoginView.as_view(), name='login'),
+    path('logout/', views.logout, name='logout'),
+    # re_path(r'^register/$', views.register, name='register'),
     # re_path(r'^user/(?P<pk>\d+)/profile/$', views.profile, name='profile'),
     # re_path(r'^user/(?P<pk>\d+)/profile/update/$', views.profile_update, name='profile_update'),
     # re_path(r'^user/(?P<pk>\d+)/pwdchange/$', views.pwd_change, name='pwd_change'),
-    path('logout/', views.logout, name='logout'),
 ]
 

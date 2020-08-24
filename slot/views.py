@@ -9,6 +9,55 @@ from .models import Warehouse, Haulier, WarehouseProfile, FixWeekday, ProgressRe
 from users.models import UserProfile
 
 
+def return_record_set(search_date, havetime, hours, minutes):
+    RecordSet = Warehouse.objects.filter(workdate=search_date,
+                                         havetime__exact=havetime,
+                                         slottime__hour=hours,
+                                         slottime__minute=minutes,
+                                         ).order_by("status")
+    return RecordSet
+
+
+def return_status_record_set(search_date, progress_code):
+    RecordSet = Warehouse.objects.filter(workdate=search_date,
+                                         progress__exact=progress_code, )
+    return RecordSet
+
+def get_progress_name(progress_code):
+    """
+    :param progress_code: char 状态的字符
+    :return: 状态的名称
+    """
+    return_name = ""
+    if progress_code == '1':
+        return_name = str(progress_code) + "-Booked"
+    if progress_code == '2':
+        return_name = str(progress_code) + "-Arrived"
+    if progress_code == '3':
+        return_name = str(progress_code) + "-Loading"
+    if progress_code == '4':
+        return_name = str(progress_code) + "-Finished"
+    if progress_code == '5':
+        return_name = str(progress_code) + "-Abnormal"
+
+    return return_name
+
+
+def reset_time(need_time):
+    this_hour = need_time[0:2]
+    this_mins = need_time[3:5]
+    if this_hour != '30' and this_mins != '00':
+        if this_mins > '30':
+            this_hour = int(this_hour) + 1
+            if this_hour < 10:
+                this_hour = '0' + str(this_hour)
+            this_mins = '00'
+        else:
+            this_mins = '30'
+    new_time = this_hour+":"+this_mins
+    return new_time
+
+
 # Create your views here.
 class SoltListView(View):
     def get(self, request):
@@ -29,157 +78,37 @@ class SoltListView(View):
             max_slot_number = location_result[0].maxslot
 
         # 确定时间的slottime
-        all_slots0600 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=6,
-                                                 slottime__minute=0,
-                                                 ).order_by("status")
+        all_slots0600 = return_record_set(search_date, 1, 6, 0)
+        all_slots0630 = return_record_set(search_date, 1, 6, 30)
+        all_slots0700 = return_record_set(search_date, 1, 7, 0)
+        all_slots0730 = return_record_set(search_date, 1, 7, 30)
+        all_slots0800 = return_record_set(search_date, 1, 8, 0)
+        all_slots0830 = return_record_set(search_date, 1, 8, 30)
+        all_slots0900 = return_record_set(search_date, 1, 9, 0)
+        all_slots0930 = return_record_set(search_date, 1, 9, 30)
+        all_slots1000 = return_record_set(search_date, 1, 10, 0)
+        all_slots1030 = return_record_set(search_date, 1, 10, 30)
+        all_slots1100 = return_record_set(search_date, 1, 11, 0)
+        all_slots1130 = return_record_set(search_date, 1, 11, 30)
+        all_slots1200 = return_record_set(search_date, 1, 12, 0)
+        all_slots1230 = return_record_set(search_date, 1, 12, 30)
+        all_slots1300 = return_record_set(search_date, 1, 13, 0)
+        all_slots1330 = return_record_set(search_date, 1, 13, 30)
+        all_slots1400 = return_record_set(search_date, 1, 14, 0)
+        all_slots1430 = return_record_set(search_date, 1, 14, 30)
+        all_slots1500 = return_record_set(search_date, 1, 15, 0)
+        all_slots1530 = return_record_set(search_date, 1, 15, 30)
+        all_slots1600 = return_record_set(search_date, 1, 16, 0)
+        all_slots1630 = return_record_set(search_date, 1, 16, 30)
+        all_slots1700 = return_record_set(search_date, 1, 17, 0)
+        all_slots1730 = return_record_set(search_date, 1, 17, 30)
+        all_slots1800 = return_record_set(search_date, 1, 18, 0)
+        all_slots1830 = return_record_set(search_date, 1, 18, 30)
+        all_slots1900 = return_record_set(search_date, 1, 19, 0)
+        all_slots1930 = return_record_set(search_date, 1, 19, 30)
+        all_slots2000 = return_record_set(search_date, 1, 20, 0)
+        all_slots2030 = return_record_set(search_date, 1, 20, 30)
 
-        all_slots0630 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=6,
-                                                 slottime__minute=30,
-                                                 ).order_by("status")
-        all_slots0700 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=7,
-                                                 slottime__minute=0,
-                                                 ).order_by("status")
-        all_slots0730 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=7,
-                                                 slottime__minute=30,
-                                                 ).order_by("status")
-        all_slots0800 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=8,
-                                                 slottime__minute=0,
-                                                 ).order_by("status")
-        all_slots0830 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=8,
-                                                 slottime__minute=30,
-                                                 ).order_by("status")
-        all_slots0900 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=9,
-                                                 slottime__minute=0,
-                                                 ).order_by("status")
-        all_slots0930 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=9,
-                                                 slottime__minute=30,
-                                                 ).order_by("status")
-        all_slots1000 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=10,
-                                                 slottime__minute=00
-                                                 ).order_by("status")
-        all_slots1030 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=10,
-                                                 slottime__minute=30
-                                                 ).order_by("status")
-        all_slots1100 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=11,
-                                                 slottime__minute=00
-                                                 ).order_by("status")
-        all_slots1130 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=11,
-                                                 slottime__minute=30
-                                                 ).order_by("status")
-        all_slots1200 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=12,
-                                                 slottime__minute=00
-                                                 ).order_by("status")
-        all_slots1230 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=12,
-                                                 slottime__minute=30
-                                                 ).order_by("status")
-        all_slots1300 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=13,
-                                                 slottime__minute=00
-                                                 ).order_by("status")
-        all_slots1330 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=13,
-                                                 slottime__minute=30
-                                                 ).order_by("status")
-        all_slots1400 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=14,
-                                                 slottime__minute=00
-                                                 ).order_by("status")
-        all_slots1430 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=14,
-                                                 slottime__minute=30
-                                                 ).order_by("status")
-        all_slots1500 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=15,
-                                                 slottime__minute=00
-                                                 ).order_by("status")
-        all_slots1530 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=15,
-                                                 slottime__minute=30
-                                                 ).order_by("status")
-        all_slots1600 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=16,
-                                                 slottime__minute=00
-                                                 ).order_by("status")
-        all_slots1630 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=16,
-                                                 slottime__minute=30
-                                                 ).order_by("status")
-        all_slots1700 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=17,
-                                                 slottime__minute=00
-                                                 ).order_by("status")
-        all_slots1730 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=17,
-                                                 slottime__minute=30
-                                                 ).order_by("status")
-        all_slots1800 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=18,
-                                                 slottime__minute=00
-                                                 ).order_by("status")
-        all_slots1830 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=18,
-                                                 slottime__minute=30
-                                                 ).order_by("status")
-        all_slots1900 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=19,
-                                                 slottime__minute=00
-                                                 ).order_by("status")
-        all_slots1930 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=19,
-                                                 slottime__minute=30
-                                                 ).order_by("status")
-        all_slots2000 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=20,
-                                                 slottime__minute=00
-                                                 ).order_by("status")
-        all_slots2030 = Warehouse.objects.filter(workdate=search_date,
-                                                 havetime__exact=1,
-                                                 slottime__hour=20,
-                                                 slottime__minute=30
-                                                 ).order_by("status")
         # 没有确定时间的INBOUND
         all_NoInSlotsTimes = Warehouse.objects.filter(workdate=search_date,
                                                       havetime__exact=0,
@@ -191,45 +120,41 @@ class SoltListView(View):
                                                        status__exact="OUTBOUND",
                                                        ).order_by("hailerid")
 
+        # 取得所有车辆的状态情况
+        all_progress_arrived = return_status_record_set(search_date, 2)
+        all_progress_loading = return_status_record_set(search_date, 3)
+        all_progress_finished = return_status_record_set(search_date, 4)
+        all_progress_abnormal = return_status_record_set(search_date, 5)
+
+
         # 取得hailer的数据
         all_Hailers = Haulier.objects.all()
 
         return render(request, "SlotList.html", {
             "search_date": search_date,
-            "all_slots0600": all_slots0600,
-            "all_slots0630": all_slots0630,
-            "all_slots0700": all_slots0700,
-            "all_slots0730": all_slots0730,
-            "all_slots0800": all_slots0800,
-            "all_slots0830": all_slots0830,
-            "all_slots0900": all_slots0900,
-            "all_slots0930": all_slots0930,
-            "all_slots1000": all_slots1000,
-            "all_slots1030": all_slots1030,
-            "all_slots1100": all_slots1100,
-            "all_slots1130": all_slots1130,
-            "all_slots1200": all_slots1200,
-            "all_slots1230": all_slots1230,
-            "all_slots1300": all_slots1300,
-            "all_slots1330": all_slots1330,
-            "all_slots1400": all_slots1400,
-            "all_slots1430": all_slots1430,
-            "all_slots1500": all_slots1500,
-            "all_slots1530": all_slots1530,
-            "all_slots1600": all_slots1600,
-            "all_slots1630": all_slots1630,
-            "all_slots1700": all_slots1700,
-            "all_slots1730": all_slots1730,
-            "all_slots1800": all_slots1800,
-            "all_slots1830": all_slots1830,
-            "all_slots1900": all_slots1900,
-            "all_slots1930": all_slots1930,
-            "all_slots2000": all_slots2000,
-            "all_slots2030": all_slots2030,
-            "all_NoInSlotsTimes": all_NoInSlotsTimes,
-            "all_NoOutSlotsTimes": all_NoOutSlotsTimes,
+            "all_slots0600": all_slots0600, "all_slots0630": all_slots0630,
+            "all_slots0700": all_slots0700, "all_slots0730": all_slots0730,
+            "all_slots0800": all_slots0800, "all_slots0830": all_slots0830,
+            "all_slots0900": all_slots0900, "all_slots0930": all_slots0930,
+            "all_slots1000": all_slots1000, "all_slots1030": all_slots1030,
+            "all_slots1100": all_slots1100, "all_slots1130": all_slots1130,
+            "all_slots1200": all_slots1200, "all_slots1230": all_slots1230,
+            "all_slots1300": all_slots1300, "all_slots1330": all_slots1330,
+            "all_slots1400": all_slots1400, "all_slots1430": all_slots1430,
+            "all_slots1500": all_slots1500, "all_slots1530": all_slots1530,
+            "all_slots1600": all_slots1600, "all_slots1630": all_slots1630,
+            "all_slots1700": all_slots1700, "all_slots1730": all_slots1730,
+            "all_slots1800": all_slots1800, "all_slots1830": all_slots1830,
+            "all_slots1900": all_slots1900, "all_slots1930": all_slots1930,
+            "all_slots2000": all_slots2000, "all_slots2030": all_slots2030,
+            "all_NoInSlotsTimes": all_NoInSlotsTimes, "all_NoOutSlotsTimes": all_NoOutSlotsTimes,
             "all_Hailers": all_Hailers,
             "max_slot_number": max_slot_number,
+            "all_progress_arrived": all_progress_arrived,
+            "all_progress_loading": all_progress_loading,
+            "all_progress_finished": all_progress_finished,
+            "all_progress_abnormal": all_progress_abnormal,
+
         })
 
     def post(self, request):
@@ -264,7 +189,7 @@ class SoltListView(View):
             if d_workdate < yesterday:
                 strError = "You can not select the date before today. "
                 return render(request, "Slot_Save_Error.html",
-                              {"Warehouse_form": Warehouse_form,
+                              {"deliveryref":deliveryref,
                                "workdate": "",
                                "slottime": "",
                                "ErrorMsg": strError,
@@ -294,18 +219,9 @@ class SoltListView(View):
                                "ErrorMsg": strError,
                                })
 
+            slottime = reset_time(slottime)
             slot_hour = slottime[0:2]
             slot_mins = slottime[3:5]
-            if slot_mins != '30' and slot_mins != '00':
-                if slot_mins > '30':
-                    slot_hour = int(slot_hour) + 1
-                    if slot_hour < 10:
-                        slot_hour = '0' + str(slot_hour)
-                    slot_mins = '00'
-                else:
-                    slot_mins = '30'
-
-            slottime = slot_hour + ":" + slot_mins
 
             vehiclereg = request.POST.get("vehiclereg", 0)  # 车牌号码
             status = request.POST.get("status", 0)  # INBOUND OR OUTBOUND
@@ -375,9 +291,9 @@ class SoltListView(View):
             warehouse.status = status.upper()
             warehouse.progress = 1  # 1=Booked 2=Arrived 3=Loading 4=Finished 5=abnormal
             warehouse.havetime = havetime
-            warehouse.hailerid = hailer_id
+            warehouse.hailerid_id = hailer_id
             warehouse.position = position
-            warehouse.op_id = request.user.id
+            warehouse.op_user_id = request.user.id
             warehouse.save()
 
             progressRecord = ProgressRecord()
@@ -388,7 +304,7 @@ class SoltListView(View):
             progressRecord.progress_name = "Booked"
             progressRecord.remark = "Create Booked"
             progressRecord.save()
-            return render(request, "Slot_Save_Success.html", {"searching_date": workdate,
+            return render(request, "Slot_Save_Success.html", {"search_date": workdate,
                                                               })
         else:
             strError = "Delivery Reference can not be repeated or empty. "
@@ -399,18 +315,6 @@ class SoltListView(View):
                            "ErrorMsg": strError})
 
 
-# class SoltDetailView(DetailView):
-#     queryset = Warehouse.objects.all()
-#     template_name = "Slot_Detail.html"
-#
-#     def get_object(self):
-#         # get_object() 默认时返回通过 pk 或 slug 筛选出的对象（该视图需要操作的对象）
-#         # Call the superclass
-#         object = super().get_object()
-#
-#         return object
-
-
 class SoltDetailView(DetailView):
     queryset = Warehouse.objects.all()
     template_name = "Slot_Detail.html"
@@ -419,7 +323,6 @@ class SoltDetailView(DetailView):
         # get_object() 默认时返回通过 pk 或 slug 筛选出的对象（该视图需要操作的对象）
         # Call the superclass
         object = super().get_object()
-        # object.haulier_name = Haulier.objects.filter(id=object.haulierid)
         return object
 
 
@@ -439,39 +342,20 @@ class SoltUpdateView(View):
                 status = slot_result[0].status
                 old_progress = str(slot_result[0].progress)
                 old_remark = slot_result[0].remark.strip()
-                new_remark = request.POST.get("new_remark", "").strip()  # 新状态
+                new_remark = request.POST.get("new_remark", "").strip()  # 新备注
                 remark_reason = ""  # 记录修改的原因
-                progress_name = ""
-                if old_progress == '1':
-                    progress_name = str(old_progress) + "-Booked"
-                if old_progress == '2':
-                    progress_name = str(old_progress) + "-Arrived"
-                if old_progress == '3':
-                    progress_name = str(old_progress) + "-Loading"
-                if old_progress == '4':
-                    progress_name = str(old_progress) + "-Finished"
-                if old_progress == '5':
-                    progress_name = str(old_progress) + "-Abnormal"
+                progress_name = get_progress_name(old_progress)
                 progress = old_progress
                 if request.user.profile.staff_role != 1:  # 只有仓库人员或经理才能更新状态
+                    if new_workdate == 0:  # 仓库人员进入后，日期读数将为0， 重置新日期及时间
+                        new_workdate = datetime.datetime.strftime(old_workdate, "%Y-%m-%d")
+                        new_time = old_time.strftime("%H:%M")
                     new_progress = request.POST.get("new_progress", 0)  # 新状态
                     if new_progress != old_progress:
                         old_progress_name = progress_name
                         progress = new_progress
-                        if new_progress == '1':
-                            progress_name = str(new_progress) + "-Booked"
-                        if new_progress == '2':
-                            progress_name = str(new_progress) + "-Arrived"
-                        if new_progress == '3':
-                            progress_name = str(new_progress) + "-Loading"
-                        if new_progress == '4':
-                            progress_name = str(new_progress) + "-Finished"
-                        if new_progress == '5':
-                            progress_name = str(new_progress) + "-Abnormal"
+                        progress_name = get_progress_name(new_progress)
                         remark_reason = " | Modify Status: From " + old_progress_name + " To " + progress_name  # 记录修改状态
-                        if new_workdate == 0:  # 仓库人员进入后，日期读数将为0， 重置新日期及时间
-                            new_workdate = datetime.datetime.strftime(old_workdate,"%Y-%m-%d")
-                            new_time = old_time.strftime("%H:%M")
                         # 判断进程的顺序， 如果顺序不对，则返回失败信息
                         if new_progress != '5' and old_progress != '5':
                             if new_progress < old_progress:  # 返回保存错误
@@ -483,7 +367,6 @@ class SoltUpdateView(View):
                                                "slottime": new_time,
                                                "ErrorMsg": strError,
                                                })
-
 
                 havetime = request.POST.get("new_haveTime", 1)  # 是否确定时间， 0 未确定， 1 确定
 
@@ -497,7 +380,7 @@ class SoltUpdateView(View):
 
                     if not (new_workdate == compare_olddate and new_time == compare_oldtime):
                         remark_reason = remark_reason + " | Modify DateTime: From " + compare_olddate + \
-                                         " " + compare_oldtime + " To " + new_workdate + " " + new_time  # 记录修改时间
+                                        " " + compare_oldtime + " To " + new_workdate + " " + new_time  # 记录修改时间
                         position = request.user.profile.op_position  # 仓库位置
                         yesterday = datetime.datetime.now() + datetime.timedelta(days=-1)
                         d_workdate = datetime.datetime.strptime(new_workdate, "%Y-%m-%d")
@@ -528,74 +411,66 @@ class SoltUpdateView(View):
                                            "ErrorMsg": strError,
                                            })
 
+                        new_time = reset_time(new_time)
                         slot_hour = new_time[0:2]
                         slot_mins = new_time[3:5]
-                        if slot_mins != '30' and slot_mins != '00':
-                            if slot_mins > '30':
-                                slot_hour = int(slot_hour) + 1
-                                if slot_hour < 10:
-                                    slot_hour = '0' + str(slot_hour)
-                                slot_mins = '00'
-                            else:
-                                slot_mins = '30'
-
-                        new_time = slot_hour + ":" + slot_mins
 
                         # 需要在此判断， 该时间段是否已经满了？
-                        if position == "UK" and havetime == 1:
-                            warehouse_profile_result = WarehouseProfile.objects.filter(position=position)
-                            max_count = 0
-                            max_inbound_count = 0
-                            if warehouse_profile_result:
-                                max_count = warehouse_profile_result[0].maxslot
-                                max_inbound_count = warehouse_profile_result[0].maxinbound
+                        if new_progress == old_progress:  #如果是修改状态，则不必要判断是否满了
+                            if position == "UK" and havetime == 1:
+                                warehouse_profile_result = WarehouseProfile.objects.filter(position=position)
+                                max_count = 0
+                                max_inbound_count = 0
+                                if warehouse_profile_result:
+                                    max_count = warehouse_profile_result[0].maxslot
+                                    max_inbound_count = warehouse_profile_result[0].maxinbound
 
-                            # 检查是否有预留的公司时间
-                            weekday = datetime.datetime.strptime(new_workdate, '%Y-%m-%d').weekday() + 1
-                            check_date_result = FixWeekday.objects.filter(weekday=weekday,
-                                                                          time__hour=slot_hour,
-                                                                          time__minute=slot_mins,
-                                                                          status=1)
-                            count_preserves = 0
-                            if check_date_result:
-                                count_preserves = check_date_result.count()
+                                # 检查是否有预留的公司时间
+                                weekday = datetime.datetime.strptime(new_workdate, '%Y-%m-%d').weekday() + 1
+                                check_date_result = FixWeekday.objects.filter(weekday=weekday,
+                                                                              time__hour=slot_hour,
+                                                                              time__minute=slot_mins,
+                                                                              status=1)
+                                count_preserves = 0
+                                if check_date_result:
+                                    count_preserves = check_date_result.count()
 
-                            # 检查该时间段， 有多少台车已经booking
-                            warehouse_result = Warehouse.objects.filter(workdate=new_workdate,
-                                                                        slottime__hour=slot_hour,
-                                                                        slottime__minute=slot_mins,
-                                                                        havetime__exact=1)
-                            count_orders = 0
-                            if warehouse_result:
-                                count_orders = warehouse_result.count()
-
-                            if count_orders + count_preserves >= max_count:
-                                strError = "Max handle number is " + str(max_count) + \
-                                           ". But System already have booking number is " + \
-                                           str(count_orders) + " and Preserves number is " + str(count_preserves)
-                                return render(request, "Slot_Save_Error.html",
-                                              {"Warehouse_form": Warehouse_Updateform,
-                                               "workdate": new_workdate,
-                                               "slottime": new_time,
-                                               "ErrorMsg": strError
-                                               })
-
-                            if status == "INBOUND":
-                                # 检查该时间段， 最大的INBOUND的数量是否已经爆满
+                                # 检查该时间段， 有多少台车已经booking
                                 warehouse_result = Warehouse.objects.filter(workdate=new_workdate,
                                                                             slottime__hour=slot_hour,
                                                                             slottime__minute=slot_mins,
-                                                                            havetime__exact=1,
-                                                                            status="INBOUND")
-                                count_inbound_order = warehouse_result.count()
-                                if count_inbound_order >= max_inbound_count:
-                                    strError = "INBOUND NUMBER IS FULL, Because We only can handle Max Inbound number is " + str(
-                                        max_inbound_count)
+                                                                            havetime__exact=1)
+                                count_orders = 0
+                                if warehouse_result:
+                                    count_orders = warehouse_result.count()
+
+                                if count_orders + count_preserves >= max_count:
+                                    strError = "Max handle number is " + str(max_count) + \
+                                               ". But System already have booking number is " + \
+                                               str(count_orders) + " and Preserves number is " + str(count_preserves)
                                     return render(request, "Slot_Save_Error.html",
                                                   {"Warehouse_form": Warehouse_Updateform,
                                                    "workdate": new_workdate,
                                                    "slottime": new_time,
-                                                   "ErrorMsg": strError})
+                                                   "ErrorMsg": strError
+                                                   })
+
+                                if status == "INBOUND":
+                                    # 检查该时间段， 最大的INBOUND的数量是否已经爆满
+                                    warehouse_result = Warehouse.objects.filter(workdate=new_workdate,
+                                                                                slottime__hour=slot_hour,
+                                                                                slottime__minute=slot_mins,
+                                                                                havetime__exact=1,
+                                                                                status="INBOUND")
+                                    count_inbound_order = warehouse_result.count()
+                                    if count_inbound_order >= max_inbound_count:
+                                        strError = "INBOUND NUMBER IS FULL, Because We only can handle Max Inbound number is " + str(
+                                            max_inbound_count)
+                                        return render(request, "Slot_Save_Error.html",
+                                                      {"Warehouse_form": Warehouse_Updateform,
+                                                       "workdate": new_workdate,
+                                                       "slottime": new_time,
+                                                       "ErrorMsg": strError})
 
                 if old_remark != new_remark:
                     remark_reason = remark_reason + " | Modify Remark: From " + old_remark \
@@ -606,7 +481,7 @@ class SoltUpdateView(View):
                     warehouse.workdate = new_workdate
                     warehouse.slottime = new_time
                     warehouse.havetime = havetime
-                    warehouse.progress = progress  # 1=Booked 2=Arrived 3=Loading 4=Finished 5=Abnormal
+                    warehouse.progress = int(progress)  # 1=Booked 2=Arrived 3=Loading 4=Finished 5=Abnormal
                     warehouse.remark = new_remark
                     warehouse.save()
 
@@ -614,14 +489,14 @@ class SoltUpdateView(View):
                     progressRecord.deliveryref = deliveryref
                     progressRecord.progress = progress
                     progressRecord.position = request.user.profile.op_position
-                    progressRecord.op_id = request.user.id
+                    progressRecord.op_user_id = request.user.id
                     progressRecord.progress_name = progress_name
                     progressRecord.remark = remark_reason
                     progressRecord.save()
 
-                    return render(request, "Slot_Save_Success.html", {"searching_date": new_workdate, })
+                    return render(request, "Slot_Save_Success.html", {"search_date": new_workdate, })
                 else:
-                    return render(request, "Slot_Save_Success.html", {"searching_date": new_workdate, })
+                    return render(request, "Slot_Save_Success.html", {"search_date": new_workdate, })
         else:
             strError = "Delivery Reference can not be repeated or empty. "
             return render(request, "Slot_Save_Error.html",
