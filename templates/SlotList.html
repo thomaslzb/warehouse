@@ -70,9 +70,11 @@
                         <tr>
                             <form role="form" action="{% url 'slot:slot_list' %}" method="get" >
                                 <div class="form-group">
-                                    <div class="controls input-append date form_date" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                    <div class="controls input-append date form_date" data-date-format="dd MM yyyy"
+                                         data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
                                         <label class="form-inline">
-                                        <input type="date" name="searching_date" value="{{ search_date }}" id="SearchingDate" max="3000-12-31" min="2020-08-01" class="form-control">
+                                        <input type="date" name="searching_date" value="{{ search_date }}"
+                                               id="SearchingDate" max="3000-12-31" min="2020-08-01" class="form-control">
                                         </label>
                                         <button type="submit" class="btn btn-success">Searching</button>
                                         <label><span class="text-primary alert-info well-sm"> Inbound</span>
@@ -1233,106 +1235,121 @@
                 </table>
             </div>
             <!-- 列出当天所有订单的状态统计情况 -->
-            <div class="col-md-4">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>
-                                <p class="text-muted">{{ search_date|date:"d-m-Y" }}</P>
-                            </th>
-                            <th>
-                                <p class="text-muted">Progress Status</P>
-                            </th>
-                            <th>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Arrieved 情况 -->
-                        <tr>
-                            <td><p class="text-muted">Arrived: {{ all_progress_arrived.count }}</P></td>
-                        </tr>
-                        <tr>
-                           {% for progress_arrived in all_progress_arrived %}
-                               {% if forloop.counter >= 3 %}
-                                   {% if  forloop.counter0|divisibleby:3 %}
-                                        <tr>
-                               {% endif %}
-                               {% endif %}
-                                <td>
-                                    <a href ="{% url 'slot:slot_detail' progress_arrived.id %}">
-                                        <span data-toggle="popover" title="{{ progress_arrived.op_user.username }}">
-                                            {{ progress_arrived.deliveryref }}</span>
-                                    </a>
-                                </td>
-                           {% endfor %}
-                        </tr>
-                        <!-- Loading 情况 -->
-                        <tr>
-                        <tr>
-                            <td><p class="text-muted">Loading: {{ all_progress_loading.count }}</P></td>
-                            <td></td><td></td>
-                        </tr>
-                           {% for progress_loading in all_progress_loading %}
-                               {% if forloop.counter >= 3 %}
-                                   {% if  forloop.counter0|divisibleby:3 %}
-                                        <tr>
-                               {% endif %}
-                               {% endif %}
-                                <td>
-                                    <a href ="{% url 'slot:slot_detail' progress_loading.id %}">
-                                        <span data-toggle="popover" title="{{ progress_loading.op_user.username }}">{{ progress_loading.deliveryref }}</span>
-                                    </a>
-                                </td>
-                           {% endfor %}
-                        </tr>
-                        <!-- Finished 情况 -->
-                        <tr>
-                            <td><p class="text-muted">Finished: {{ all_progress_finished.count }}</P></td>
-                            <td></td><td></td>
-                        </tr>
-                        <tr>
-                           {% for progress_finished in all_progress_finished %}
-                               {% if forloop.counter >= 3 %}
-                                   {% if  forloop.counter0|divisibleby:3 %}
-                                        <tr>
-                               {% endif %}
-                               {% endif %}
-                                <td>
-                                    <a href ="{% url 'slot:slot_detail' progress_finished.id %}">
-                                        <span data-toggle="popover" title="{{ progress_finished.op_user.username }}">
-                                            {{ progress_finished.deliveryref }}</span>
-                                    </a>
-                                </td>
-                           {% endfor %}
-                        </tr>
-                        <!-- Abnormal 情况 -->
-                        <tr>
-                            <td><p class="text-muted">Abnormal: {{ all_progress_abnormal.count }}</P></td>
-                            <td></td><td></td>
-                        </tr>
-                        <tr>
-                           {% for progress_abnormal in all_progress_abnormal %}
-                               {% if forloop.counter >= 3 %}
-                                   {% if  forloop.counter0|divisibleby:3 %}
-                                        <tr>
-                               {% endif %}
-                               {% endif %}
-                                <td>
-                                    <a href ="{% url 'slot:slot_detail' progress_abnormal.id %}">
-                                        <span data-toggle="popover" title="{{ progress_abnormal.op_user.username }}">
-                                            {{ progress_abnormal.deliveryref }}</span>
-                                    </a>
-                                </td>
+            {% if all_progress_arrived.count != 0 or all_progress_loading.count != 0 or all_progress_abnormal.count != 0 or all_progress_finished.count != 0  %}
+                <div class="col-md-4">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <p class="text-muted">{{ search_date }}</P>
+                                </th>
+                                <th>
+                                    <p class="text-muted">Progress Status</P>
+                                </th>
+                                <th>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Arrieved 情况 -->
+                            {% if all_progress_arrived.count != 0 %}
+                            <tr class="info">
+                                <td class="h4">Arrived: <span class="badge">{{ all_progress_arrived.count }}</span></td>
+                                <td></td><td></td>
+                            </tr>
+                            <tr class="info">
+                               {% for progress_arrived in all_progress_arrived %}
+                                   {% if forloop.counter >= 3 %}
+                                       {% if forloop.counter0|divisibleby:3 %}
+                                            <tr class="info">
+                                   {% endif %}
+                                   {% endif %}
+                                    <td>
+                                        <a href ="{% url 'slot:slot_detail' progress_arrived.id %}">
+                                            <span data-toggle="popover" title="{{ progress_arrived.op_user.username }}">
+                                                {{ progress_arrived.deliveryref }}</span>
+                                        </a>
+                                    </td>
+                               {% endfor %}
+                            </tr>
+                            <tr><td></td><td></td><td></td></tr>
+                            {% endif %}
+                            <!-- Loading 情况 -->
+                            {% if all_progress_loading.count != 0 %}
+                            <tr>
+                            <tr class="warning">
+                                <td class="h4">Loading: <span class="badge">{{ all_progress_loading.count }}</span></td>
+                                <td></td><td></td>
+                            </tr>
+                            <tr class="warning">
+                               {% for progress_loading in all_progress_loading %}
+                                   {% if forloop.counter >= 3 %}
+                                       {% if  forloop.counter0|divisibleby:3 %}
+                                            <tr class="warning">
+                                   {% endif %}
+                                   {% endif %}
+                                    <td>
+                                        <a href ="{% url 'slot:slot_detail' progress_loading.id %}">
+                                            <span data-toggle="popover" title="{{ progress_loading.op_user.username }}">{{ progress_loading.deliveryref }}</span>
+                                        </a>
+                                    </td>
+                               {% endfor %}
+                            </tr>
+                            <tr><td></td><td></td><td></td></tr>
+                            {% endif %}
+                            <!-- Finished 情况 -->
+                            {% if all_progress_finished.count != 0 %}
+                            <tr class="success">
+                                <td class="h4">Finished: <span class="badge">{{ all_progress_finished.count }}</span></td>
+                                <td></td><td></td>
+                            </tr>
+                            <tr class="success">
+                               {% for progress_finished in all_progress_finished %}
+                                   {% if forloop.counter >= 3 %}
+                                       {% if  forloop.counter0|divisibleby:3 %}
+                                            <tr class="success">
+                                   {% endif %}
+                                   {% endif %}
+                                    <td>
+                                        <a href ="{% url 'slot:slot_detail' progress_finished.id %}">
+                                            <span data-toggle="popover" title="{{ progress_finished.op_user.username }}">
+                                                {{ progress_finished.deliveryref }}</span>
+                                        </a>
+                                    </td>
+                               {% endfor %}
+                            </tr>
+                            <tr><td></td><td></td><td></td></tr>
+                            {% endif %}
+                            <!-- Abnormal 情况 -->
+                            {% if all_progress_abnormal.count != 0 %}
+                            <tr class="danger">
+                                <td class="h4">Abnormal: <span class="badge">{{ all_progress_abnormal.count }}</span></td>
+                                <td></td><td></td>
+                            </tr>
+                            <tr class="danger">
+                               {% for progress_abnormal in all_progress_abnormal %}
+                                   {% if forloop.counter >= 3 %}
+                                       {% if  forloop.counter0|divisibleby:3 %}
+                                            <tr class="danger">
+                                   {% endif %}
+                                   {% endif %}
+                                    <td>
+                                        <a href ="{% url 'slot:slot_detail' progress_abnormal.id %}">
+                                            <span data-toggle="popover" title="{{ progress_abnormal.op_user.username }}">
+                                                {{ progress_abnormal.deliveryref }}</span>
+                                        </a>
+                                    </td>
 
-                           {% endfor %}
-                        </tr>
-                        <tr>
-                           <td></td><td></td><td></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                               {% endfor %}
+                            </tr>
+                            {% endif %}
+                            <tr>
+                               <td></td><td></td><td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
             <!-- 列出所有没有时间的 slot -->
             <div class="col-md-4">
                 {% if all_NoInSlotsTimes.count > 0 %}
@@ -1340,7 +1357,7 @@
                     <thead>
                         <tr>
                             <th>
-                                <p class="text-muted">{{ search_date|date:"d-m-Y" }}</P>
+                                <p class="text-muted">{{ search_date }}</P>
                             </th>
                             <th>
                                 <p class="text-muted">Inbound</P>
@@ -1439,12 +1456,14 @@
 
     $(document).ready(function () {
 
-        var time = new Date("{{ search_date|date:"Y/m/d" }}");
+        var time = new Date("{{ search_date }}");
+        {#console.log("PickingDate Begin ====================")#}
+        {#console.log(time)#}
         if (isNaN(time)){
             time = new Date();
         }
-        console.log("PickingDate")
-        console.log(time)
+        {#console.log("PickingDate Change====================")#}
+        {#console.log(time)#}
         var day = ("0" + time.getDate()).slice(-2);
         var month = ("0" + (time.getMonth() + 1)).slice(-2);
         var today = time.getFullYear() + "-" + (month) + "-" + (day);
@@ -1452,7 +1471,16 @@
     })
 
     $(document).ready(function () {
-        var strdate = "{{ search_date }}";
+        {#console.log("search_date orignal ====================")#}
+        {#console.log("{{ search_date }}")#}
+        var strdate = new Date("{{ search_date }}");
+        {#console.log("search_date begin====================")#}
+        {#console.log(strdate)#}
+        if (isNaN(strdate)){
+            strdate = new Date();
+        }
+        {#console.log("search_date change====================")#}
+        {#console.log(strdate)#}
         var searchtime = new Date(strdate);
         var day = ("0" + searchtime.getDate()).slice(-2);
         var month = ("0" + (searchtime.getMonth() + 1)).slice(-2);

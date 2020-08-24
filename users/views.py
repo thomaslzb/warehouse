@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
@@ -7,9 +9,13 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic.base import View
 from django.contrib.auth.models import User
-from django.shortcuts import redirect
+
+# from captcha.helpers import captcha_image_url
+# from captcha.models import CaptchaStore
+
 from .models import EmailVerifyRecord, UserProfile
 from .forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm, ModifyPwdForm
+from django.shortcuts import redirect
 # from utils import send_register_email
 
 
@@ -17,6 +23,7 @@ from .forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm, Modify
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect("/user/login")
+
 
 @login_required
 def pwd_change(request, pk):
@@ -51,6 +58,13 @@ def pwd_change(request, pk):
 
 class LoginView(View):
     def get(self, request):
+        # # 图片验证码
+        # # hashkey验证码生成的秘钥，image_url验证码的图片地址
+        # hashkey = CaptchaStore.generate_key()
+        # image_url = captcha_image_url(hashkey)
+        # # login_form = forms.LoginForm()
+        # # Python内置了一个locals()函数，它返回当前所有的本地变量字典
+        # return render(request, "sign-in.html", locals())
         return render(request, "sign-in.html", {})
 
     def post(self, request):
@@ -66,8 +80,12 @@ class LoginView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    # return render(request, "slotList.html", {"username": username})
-                    return redirect("/slot")
+                    today = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d")
+                    # return render(request, "slotList.html", {"search_date": today})
+                    print(today)
+                    return redirect("/slot/?searching_date="+today)
+                    # return redirect("/slot")
+
                 else:
                     return render(request, "sign-in.html", {"form": "User is Activated!"})
             else:

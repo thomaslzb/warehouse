@@ -20,3 +20,5 @@ six==1.15.0
 sqlparse==0.3.1
 virtualenv==20.0.30
 Werkzeug==1.0.1
+
+django-simple-captcha~=0.5.12

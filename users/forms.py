@@ -9,10 +9,9 @@
 ------------      -------    --------    -----------
 13/08/2020 14:14   lzb       1.0         None
 """
-
+import re
 from django import forms
 from django.contrib.auth.models import User
-import re
 # from captcha.fields import CaptchaField
 
 
@@ -24,6 +23,7 @@ def email_check(email):
 class LoginForm(forms.Form):
     username = forms.CharField(required=True)
     password = forms.CharField(required=True)
+    # captcha = CaptchaField(label="Captcha")
 
     def clean_username(self):
         username = self.cleaned_data.get('username')

@@ -345,6 +345,7 @@ class SoltUpdateView(View):
                 new_remark = request.POST.get("new_remark", "").strip()  # 新备注
                 remark_reason = ""  # 记录修改的原因
                 progress_name = get_progress_name(old_progress)
+                new_progress = old_progress
                 progress = old_progress
                 if request.user.profile.staff_role != 1:  # 只有仓库人员或经理才能更新状态
                     if new_workdate == 0:  # 仓库人员进入后，日期读数将为0， 重置新日期及时间
