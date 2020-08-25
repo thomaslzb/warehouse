@@ -21,17 +21,17 @@
             <td>Haulier</td>
             <td>{{ object.hailerid.code }}
                 &nbsp;-&nbsp;{{ object.hailerid.name }}
-                &nbsp;-&nbsp;Contact: {{ object.hailerid.contact }}
-                &nbsp;-&nbsp;Email:{{ object.hailerid.email }}
-                &nbsp;-&nbsp;Tel:{{ object.hailerid.telephone }}
+                &nbsp;-&nbsp;<span class="glyphicon glyphicon-user"></span>&nbsp;Contact:&nbsp;{{ object.hailerid.contact }}
+                &nbsp;-&nbsp;<span class="glyphicon glyphicon-envelope"></span>&nbsp;Email:&nbsp;{{ object.hailerid.email }}
+                &nbsp;-&nbsp;<span class="glyphicon glyphicon-phone"></span>&nbsp;Tel:&nbsp;{{ object.hailerid.telephone }}
             </td>
           </tr>
           <tr>
             <td>Operator</td>
             <td>{{ object.op_user.username }}
                 &nbsp;&nbsp;{{ object.op_datetime|date:"j-m-Y H:i" }}
-                  Email: {{ object.op_user.email }}
-                &nbsp;&nbsp;Tel: {{ request.op_user.telephone }}
+                  <span class="glyphicon glyphicon-envelope"></span>&nbsp;Email:&nbsp;{{ object.op_user.email }}
+                &nbsp;&nbsp;<span class="glyphicon glyphicon-phone"></span>&nbsp;Tel:&nbsp;{{ request.op_user.telephone }}
             </td>
           </tr>
           <tr>

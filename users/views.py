@@ -10,8 +10,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.generic.base import View
 from django.contrib.auth.models import User
 
-# from captcha.helpers import captcha_image_url
-# from captcha.models import CaptchaStore
+from captcha.helpers import captcha_image_url
+from captcha.models import CaptchaStore
 
 from .models import EmailVerifyRecord, UserProfile
 from .forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm, ModifyPwdForm
@@ -58,14 +58,14 @@ def pwd_change(request, pk):
 
 class LoginView(View):
     def get(self, request):
-        # # 图片验证码
-        # # hashkey验证码生成的秘钥，image_url验证码的图片地址
-        # hashkey = CaptchaStore.generate_key()
-        # image_url = captcha_image_url(hashkey)
-        # # login_form = forms.LoginForm()
-        # # Python内置了一个locals()函数，它返回当前所有的本地变量字典
-        # return render(request, "sign-in.html", locals())
-        return render(request, "sign-in.html", {})
+        # 图片验证码
+        # hashkey验证码生成的秘钥，image_url验证码的图片地址
+        hashkey = CaptchaStore.generate_key()
+        image_url = captcha_image_url(hashkey)
+        login_form = LoginForm()
+        # Python内置了一个locals()函数，它返回当前所有的本地变量字典
+        return render(request, "sign-in.html", locals())
+        # return render(request, "sign-in.html", {})
 
     def post(self, request):
         login_form = LoginForm(request.POST)
@@ -89,9 +89,25 @@ class LoginView(View):
                 else:
                     return render(request, "sign-in.html", {"form": "User is Activated!"})
             else:
-                return render(request, "sign-in.html", {"msg": "UserName or Email or Password isn't correct."})
+                # 图片验证码
+                # hashkey验证码生成的秘钥，image_url验证码的图片地址
+                hashkey = CaptchaStore.generate_key()
+                image_url = captcha_image_url(hashkey)
+                login_form = LoginForm()
+                # Python内置了一个locals()函数，它返回当前所有的本地变量字典
+                msg = "UserName or Email or Password isn't correct."
+                return render(request, "sign-in.html", locals(),)
+                # return render(request, "sign-in.html", {"msg": "UserName or Email or Password isn't correct.", })
         else:
-            return render(request, "sign-in.html", {"login_form": login_form})
+            # 图片验证码
+            # hashkey验证码生成的秘钥，image_url验证码的图片地址
+            hashkey = CaptchaStore.generate_key()
+            image_url = captcha_image_url(hashkey)
+            login_form = LoginForm()
+            # Python内置了一个locals()函数，它返回当前所有的本地变量字典
+            msg = "Captcha isn't Correct."
+            return render(request, "sign-in.html", locals())
+            # return render(request, "sign-in.html", {"login_form": login_form})
 
 
 class RegisterView(View):

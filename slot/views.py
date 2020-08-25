@@ -300,8 +300,8 @@ class SoltListView(View):
             progressRecord.deliveryref = hailer + deliveryref.upper()
             progressRecord.progress = 1  # 1=Booked 2=Arrived 3=Loading 4=Finished 5=abnormal
             progressRecord.position = position
-            progressRecord.op_id = request.user.id
-            progressRecord.progress_name = "Booked"
+            progressRecord.op_user_id = request.user.id
+            progressRecord.progress_name = "1-Booked"
             progressRecord.remark = "Create Booked"
             progressRecord.save()
             return render(request, "Slot_Save_Success.html", {"search_date": workdate,

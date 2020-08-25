@@ -12,7 +12,7 @@
 import re
 from django import forms
 from django.contrib.auth.models import User
-# from captcha.fields import CaptchaField
+from captcha.fields import CaptchaField
 
 
 def email_check(email):
@@ -23,7 +23,7 @@ def email_check(email):
 class LoginForm(forms.Form):
     username = forms.CharField(required=True)
     password = forms.CharField(required=True)
-    # captcha = CaptchaField(label="Captcha")
+    captcha = CaptchaField(label="Captcha")
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
