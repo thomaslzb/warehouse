@@ -20,7 +20,6 @@
                 <img class="mb-4" src="{% static 'images/uklogo.png' %}" alt="DCG Logo" width="135" height="90">
                 <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
                 <div class="text-danger" id="jsLoginTips">{% for key, error in login_form.errors.items %}{{ error }} {% endfor %}{{ msg }}</div>
-                <div class="checkbox mb-3">
                 <label for="inputEmail" class="sr-only">Email address</label>
                 <input type="email" name="username" id="inputusername" class="form-control" placeholder="Email address" required autofocus>
                 <label class="sr-only" for="inputPassword" >Password</label>
@@ -31,7 +30,7 @@
                     <input id="id_reg_captcha_0" name="captcha_0" type="hidden" value="{{ hashkey }}">
                 </div>
             </div>
-            <div>
+            <div class="checkbox mb-3">
                 <label>
                     <input type="checkbox" value="remember-me"> Remember me
                 </label>
@@ -39,6 +38,7 @@
             <input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign in">
             <p class="mt-5 mb-3 text-muted">&copy; DCG 2020-2021</p>
         </form>
+
         <!-- Bootstrap core JavaScript
     ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
