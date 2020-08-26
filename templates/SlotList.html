@@ -90,10 +90,14 @@
                             <td>06:00</td>
                             <td>
                                 {% for slottime in all_slots0600 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -127,10 +131,14 @@
                             <td>06:30</td>
                             <td>
                                 {% for slottime in all_slots0630 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -164,10 +172,14 @@
                             <td>07:00</td>
                             <td>
                                 {% for slottime in all_slots0700 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -201,10 +213,14 @@
                             <td>07:30</td>
                             <td>
                                 {% for slottime in all_slots0730 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -238,10 +254,14 @@
                             <td>08:00</td>
                             <td>
                                 {% for slottime in all_slots0800 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -275,10 +295,14 @@
                             <td>08:30</td>
                             <td>
                                 {% for slottime in all_slots0830 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -312,10 +336,14 @@
                             <td>09:00</td>
                             <td>
                                 {% for slottime in all_slots0900 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -349,10 +377,14 @@
                             <td>09:30</td>
                             <td>
                                 {% for slottime in all_slots0930 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -386,10 +418,14 @@
                             <td>10:00</td>
                             <td>
                                 {% for slottime in all_slots1000 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -423,10 +459,14 @@
                             <td>10:30</td>
                             <td>
                                 {% for slottime in all_slots1030 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -460,10 +500,14 @@
                             <td>11:00</td>
                             <td>
                                 {% for slottime in all_slots1100 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -497,10 +541,14 @@
                             <td>11:30</td>
                             <td>
                                 {% for slottime in all_slots1130 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -534,10 +582,14 @@
                             <td>12:00</td>
                             <td>
                                 {% for slottime in all_slots1200 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -571,10 +623,14 @@
                             <td>12:30</td>
                             <td>
                                 {% for slottime in all_slots1230 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -608,10 +664,14 @@
                             <td>13:00</td>
                             <td>
                                 {% for slottime in all_slots1300 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -645,10 +705,14 @@
                             <td>13:30</td>
                             <td>
                                 {% for slottime in all_slots1330 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -682,10 +746,14 @@
                             <td>14:00</td>
                             <td>
                                 {% for slottime in all_slots1400 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -719,10 +787,14 @@
                             <td>14:30</td>
                             <td>
                                 {% for slottime in all_slots1430 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -756,10 +828,14 @@
                             <td>15:00</td>
                             <td>
                                 {% for slottime in all_slots1500 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -793,10 +869,14 @@
                             <td>15:30</td>
                             <td>
                                 {% for slottime in all_slots1530 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -830,10 +910,14 @@
                             <td>16:00</td>
                             <td>
                                 {% for slottime in all_slots1600 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -867,10 +951,14 @@
                             <td>16:30</td>
                             <td>
                                 {% for slottime in all_slots1630 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -904,10 +992,14 @@
                             <td>17:00</td>
                             <td>
                                 {% for slottime in all_slots1700 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -941,10 +1033,14 @@
                             <td>17:30</td>
                             <td>
                                 {% for slottime in all_slots1730 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -978,10 +1074,14 @@
                             <td>18:00</td>
                             <td>
                                 {% for slottime in all_slots1800 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -1015,10 +1115,14 @@
                             <td>18:30</td>
                             <td>
                                 {% for slottime in all_slots1830 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -1052,10 +1156,14 @@
                             <td>19:00</td>
                             <td>
                                 {% for slottime in all_slots1900 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -1089,10 +1197,14 @@
                             <td>19:30</td>
                             <td>
                                 {% for slottime in all_slots1930 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -1126,10 +1238,14 @@
                             <td>20:00</td>
                             <td>
                                 {% for slottime in all_slots2000 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
@@ -1163,10 +1279,14 @@
                             <td>20:30</td>
                             <td>
                                 {% for slottime in all_slots2030 %}
-                                    {% if slottime.status == 'INBOUND' %}
-                                        <span class="alert-info well-sm">
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
                                     {% else %}
-                                        <span class="alert-success well-sm">
+                                        <span class="alert-dismissable">
                                     {% endif %}
                                     <a href ="{% url 'slot:slot_detail' slottime.id %}">
                                         {% if slottime.progress == 1 %}
