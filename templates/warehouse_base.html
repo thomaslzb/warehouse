@@ -11,15 +11,15 @@
     <link href= "{% static 'css/style.css' %}" rel="stylesheet">
     <div class="panel-heading">
         <!-- 头部 -->
-        <div class="row">
-            <div class="col-md-12" width = 100% >
-                <div class="col-sm-1">
-                    <img class="form-inline" src="{% static 'images/uklogo.png' %}" >
-                </div>
-                <div class="col-sm-8">
-                    <h3>&nbsp;&nbsp;Slot Time Booking System</h3>
-                    &nbsp;&nbsp;&nbsp;&nbsp;Current User: <a href ="" class="text-right">{{ request.user }}</a>&nbsp-&nbsp<a href="{% url 'users:logout' %}">Logout</a>
-                </div>
+        <div class="panel-heading">
+            <div class="inline-group col-sm-1">
+                <img class="form-inline" src="{% static 'images/uklogo.png' %}" >
+            </div>
+            <div class="col-sm-6">
+                <h2>&nbsp;&nbsp;Slot Time Booking System</h2>
+                &nbsp;&nbsp;&nbsp;&nbsp;<label>Current User:</label> &nbsp-&nbsp
+                    <a href ="" class="text-right">{{ request.user }}</a>
+                    <a href="{% url 'users:logout' %}">Logout</a>
             </div>
         </div>
     </div>

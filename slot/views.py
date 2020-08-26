@@ -300,8 +300,8 @@ class SoltListView(View):
             progressRecord.deliveryref = hailer + deliveryref.upper()
             progressRecord.progress = 1  # 1=Booked 2=Arrived 3=Loading 4=Finished 5=abnormal
             progressRecord.position = position
-            progressRecord.op_id = request.user.id
-            progressRecord.progress_name = "Booked"
+            progressRecord.op_user_id = request.user.id
+            progressRecord.progress_name = "1-Booked"
             progressRecord.remark = "Create Booked"
             progressRecord.save()
             return render(request, "Slot_Save_Success.html", {"search_date": workdate,
@@ -345,6 +345,7 @@ class SoltUpdateView(View):
                 new_remark = request.POST.get("new_remark", "").strip()  # 新备注
                 remark_reason = ""  # 记录修改的原因
                 progress_name = get_progress_name(old_progress)
+                new_progress = old_progress
                 progress = old_progress
                 if request.user.profile.staff_role != 1:  # 只有仓库人员或经理才能更新状态
                     if new_workdate == 0:  # 仓库人员进入后，日期读数将为0， 重置新日期及时间

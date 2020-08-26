@@ -10,32 +10,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6c41a3cb-ed83-4987-9df8-3e22d8167175" name="Default Changelist" comment="2020.08.19EndCompany">
-      <change afterPath="$PROJECT_DIR$/slot/migrations/0003_auto_20200821_2023.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/slot/migrations/0005_auto_20200822_0945.py" afterDir="false" />
+    <list default="true" id="6c41a3cb-ed83-4987-9df8-3e22d8167175" name="Default Changelist" comment="2020.08.25 EndUpdate">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/slot/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/slot/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/slot/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/slot/migrations/0001_initial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/slot/migrations/0002_auto_20200821_0835.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/slot/migrations/0003_auto_20200821_0839.py" beforeDir="false" afterPath="$PROJECT_DIR$/slot/migrations/0002_auto_20200821_2021.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/slot/migrations/0004_auto_20200821_0851.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/slot/migrations/0005_auto_20200821_1206.py" beforeDir="false" afterPath="$PROJECT_DIR$/slot/migrations/0004_auto_20200821_2024.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/slot/migrations/0006_auto_20200821_1554.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/slot/migrations/0007_auto_20200821_1600.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/slot/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/slot/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/slot/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/slot/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/SlotList.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/SlotList.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/Slot_Confirm_Delete.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Slot_Confirm_Delete.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/Slot_Detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Slot_Detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/Slot_Save_Error.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Slot_Save_Error.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/Slot_Save_Success.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Slot_Save_Success.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sign-in.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sign-in.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/views.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/warehouse_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/warehouse_base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/migrations/0001_initial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0002_auto_20200821_0821.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/warehouse/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/warehouse/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +51,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Demo/Github/OnlineCourse" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -184,6 +162,10 @@
       <workItem from="1598172325987" duration="10749000" />
       <workItem from="1598184555975" duration="4460000" />
       <workItem from="1598253249580" duration="6760000" />
+      <workItem from="1598260028680" duration="17349000" />
+      <workItem from="1598283633776" duration="22624000" />
+      <workItem from="1598372614762" duration="349000" />
+      <workItem from="1598373004212" duration="4906000" />
     </task>
     <task id="LOCAL-00001" summary="today">
       <created>1597329118319</created>
@@ -241,7 +223,28 @@
       <option name="project" value="LOCAL" />
       <updated>1597854522126</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="2020.08.24 For Server">
+      <created>1598286046803</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1598286046804</updated>
+    </task>
+    <task id="LOCAL-00010" summary="2020.08.25 End Update">
+      <created>1598372246645</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1598372246645</updated>
+    </task>
+    <task id="LOCAL-00011" summary="2020.08.25 EndUpdate">
+      <created>1598372812685</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1598372812685</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -283,7 +286,10 @@
     <MESSAGE value="today12" />
     <MESSAGE value="Ver1.0" />
     <MESSAGE value="2020.08.19EndCompany" />
-    <option name="LAST_COMMIT_MESSAGE" value="2020.08.19EndCompany" />
+    <MESSAGE value="2020.08.24 For Server" />
+    <MESSAGE value="2020.08.25 End Update" />
+    <MESSAGE value="2020.08.25 EndUpdate" />
+    <option name="LAST_COMMIT_MESSAGE" value="2020.08.25 EndUpdate" />
   </component>
   <component name="WindowStateProjectService">
     <state x="586" y="198" key="#Inspections" timestamp="1597330029454">
@@ -355,34 +361,38 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2710" y="215" key="Github.UntrackedFilesDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597237516196" />
-    <state width="1877" height="427" key="GridCell.Tab.0.bottom" timestamp="1598259257660">
+    <state width="938" height="391" key="GridCell.Tab.0.bottom" timestamp="1598426302771">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1493" height="351" key="GridCell.Tab.0.bottom/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1596706046774" />
     <state width="1557" height="299" key="GridCell.Tab.0.bottom/0.0.1600.860@0.0.1600.860" timestamp="1598189022591" />
-    <state width="1877" height="427" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598259257660" />
+    <state width="938" height="391" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598426302771" />
     <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597303162745" />
-    <state width="1877" height="427" key="GridCell.Tab.0.center" timestamp="1598259257660">
+    <state width="1877" height="411" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1598348573354" />
+    <state width="938" height="391" key="GridCell.Tab.0.center" timestamp="1598426302771">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1493" height="351" key="GridCell.Tab.0.center/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1596706046772" />
     <state width="1557" height="299" key="GridCell.Tab.0.center/0.0.1600.860@0.0.1600.860" timestamp="1598189022591" />
-    <state width="1877" height="427" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598259257660" />
+    <state width="938" height="391" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598426302771" />
     <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597303162745" />
-    <state width="1877" height="427" key="GridCell.Tab.0.left" timestamp="1598259257660">
+    <state width="1877" height="411" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1598348573354" />
+    <state width="938" height="391" key="GridCell.Tab.0.left" timestamp="1598426302770">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1493" height="351" key="GridCell.Tab.0.left/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1596706046770" />
     <state width="1557" height="299" key="GridCell.Tab.0.left/0.0.1600.860@0.0.1600.860" timestamp="1598189022590" />
-    <state width="1877" height="427" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598259257660" />
+    <state width="938" height="391" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598426302770" />
     <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597303162745" />
-    <state width="1877" height="427" key="GridCell.Tab.0.right" timestamp="1598259257660">
+    <state width="1877" height="411" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1598348573354" />
+    <state width="938" height="391" key="GridCell.Tab.0.right" timestamp="1598426302771">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1493" height="351" key="GridCell.Tab.0.right/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1596706046772" />
     <state width="1557" height="299" key="GridCell.Tab.0.right/0.0.1600.860@0.0.1600.860" timestamp="1598189022591" />
-    <state width="1877" height="427" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598259257660" />
+    <state width="938" height="391" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598426302771" />
     <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597303162745" />
+    <state width="1877" height="411" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1598348573354" />
     <state width="1557" height="358" key="GridCell.Tab.1.bottom" timestamp="1597606253395">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
@@ -403,12 +413,12 @@
     </state>
     <state width="1557" height="358" key="GridCell.Tab.1.right/0.0.1600.860@0.0.1600.860" timestamp="1597606253395" />
     <state width="1877" height="348" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597423163035" />
-    <state x="336" y="72" key="SettingsEditor" timestamp="1598260015995">
+    <state x="336" y="72" key="SettingsEditor" timestamp="1598266920546">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="269" y="57" key="SettingsEditor/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1596449690669" />
     <state x="280" y="60" key="SettingsEditor/0.0.1600.860@0.0.1600.860" timestamp="1598127682492" />
-    <state x="336" y="72" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598260015995" />
+    <state x="336" y="72" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598266920546" />
     <state x="2262" y="171" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597248712505" />
     <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1597667402742">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -431,6 +441,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="468" y="13" width="600" height="798" key="find.popup/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1596462825324" />
+    <state x="757" y="308" key="git4idea.merge.GitMergeDialog" timestamp="1598372900613">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="757" y="308" key="git4idea.merge.GitMergeDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598372900613" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1597829430014">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -439,15 +453,10 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/users/views.py</url>
-          <line>145</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/slot/views.py</url>
-          <line>63</line>
-          <option name="timeStamp" value="3" />
+        <line-breakpoint enabled="true" type="django-line">
+          <url>file://$PROJECT_DIR$/templates/SlotList.html</url>
+          <line>70</line>
+          <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import sys
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -28,7 +29,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["192.168.1.104", "127.0.0.1", ]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,13 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # third app
+    'captcha',
 
     # myself
     'users',
     'utils',
     'slot'
 ]
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -56,7 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'rbac.middlewares.rbac.RbacMiddleware',
+    # 'rbac.middlewares.rbac.RbacMiddleware',
 ]
 
 ROOT_URLCONF = 'warehouse.urls'
@@ -80,7 +80,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'warehouse.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -88,14 +87,13 @@ DATABASES = {
     # 这个是本地开发设置
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # 数据库引擎
-        'NAME': 'ukdcg',    # 数据库名称
-        'USER': 'ukdcg',    # 链接数据库的用户名
-        'PASSWORD': 'ukthomas',     # 链接数据库的密码
-        'HOST': '127.0.0.1',    # mysql服务器的域名和ip地址
-        'PORT': '3306',     # mysql的一个端口号,默认是3306
+        'NAME': 'ukdcg',  # 数据库名称
+        'USER': 'ukdcg',  # 链接数据库的用户名
+        'PASSWORD': 'ukthomas',  # 链接数据库的密码
+        'HOST': '127.0.0.1',  # mysql服务器的域名和ip地址
+        'PORT': '3306',  # mysql的一个端口号,默认是3306
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -115,7 +113,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -125,17 +122,16 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
- os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'static'),
 )
 
-STATICFILES_FNDERS=(
+STATICFILES_FNDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
@@ -150,3 +146,19 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = "thomaslzbuk@gmail.com"
 EMAIL_FROM = "thomaslzbuk@gmail.com"
 EMAIL_HOST_PASSWORD = ""
+
+# django_simple_captcha 验证码配置其他配置项查看文档
+# 默认格式
+CAPTCHA_OUTPUT_FORMAT = '%(image)s %(text_field)s %(hidden_field)s '
+CAPTCHA_NOISE_FUNCTIONS = (# 'captcha.helpers.noise_null',  # 没有样式
+                           # 'captcha.helpers.noise_arcs', # 线
+                           'captcha.helpers.noise_dots', # 点
+                           )
+# 图片中的文字为随机英文字母，如 mdsh
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
+
+# 图片中的文字为数字表达式，如2+2=
+# CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
+
+# 超时(minutes)
+CAPTCHA_TIMEOUT = 1
