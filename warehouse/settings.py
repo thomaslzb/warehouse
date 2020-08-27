@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ["192.168.1.104", "127.0.0.1", ]
 # Application definition
 
 INSTALLED_APPS = [
+    'simpleui',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -162,3 +163,5 @@ CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
 
 # 超时(minutes)
 CAPTCHA_TIMEOUT = 1
+
+SIMPLEUI_ANALYSIS = False
