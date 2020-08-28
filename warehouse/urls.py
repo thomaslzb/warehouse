@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.views.generic.base import TemplateView
 from django.urls import path, include, re_path
 from users.views import LoginView, LogoutView
+from . import views
 
 urlpatterns = [
     path('', LoginView.as_view(), name="index"),
@@ -26,3 +27,8 @@ urlpatterns = [
     path('captcha/', include('captcha.urls')),
 ]
 
+
+handler400 = views.bad_request
+handler403 = views.permission_denied
+handler404 = views.page_not_found
+handler500 = views.server_error

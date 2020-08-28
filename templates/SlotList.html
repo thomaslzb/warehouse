@@ -1466,23 +1466,29 @@
                                {% endif %}
                                {% endif %}
                                 <td>
+                                    {% if slottime.progress != 4 %}
+                                        <span class="alert-warning well-sm">
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
                                     <a href ="{% url 'slot:slot_detail' NoSlotTime.id %}">
                                         {% if NoSlotTime.progress == 1 %}
-                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ slottime.status }}">{{ NoSlotTime.deliveryref }}-Booked</span>
+                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Booked</span>
                                         {% endif %}
                                         {% if NoSlotTime.progress == 2 %}
-                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ slottime.status }}">{{ NoSlotTime.deliveryref }}-Arrived</span>
+                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Arrived</span>
                                         {% endif %}
                                         {% if NoSlotTime.progress == 3 %}
-                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ slottime.status }}">{{ NoSlotTime.deliveryref }}-Loading</span>
+                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Loading</span>
                                         {% endif %}
                                         {% if NoSlotTime.progress == 4 %}
-                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ slottime.status }}">{{ NoSlotTime.deliveryref }}-Finished</span>
+                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Finished</span>
                                         {% endif %}
                                         {% if NoSlotTime.progress == 5 %}
-                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ slottime.status }}">{{ NoSlotTime.deliveryref }}-Abnormal</span>
+                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Abnormal</span>
                                         {% endif %}
                                     </a>
+                                    </span>
                                 </td>
                            {% endfor %}
                         </tr>
@@ -1514,23 +1520,29 @@
                                {% endif %}
                                {% endif %}
                                 <td>
+                                    {% if slottime.progress != 4 %}
+                                        <span class="alert-warning well-sm">
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
                                     <a href ="{% url 'slot:slot_detail' NoSlotTime.id %}">
                                         {% if NoSlotTime.progress == 1 %}
-                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ slottime.status }}">{{ NoSlotTime.deliveryref }}-Booked</span>
+                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Booked</span>
                                         {% endif %}
                                         {% if NoSlotTime.progress == 2 %}
-                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ slottime.status }}">{{ NoSlotTime.deliveryref }}-Arrived</span>
+                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Arrived</span>
                                         {% endif %}
                                         {% if NoSlotTime.progress == 3 %}
-                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ slottime.status }}">{{ NoSlotTime.deliveryref }}-Loading</span>
+                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Loading</span>
                                         {% endif %}
                                         {% if NoSlotTime.progress == 4 %}
-                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ slottime.status }}">{{ NoSlotTime.deliveryref }}-Finished</span>
+                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Finished</span>
                                         {% endif %}
                                         {% if NoSlotTime.progress == 5 %}
-                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ slottime.status }}">{{ NoSlotTime.deliveryref }}-Abnormal</span>
+                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Abnormal</span>
                                         {% endif %}
                                     </a>
+                                    </span>
                                 </td>
                            {% endfor %}
                         </tr>
