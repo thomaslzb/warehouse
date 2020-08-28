@@ -16,7 +16,6 @@ import sys
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.join(BASE_DIR, "apps"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -27,7 +26,7 @@ SECRET_KEY = '$br5hka+8vgljff#ya&taz*%d_(mmtzdxt-p*&=7o@3h48ue(2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["192.168.1.104", "127.0.0.1", ]
+ALLOWED_HOSTS = ["*", ]
 
 # Application definition
 
@@ -35,6 +34,7 @@ INSTALLED_APPS = [
     'simpleui',
     'django.contrib.admin',
     'django.contrib.auth',
+
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -165,3 +165,8 @@ CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
 CAPTCHA_TIMEOUT = 1
 
 SIMPLEUI_ANALYSIS = False
+
+USE_L10N = False
+DATETIME_FORMAT = "Y-m-d H:i:s"
+DATE_FORMAT = "Y-m-d"
+TIME_FORMAT = "H:i"
