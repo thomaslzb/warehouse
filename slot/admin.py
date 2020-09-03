@@ -5,7 +5,7 @@ from .models import Haulier, WarehouseProfile, FixWeekday, Warehouse, ProgressRe
 # Register your models here.
 # admin.site.register(Haulier)
 @admin.register(FixWeekday)
-class FixWeekday(admin.ModelAdmin):
+class FixWeekdayAdmin(admin.ModelAdmin):
     list_display = ('Haulier', 'weekday', 'time', 'status', 'op_user', 'op_datetime')
     fk_fields = ('op_user_id',)
     list_per_page = 25
@@ -20,7 +20,7 @@ class HaulierAdmin(admin.ModelAdmin):
 
 
 @admin.register(ProgressRecord)
-class ProgressReoord(admin.ModelAdmin):
+class ProgressReoordAdmin(admin.ModelAdmin):
     list_display = ('deliveryref', 'progress', 'remark', 'op_user', 'op_datetime', 'position', )
     search_fields = ('deliveryref', )
     list_filter = ('progress', 'position')
@@ -29,13 +29,13 @@ class ProgressReoord(admin.ModelAdmin):
 
 
 @admin.register(WarehouseProfile)
-class WarehouseProfile(admin.ModelAdmin):
+class WarehouseProfileAdmin(admin.ModelAdmin):
     list_display = ('position', 'beginworktime', 'overworktime', 'maxslot', 'maxinbound', 'op_user', 'op_datetime')
     list_per_page = 25
 
 
 @admin.register(Warehouse)
-class Warehouse(admin.ModelAdmin):
+class WarehouseAdmin(admin.ModelAdmin):
     # def time_display(self, obj):
     #     return obj.slottime.strftime("%H:%M")
 

@@ -16,7 +16,7 @@ from .models import Warehouse
 class SoltTimeForm(forms.ModelForm):
     class Meta:
         model = Warehouse
-        exclude = ["progress", "op_user", "position", "status", "op_datetime", "hailerid", "havetime", ]
+        exclude = ["progress", "op_user", "position", "status", "op_datetime", "hailerid", "havetime", "last_update"]
 
 """
     def clean_deliveryref(self):
