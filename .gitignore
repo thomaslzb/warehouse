@@ -156,3 +156,4 @@ warehouse/settings.py
 slot/migrations/0003_auto_20200828_0916.py
 slot/migrations/0002_auto_20200828_0910.py
 slot/migrations/0003_auto_20200828_0916.py
+*.pyc

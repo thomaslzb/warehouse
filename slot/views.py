@@ -23,6 +23,7 @@ def return_status_record_set(search_date, progress_code):
                                          progress__exact=progress_code, )
     return RecordSet
 
+
 def get_progress_name(progress_code):
     """
     :param progress_code: char 状态的字符
@@ -195,6 +196,18 @@ class SoltListView(View):
                                "ErrorMsg": strError,
                                })
 
+            # 不能更新成为当前日期之后10天的日期
+            last_day = 10
+            diff_day = (d_workdate - yesterday).days
+            if diff_day >= last_day:
+                strError = " You cannot set the date more than 10 days after the current date"
+                return render(request, "Slot_Save_Error.html",
+                              {"Warehouse_form": Warehouse_form,
+                               "workdate": workdate,
+                               "slottime": '',
+                               "ErrorMsg": strError,
+                               })
+
             hailer_result = Haulier.objects.filter(code__exact=hailer)
             hailer_id = 0
             if hailer_result:
@@ -294,6 +307,7 @@ class SoltListView(View):
             warehouse.hailerid_id = hailer_id
             warehouse.position = position
             warehouse.op_user_id = request.user.id
+            warehouse.op_datetime = datetime.datetime.now()
             warehouse.save()
 
             progressRecord = ProgressRecord()
@@ -385,14 +399,28 @@ class SoltUpdateView(View):
                         position = request.user.profile.op_position  # 仓库位置
                         yesterday = datetime.datetime.now() + datetime.timedelta(days=-1)
                         d_workdate = datetime.datetime.strptime(new_workdate, "%Y-%m-%d")
+                        # 不能更新成为当前日期之前的日期
                         if d_workdate < yesterday:
                             strError = "You can not select the date before today. "
                             return render(request, "Slot_Save_Error.html",
                                           {"Warehouse_form": Warehouse_Updateform,
-                                           "workdate": "new_workdate",
-                                           "slottime": "new_time",
+                                           "workdate": new_workdate,
+                                           "slottime": new_time,
                                            "ErrorMsg": strError,
                                            })
+
+                        # 不能更新成为当前日期之后10天的日期
+                        last_day = 10
+                        diff_day = (d_workdate - yesterday).days
+                        if diff_day >= last_day:
+                            strError = " You cannot set the date more than 10 days after the current date"
+                            return render(request, "Slot_Save_Error.html",
+                                          {"Warehouse_form": Warehouse_Updateform,
+                                           "workdate": new_workdate,
+                                           "slottime": new_time,
+                                           "ErrorMsg": strError,
+                                           })
+
 
                         # 判断时间，并转换成为整点 00 或 30
                         time_result = WarehouseProfile.objects.filter(position__exact=position)

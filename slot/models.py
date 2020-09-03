@@ -99,8 +99,9 @@ class Warehouse(models.Model):
     position = models.CharField(max_length=2, default="UK", null=False, verbose_name="Position")
     op_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='op_warehouse',
                                 on_delete=models.CASCADE, default=1, verbose_name="Operator")
-    op_datetime = models.DateTimeField(auto_now=True, blank=True, verbose_name="Operator")
+    op_datetime = models.DateTimeField(auto_now=False, blank=True, verbose_name="Operator")
     remark = models.CharField(max_length=80, null=True, blank=True, default="", verbose_name="Remark")
+    last_update = models.DateTimeField(auto_now=True, blank=True, verbose_name="Last Update")
 
     class Meta:
         db_table = "Warehouse"

@@ -12,3 +12,5 @@ def get_current_app_name(_file):
 class SlotConfig(AppConfig):
     name = get_current_app_name(__file__)
     verbose_name = VERBOSE_APP_NAME
+
+
