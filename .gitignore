@@ -162,3 +162,8 @@ menu/migrations/0001_initial.py
 menu/migrations/0002_auto_20200904_1413.py
 menu/migrations/0003_firstmenu_menu_url.py
 menu/migrations/__init__.py
+menu/migrations/0006_auto_20200904_1723.py
+menu/migrations/0004_firstmenu_have_child.py
+menu/migrations/0005_auto_20200904_1654.py
+menu/migrations/0006_auto_20200904_1723.py
+*.xml

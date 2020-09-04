@@ -2,23 +2,16 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib import admin
-from .models import Menu, Role, Permission, FirstMenu
+from .models import Menu, Role, Permission
 
 PER_PAGE = 15
 
 
-# Register your models here.
-@admin.register(FirstMenu)
-class FirstMenuAdmin(admin.ModelAdmin):
-    list_display = ('menu_order', 'menu_name', 'menu_url', 'menu_remark')
-    ordering = ('menu_order', )
-    list_per_page = PER_PAGE
-
-
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
-    list_display = ('first_menu', 'menu_order', 'menu_name', 'menu_url', 'menu_remark')
-    ordering = ('first_menu', 'menu_order', )
+    list_display = ('menu_order', 'menu_name', 'node_type', 'menu_url', 'menu_icon', 'parent_id',
+                    'level', 'path', )
+    ordering = ('menu_order', )
     list_per_page = PER_PAGE
 
 
@@ -30,8 +23,8 @@ class RoleAdmin(admin.ModelAdmin):
 
 @admin.register(Permission)
 class PermissionAdmin(admin.ModelAdmin):
-    list_display = ('role', 'first_menu', 'menu', 'is_list', 'is_update', 'is_delete',)
-    fk_fields = ('role', 'first_menu', 'menu_id', )
+    list_display = ('role', 'menu', )
+    fk_fields = ('role', 'menu_id', )
     list_per_page = PER_PAGE
 
 
