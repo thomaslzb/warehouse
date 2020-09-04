@@ -18,4 +18,4 @@ class UserProfileAdmin(UserAdmin):
 admin.site.register(User, UserProfileAdmin)
 
 admin.site.site_header = "DCG Warehouse Admin"
-admin.site.site_title = "DCG Data Adminstration"
+admin.site.site_title = "DCG Data Admin"

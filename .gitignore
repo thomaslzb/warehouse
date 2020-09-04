@@ -157,3 +157,8 @@ slot/migrations/0003_auto_20200828_0916.py
 slot/migrations/0002_auto_20200828_0910.py
 slot/migrations/0003_auto_20200828_0916.py
 *.pyc
+menu/migrations/0001_initial.py
+menu/migrations/0001_initial.py
+menu/migrations/0002_auto_20200904_1413.py
+menu/migrations/0003_firstmenu_menu_url.py
+menu/migrations/__init__.py

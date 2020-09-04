@@ -1,12 +1,29 @@
 import datetime
+import functools
+
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, reverse
-from django.http import Http404
-from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import DetailView, UpdateView, DeleteView
+from django.views.generic import DetailView, DeleteView
+
 from .forms import SoltTimeForm, SoltTimeUpdateForm
 from .models import Warehouse, Haulier, WarehouseProfile, FixWeekday, ProgressRecord
 from users.models import UserProfile
+
+
+def user_is_not_staff(func):
+    """View decorator that checks a user is allowed to write a review, in negative case the decorator return
+    Forbidden """
+
+    @functools.wraps(func)
+    def wrapper(request, *args, **kwargs):
+        user_profile = UserProfile.objects.filter(user_id=request.request.user.id)
+        if user_profile[0].staff_role == 0:
+            return HttpResponseForbidden()
+
+        return func(request, *args, **kwargs)
+
+    return wrapper
 
 
 def return_record_set(search_date, havetime, hours, minutes):
@@ -55,12 +72,13 @@ def reset_time(need_time):
             this_mins = '00'
         else:
             this_mins = '30'
-    new_time = this_hour+":"+this_mins
+    new_time = this_hour + ":" + this_mins
     return new_time
 
 
 # Create your views here.
 class SoltListView(View):
+    @user_is_not_staff
     def get(self, request):
         search_date = request.GET.get("searching_date")
 
@@ -127,7 +145,6 @@ class SoltListView(View):
         all_progress_finished = return_status_record_set(search_date, 4)
         all_progress_abnormal = return_status_record_set(search_date, 5)
 
-
         # 取得hailer的数据
         all_Hailers = Haulier.objects.all()
 
@@ -158,6 +175,7 @@ class SoltListView(View):
 
         })
 
+    @user_is_not_staff
     def post(self, request):
         Warehouse_form = SoltTimeForm(request.POST)
         if Warehouse_form.is_valid():
@@ -190,7 +208,7 @@ class SoltListView(View):
             if d_workdate < yesterday:
                 strError = "You can not select the date before today. "
                 return render(request, "Slot_Save_Error.html",
-                              {"deliveryref":deliveryref,
+                              {"deliveryref": deliveryref,
                                "workdate": "",
                                "slottime": "",
                                "ErrorMsg": strError,
@@ -333,6 +351,7 @@ class SoltDetailView(DetailView):
     queryset = Warehouse.objects.all()
     template_name = "Slot_Detail.html"
 
+    @user_is_not_staff
     def get_object(self):
         # get_object() 默认时返回通过 pk 或 slug 筛选出的对象（该视图需要操作的对象）
         # Call the superclass
@@ -341,6 +360,7 @@ class SoltDetailView(DetailView):
 
 
 class SoltUpdateView(View):
+    @user_is_not_staff
     def post(self, request):
         Warehouse_Updateform = SoltTimeUpdateForm(request.POST)
         if Warehouse_Updateform.is_valid():
@@ -421,7 +441,6 @@ class SoltUpdateView(View):
                                            "ErrorMsg": strError,
                                            })
 
-
                         # 判断时间，并转换成为整点 00 或 30
                         time_result = WarehouseProfile.objects.filter(position__exact=position)
                         begin_time = datetime.time(0).strftime("%H:%M")
@@ -445,7 +464,7 @@ class SoltUpdateView(View):
                         slot_mins = new_time[3:5]
 
                         # 需要在此判断， 该时间段是否已经满了？
-                        if new_progress == old_progress:  #如果是修改状态，则不必要判断是否满了
+                        if new_progress == old_progress:  # 如果是修改状态，则不必要判断是否满了
                             if position == "UK" and havetime == 1:
                                 warehouse_profile_result = WarehouseProfile.objects.filter(position=position)
                                 max_count = 0
@@ -539,6 +558,7 @@ class SlotTimeDeleteView(DeleteView):
     model = Warehouse
     template_name = "Slot_Confirm_Delete.html"
 
+    @user_is_not_staff
     def get_object(self, queryset=None):
         """ Hook to ensure object is owned by request.user. """
         obj = super(SlotTimeDeleteView, self).get_object()
@@ -546,5 +566,6 @@ class SlotTimeDeleteView(DeleteView):
         #     raise Http404
         return obj
 
+    @user_is_not_staff
     def get_success_url(self):
         return reverse('slot:slot_list')
