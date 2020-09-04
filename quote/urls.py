@@ -10,8 +10,9 @@
 01/09/2020 10:29   lzb       1.0         None
 """
 from django.urls import path
-from . import views
+from django.contrib.auth.decorators import login_required
+from .views import QuoteIndex
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', login_required(QuoteIndex.as_view()), name='index'),
 ]
