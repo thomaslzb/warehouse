@@ -46,7 +46,9 @@ INSTALLED_APPS = [
     # myself
     'users',
     'utils',
-    'slot'
+    'slot',
+    'quote',
+    'menu'
 ]
 
 MIDDLEWARE = [
@@ -151,10 +153,10 @@ EMAIL_HOST_PASSWORD = ""
 # django_simple_captcha 验证码配置其他配置项查看文档
 # 默认格式
 CAPTCHA_OUTPUT_FORMAT = '%(image)s %(text_field)s %(hidden_field)s '
-CAPTCHA_NOISE_FUNCTIONS = (# 'captcha.helpers.noise_null',  # 没有样式
-                           # 'captcha.helpers.noise_arcs', # 线
-                           'captcha.helpers.noise_dots', # 点
-                           )
+CAPTCHA_NOISE_FUNCTIONS = (  # 'captcha.helpers.noise_null',  # 没有样式
+    # 'captcha.helpers.noise_arcs', # 线
+    'captcha.helpers.noise_dots',  # 点
+)
 # 图片中的文字为随机英文字母，如 mdsh
 CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
 

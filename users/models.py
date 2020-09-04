@@ -3,6 +3,7 @@ from datetime import datetime
 
 from django.db import models
 from django.contrib.auth.models import User
+from menu.models import Role
 
 
 # Create your models here.
@@ -11,6 +12,8 @@ class UserProfile(models.Model):
     op_position = models.CharField('Op_position', max_length=2, blank=True)
     telephone = models.CharField('Telephone', max_length=100, blank=True)
     mod_date = models.DateTimeField('Last modified', auto_now=True)
+    role = models.ForeignKey(Role, to_field='id', default='1', on_delete=models.CASCADE, related_name='user_role',
+                             verbose_name="System Role")
 
     # OPERATOR  WAREHOUSE MANAGER
     staff_role = models.IntegerField('Staff_role', blank=True, default="0")

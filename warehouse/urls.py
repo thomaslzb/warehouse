@@ -22,6 +22,7 @@ from . import views
 urlpatterns = [
     path('', LoginView.as_view(), name="index"),
     path('slot/', include('slot.urls')),
+    path('quote/', include('quote.urls')),
     path('dcgadmin/', admin.site.urls),
     path("user/", include('users.urls')),
     path('captcha/', include('captcha.urls')),

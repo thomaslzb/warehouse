@@ -82,8 +82,10 @@ class LoginView(View):
                     login(request, user)
                     today = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d")
                     # return render(request, "slotList.html", {"search_date": today})
-                    print(today)
-                    return redirect("/slot/?searching_date="+today)
+                    if user.profile.staff_role != 0:
+                        return redirect("/slot/?searching_date="+today)
+                    else:
+                        return redirect("/quote")
                     # return redirect("/slot")
 
                 else:
