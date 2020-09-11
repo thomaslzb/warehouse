@@ -11,15 +11,15 @@
 """
 
 from django.urls import re_path, path
-from . import views
+from .views import LoginView, LogoutView, MyProfile, pwd_change
 
 app_name = 'users'
 urlpatterns = [
-    path('login/', views.LoginView.as_view(), name='login'),
-    path('logout/', views.logout, name='logout'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('myprofile/', MyProfile.as_view(), name='my_profile'),
+    # path('user/<pk>/pwdchange/', pwd_change, name='pwd_change'),
     # re_path(r'^register/$', views.register, name='register'),
-    # re_path(r'^user/(?P<pk>\d+)/profile/$', views.profile, name='profile'),
     # re_path(r'^user/(?P<pk>\d+)/profile/update/$', views.profile_update, name='profile_update'),
-    # re_path(r'^user/(?P<pk>\d+)/pwdchange/$', views.pwd_change, name='pwd_change'),
 ]
 

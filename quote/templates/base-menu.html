@@ -11,26 +11,30 @@
             <ul class="sidebar-menu" id="nav-accordion">
               <p class="centered"><a href="profile.html"><img src="{% static 'new/img/friends/fr-02.jpg' %}" class="img-circle" width="80"></a></p>
               <h5 class="centered">{{ request.user }}</h5>
-                {% for first_menu  in all_menu %}
                       <li class="mt">
-                        <a class="active" href="index.html">
+                        <a {% if menu_active == 'UK' %}class="active"{% endif %} href="{% url 'inquire-uk' %}">
                           <i class="fa fa-dashboard"></i>
-                          <span>QuotePrice</span>
+                          <span>Deliver To UK</span>
                           </a>
                       </li>
-                    {% for secord_menu in all_menu %}
-                      <li class="sub-menu">
-                        <a href="javascript:;">
-                          <i class="fa fa-desktop"></i>
+                      <li class="mt">
+                        <a {% if menu_active == 'EURO' %}class="active"{% endif %}  href="{% url 'inquire-euro' %}">
+                          <i class="fa fa-dashboard"></i>
+                          <span>Deliver To European</span>
+                          </a>
+                      </li>
+                      <li class="mt">
+                        <a {% if menu_active == 'MY_SKU' %}class="active"{% endif %}  href="{% url 'sku:sku-list' %}">
+                          <i class="fa fa-dashboard"></i>
+                          <span>My SKU</span>
+                          </a>
+                      </li>
+                      <li class="mt">
+                        <a {% if menu_active == 'MY_PROFILE' %}class="active"{% endif %}  href="{% url 'users:my_profile' %}">
+                          <i class="fa fa-dashboard"></i>
                           <span>My Profile</span>
                           </a>
-                        <ul class="sub">
-                          <li><a href="general.html">Profile</a></li>
-                          <li><a href="buttons.html">Modify Password</a></li>
-                        </ul>
                       </li>
-                    {% endfor %}
-                {% endfor %}
             </ul>
             <!-- sidebar menu end-->
           </div>

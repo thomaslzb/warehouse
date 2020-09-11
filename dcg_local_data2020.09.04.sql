@@ -179,7 +179,7 @@ CREATE TABLE IF NOT EXISTS `auth_user` (
 -- Dumping data for table ukdcg.auth_user: ~1 rows (approximately)
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
 INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
-	(1, 'pbkdf2_sha256$216000$K2crmijDVkeo$G3AbgGWi4r/33BkpN2qLkKuHForR0MHuRcGjiVVC3d4=', '2020-09-04 13:09:24.731609', 1, 'dcgadmin', '', '', '', 1, 1, '2020-09-04 13:08:19.179065'),
+	(1, 'pbkdf2_sha256$216000$K2crmijDVkeo$G3AbgGWi4r/33BkpN2qLkKuHForR0MHuRcGjiVVC3d4=', '2020-09-04 15:48:27.923594', 1, 'dcgadmin', '', '', '', 1, 1, '2020-09-04 13:08:19.179065'),
 	(2, 'pbkdf2_sha256$216000$FQV0U0LvuWj7$oH0FGiwVJM4ftTB3/ho/hfmxKibsQk0DyQzEtrVg2Zo=', '2020-08-17 13:20:05.186449', 0, 'LILLIAN', '', '', 'OP01@dcg-uk.co.uk', 0, 1, '2020-08-17 11:28:43.000000'),
 	(3, 'pbkdf2_sha256$216000$0f108XXBTdO6$dVYdCs7UhNYd1nmIaUGVvvbS7rCNz+AbUTR8RD1pwZE=', '2020-08-25 10:59:52.559760', 0, 'HAO', '', '', 'OP07@dcg-uk.co.uk', 0, 1, '2020-08-17 11:30:04.000000'),
 	(4, 'pbkdf2_sha256$216000$RC2JZYKOaPb0$MKD0W63rVIMGNzv1c02j1fzdXB4cBC2UFdV5JDIUCfo=', '2020-08-21 07:48:41.085621', 0, 'DAN', '', '', 'DAN.CHEN@dcg-uk.co.uk', 0, 1, '2020-08-17 11:31:07.000000'),
@@ -195,7 +195,7 @@ INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `userna
 	(14, 'pbkdf2_sha256$216000$RKpVU7H7gRdH$HBi1HJV9mEqlfMjm0UzFpmgLoZysV2ZCOIXYMFXXwTs=', '2020-09-03 11:11:47.480330', 0, 'Lvy.Li', '', '', 'Ivy.li@dcg-uk.co.uk', 0, 1, '2020-08-18 09:33:07.000000'),
 	(15, 'pbkdf2_sha256$216000$Ro84s7SGqjgL$nSpMcIieHQHRp+uXiPkg15Svj9dEwZ7Oc8tJcyuGeBc=', '2020-09-02 22:24:54.204161', 0, 'Will', '', '', 'will.liang@dcg-uk.co.uk', 0, 1, '2020-08-18 09:40:53.000000'),
 	(16, 'pbkdf2_sha256$216000$BfTqaBJIXFyo$jo0BxfabglVb65cf1vTrQNmQRCdzUuzVfoaeIjtJ/Mc=', '2020-09-03 13:08:25.341861', 0, 'Anthony', '', '', 'anthony.g@dcg-uk.co.uk', 0, 1, '2020-08-18 10:33:36.000000'),
-	(17, 'pbkdf2_sha256$216000$lBe2riymyfGB$Q7jA+eRCCeI3IoUdJP8k0U3pHsaexeldMqx+y5vY2iM=', '2020-09-04 14:03:33.317014', 0, 'Thomas', '', '', '1@1.com', 0, 1, '2020-08-18 14:26:39.000000'),
+	(17, 'pbkdf2_sha256$216000$lBe2riymyfGB$Q7jA+eRCCeI3IoUdJP8k0U3pHsaexeldMqx+y5vY2iM=', '2020-09-04 15:20:36.655125', 0, 'Thomas', '', '', '1@1.com', 0, 1, '2020-08-18 14:26:39.000000'),
 	(19, 'pbkdf2_sha256$216000$kLfYetIJ5hY2$iV1F35hljBDuOdxwiyBlKQmFH9Y2xe+KZRC8clqlKHc=', '2020-08-25 12:18:28.000000', 0, 'w-op01', '', '', 'w1@dcg-uk.co.uk', 0, 1, '2020-08-25 12:18:10.000000'),
 	(20, 'pbkdf2_sha256$216000$8GLnHIu51iJB$k3X4iB46nR41OfU6f9O3bvi8PWAaVzepoBADc8THxn4=', '2020-08-25 12:20:29.000000', 0, 'w-op02', '', '', 'w2@dcg-uk.co.uk', 0, 1, '2020-08-25 12:20:05.000000');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
@@ -241,13 +241,12 @@ CREATE TABLE IF NOT EXISTS `captcha_captchastore` (
   `expiration` datetime(6) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `hashkey` (`hashkey`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table ukdcg.captcha_captchastore: ~0 rows (approximately)
 /*!40000 ALTER TABLE `captcha_captchastore` DISABLE KEYS */;
 INSERT INTO `captcha_captchastore` (`id`, `challenge`, `response`, `hashkey`, `expiration`) VALUES
-	(20, 'KRLE', 'krle', 'bca8f740ec71f76be72b7ef75a100795b1d75528', '2020-09-04 14:20:24.681054'),
-	(21, 'QHDK', 'qhdk', '6d2b443935a8a04ea09103ace59dfc105a88c384', '2020-09-04 14:32:57.194478');
+	(26, 'JLGK', 'jlgk', '326f8649444c06d99165498422b6a1de8e0e91f0', '2020-09-04 15:45:12.995648');
 /*!40000 ALTER TABLE `captcha_captchastore` ENABLE KEYS */;
 
 -- Dumping structure for table ukdcg.django_admin_log
@@ -266,7 +265,7 @@ CREATE TABLE IF NOT EXISTS `django_admin_log` (
   CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
   CONSTRAINT `django_admin_log_chk_1` CHECK ((`action_flag` >= 0))
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table ukdcg.django_admin_log: ~16 rows (approximately)
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
@@ -287,7 +286,10 @@ INSERT INTO `django_admin_log` (`id`, `action_time`, `object_id`, `object_repr`,
 	(14, '2020-09-04 13:24:47.692425', '5', 'Permission object (5)', 1, '[{"added": {}}]', 26, 1),
 	(15, '2020-09-04 13:24:59.232437', '5', 'Logout', 3, '', 24, 1),
 	(16, '2020-09-04 13:32:06.638982', '4', 'Permission object (4)', 2, '[{"changed": {"fields": ["Role"]}}]', 26, 1),
-	(17, '2020-09-04 13:48:35.048105', '12', 'thomas_test', 2, '[{"changed": {"fields": ["Email address"]}}, {"added": {"name": "User Profile", "object": "thomas_test"}}]', 4, 1);
+	(17, '2020-09-04 13:48:35.048105', '12', 'thomas_test', 2, '[{"changed": {"fields": ["Email address"]}}, {"added": {"name": "User Profile", "object": "thomas_test"}}]', 4, 1),
+	(18, '2020-09-04 15:49:07.767983', '3', 'NoChild', 1, '[{"added": {}}]', 23, 1),
+	(19, '2020-09-04 15:54:50.968270', '6', 'NoChild', 1, '[{"added": {}}]', 24, 1),
+	(20, '2020-09-04 15:55:29.545063', '6', 'Permission object (6)', 1, '[{"added": {}}]', 26, 1);
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 
 -- Dumping structure for table ukdcg.django_content_type
@@ -337,7 +339,7 @@ CREATE TABLE IF NOT EXISTS `django_migrations` (
   `name` varchar(255) NOT NULL,
   `applied` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table ukdcg.django_migrations: ~25 rows (approximately)
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
@@ -366,7 +368,10 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 	(22, 'slot', '0001_initial', '2020-09-04 13:07:40.095583'),
 	(23, 'users', '0001_initial', '2020-09-04 13:07:40.756584'),
 	(24, 'menu', '0002_auto_20200904_1413', '2020-09-04 13:13:05.418873'),
-	(25, 'menu', '0003_firstmenu_menu_url', '2020-09-04 13:34:37.450046');
+	(25, 'menu', '0003_firstmenu_menu_url', '2020-09-04 13:34:37.450046'),
+	(26, 'menu', '0004_firstmenu_have_child', '2020-09-04 15:46:54.869375'),
+	(27, 'menu', '0005_auto_20200904_1654', '2020-09-04 15:54:13.345175'),
+	(28, 'menu', '0006_auto_20200904_1723', '2020-09-04 16:23:50.868473');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 
 -- Dumping structure for table ukdcg.django_session
@@ -382,7 +387,8 @@ CREATE TABLE IF NOT EXISTS `django_session` (
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
 	('1wj8co364x8jrbrogc1vf1wxsn09hbao', '.eJxVjEEOwiAQRe_C2pABitO6dO8ZyDAMUjU0Ke3KeHfbpAvd_vfef6tA61LC2mQOY1IXZVCdfsdI_JS6k_Sgep80T3WZx6h3RR-06duU5HU93L-DQq1sNXvCnJ1FIOuNULZEHt3gKCJAL8mfE4jBoXMMXjhi7KA30bLdAgb1-QIRijgT:1kECJR:n1fSXtIAWk6rqVLqW-Whh9fP-rQGrmlqM8628si9OEo', '2020-09-18 14:03:33.324984'),
-	('6y1t3rdxj938v47n5ntr677nv4o101k8', '.eJxVjEEOwiAQRe_C2pABitO6dO8ZyDAMUjU0Ke3KeHfbpAvd_vfef6tA61LC2mQOY1IXZVCdfsdI_JS6k_Sgep80T3WZx6h3RR-06duU5HU93L-DQq1sNXvCnJ1FIOuNULZEHt3gKCJAL8mfE4jBoXMMXjhi7KA30bLdAgb1-QIRijgT:1kECFA:9pLnXPHoElF8jwZ8jT0TPgcFtoJOTI4RiQ4np-ZugWY', '2020-09-18 13:59:08.361668');
+	('6y1t3rdxj938v47n5ntr677nv4o101k8', '.eJxVjEEOwiAQRe_C2pABitO6dO8ZyDAMUjU0Ke3KeHfbpAvd_vfef6tA61LC2mQOY1IXZVCdfsdI_JS6k_Sgep80T3WZx6h3RR-06duU5HU93L-DQq1sNXvCnJ1FIOuNULZEHt3gKCJAL8mfE4jBoXMMXjhi7KA30bLdAgb1-QIRijgT:1kECFA:9pLnXPHoElF8jwZ8jT0TPgcFtoJOTI4RiQ4np-ZugWY', '2020-09-18 13:59:08.361668'),
+	('ys3vvem1gzbkfmpybw0wfxebx22egehx', '.eJxVjMEOwiAQRP-FsyGLhQIevfsNZGEXqRpISnsy_rtt0oMe5jLvzbxFwHUpYe08h4nERShx-u0ipifXHdAD673J1OoyT1Huijxol7dG_Loe7t9BwV62tYlOQ3TE3lk_DKBy9CqnhMaxs0nTiGfWnFP0wBoVWgME4xYDTArF5wvvBThX:1kEDwx:14cyeFFiBRSLFLpKqrVciKZ52As2f5HnIBnVTiDk-q4', '2020-09-18 15:48:27.929622');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 
 -- Dumping structure for table ukdcg.haulier
@@ -1194,12 +1200,12 @@ INSERT INTO `users_userprofile` (`id`, `op_position`, `telephone`, `mod_date`, `
 	(8, 'UK', '', '2020-08-17 11:38:46.199566', 2, 1, 7),
 	(9, 'UK', '', '2020-08-17 11:38:53.481002', 1, 1, 11),
 	(10, 'UK', '', '2020-08-17 11:39:53.553662', 2, 1, 9),
-	(11, 'UK', '', '2020-08-17 11:49:51.084089', 1, 1, 12),
+	(11, 'UK', '', '2020-08-17 11:49:51.084089', 0, 1, 12),
 	(12, 'UK', '', '2020-08-18 09:32:32.566292', 1, 1, 13),
 	(13, 'UK', '', '2020-08-18 09:33:35.620295', 3, 1, 14),
 	(14, 'UK', '', '2020-08-18 09:41:26.984636', 3, 1, 15),
 	(15, 'UK', '', '2020-08-18 10:34:09.554823', 1, 1, 16),
-	(16, 'UK', '', '2020-08-18 14:28:56.300922', 1, 1, 17),
+	(16, 'UK', '', '2020-08-18 14:28:56.300922', 0, 1, 17),
 	(17, 'UK', '', '2020-08-25 12:18:46.661942', 2, 1, 19),
 	(18, 'UK', '', '2020-08-25 12:20:43.506593', 2, 1, 20);
 /*!40000 ALTER TABLE `users_userprofile` ENABLE KEYS */;
@@ -1574,72 +1580,55 @@ INSERT INTO `warehouseprofile` (`id`, `position`, `beginworktime`, `overworktime
 	(1, 'UK', '06:00:00.000000', '20:30:00.000000', 2, 1, '2020-08-17 11:46:24.662275', 1);
 /*!40000 ALTER TABLE `warehouseprofile` ENABLE KEYS */;
 
--- Dumping structure for table ukdcg.z_first_menu
-CREATE TABLE IF NOT EXISTS `z_first_menu` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `menu_name` varchar(50) NOT NULL,
-  `menu_remark` varchar(200) NOT NULL,
-  `menu_order` varchar(50) NOT NULL,
-  `menu_url` varchar(200) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Dumping data for table ukdcg.z_first_menu: ~2 rows (approximately)
-/*!40000 ALTER TABLE `z_first_menu` DISABLE KEYS */;
-INSERT INTO `z_first_menu` (`id`, `menu_name`, `menu_remark`, `menu_order`, `menu_url`) VALUES
-	(1, 'Check Quote', '', '1', ''),
-	(2, 'User Profiles', '', '2', '');
-/*!40000 ALTER TABLE `z_first_menu` ENABLE KEYS */;
-
 -- Dumping structure for table ukdcg.z_menu
 CREATE TABLE IF NOT EXISTS `z_menu` (
   `id` int NOT NULL AUTO_INCREMENT,
   `menu_name` varchar(50) NOT NULL,
-  `menu_url` varchar(200) NOT NULL,
-  `menu_remark` varchar(200) NOT NULL,
-  `first_menu_id` int NOT NULL,
+  `menu_url` varchar(200) DEFAULT NULL,
   `menu_order` varchar(50) NOT NULL,
+  `is_use` tinyint(1) NOT NULL,
+  `level` smallint unsigned NOT NULL,
+  `menu_icon` varchar(200) NOT NULL,
+  `node_type` smallint unsigned NOT NULL,
+  `parent_id` smallint unsigned NOT NULL,
+  `path` varchar(200) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `z_menu_first_menu_id_7133b592_fk_z_first_menu_id` (`first_menu_id`),
-  CONSTRAINT `z_menu_first_menu_id_7133b592_fk_z_first_menu_id` FOREIGN KEY (`first_menu_id`) REFERENCES `z_first_menu` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `z_menu_chk_1` CHECK ((`level` >= 0)),
+  CONSTRAINT `z_menu_chk_2` CHECK ((`node_type` >= 0)),
+  CONSTRAINT `z_menu_chk_3` CHECK ((`parent_id` >= 0))
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table ukdcg.z_menu: ~4 rows (approximately)
 /*!40000 ALTER TABLE `z_menu` DISABLE KEYS */;
-INSERT INTO `z_menu` (`id`, `menu_name`, `menu_url`, `menu_remark`, `first_menu_id`, `menu_order`) VALUES
-	(1, 'Require', '/', '', 1, '1'),
-	(2, 'My SKU', '/', '', 1, '2'),
-	(3, 'My Profiles', '/', '', 2, '1'),
-	(4, 'Modify Password', '/', '', 2, '2');
+INSERT INTO `z_menu` (`id`, `menu_name`, `menu_url`, `menu_order`, `is_use`, `level`, `menu_icon`, `node_type`, `parent_id`, `path`) VALUES
+	(1, 'Require', '/', '1', 1, 0, '', 1, 0, ''),
+	(2, 'My SKU', '/', '2', 1, 0, '', 1, 0, ''),
+	(3, 'My Profiles', '/', '1', 1, 0, '', 1, 0, ''),
+	(4, 'Modify Password', '/', '2', 1, 0, '', 1, 0, ''),
+	(6, 'NoChild', '', '0', 1, 0, '', 1, 0, '');
 /*!40000 ALTER TABLE `z_menu` ENABLE KEYS */;
 
 -- Dumping structure for table ukdcg.z_permission
 CREATE TABLE IF NOT EXISTS `z_permission` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `is_display` tinyint(1) NOT NULL,
-  `is_list` tinyint(1) NOT NULL,
-  `is_update` tinyint(1) NOT NULL,
-  `is_delete` tinyint(1) NOT NULL,
-  `first_menu_id` int NOT NULL,
   `menu_id` int NOT NULL,
   `role_id` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `z_permission_first_menu_id_7f1b9ba7_fk_z_first_menu_id` (`first_menu_id`),
   KEY `z_permission_menu_id_dcbbe4a6_fk_z_menu_id` (`menu_id`),
   KEY `z_permission_role_id_3c3f846f_fk_z_role_id` (`role_id`),
-  CONSTRAINT `z_permission_first_menu_id_7f1b9ba7_fk_z_first_menu_id` FOREIGN KEY (`first_menu_id`) REFERENCES `z_first_menu` (`id`),
   CONSTRAINT `z_permission_menu_id_dcbbe4a6_fk_z_menu_id` FOREIGN KEY (`menu_id`) REFERENCES `z_menu` (`id`),
   CONSTRAINT `z_permission_role_id_3c3f846f_fk_z_role_id` FOREIGN KEY (`role_id`) REFERENCES `z_role` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table ukdcg.z_permission: ~5 rows (approximately)
 /*!40000 ALTER TABLE `z_permission` DISABLE KEYS */;
-INSERT INTO `z_permission` (`id`, `is_display`, `is_list`, `is_update`, `is_delete`, `first_menu_id`, `menu_id`, `role_id`) VALUES
-	(1, 1, 1, 1, 1, 1, 1, 1),
-	(2, 1, 1, 1, 1, 1, 2, 1),
-	(3, 1, 1, 1, 1, 1, 1, 2),
-	(4, 1, 1, 1, 1, 2, 3, 1),
-	(5, 1, 1, 1, 1, 2, 4, 2);
+INSERT INTO `z_permission` (`id`, `menu_id`, `role_id`) VALUES
+	(1, 1, 1),
+	(2, 2, 1),
+	(3, 1, 2),
+	(4, 3, 1),
+	(5, 4, 2),
+	(6, 6, 1);
 /*!40000 ALTER TABLE `z_permission` ENABLE KEYS */;
 
 -- Dumping structure for table ukdcg.z_role

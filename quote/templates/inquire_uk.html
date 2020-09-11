@@ -1,0 +1,81 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+        <!-- Detail -->
+        <div class="row">
+            <div class="col-md-5 mt">
+                <div class="content-panel">
+                    <div class="container profile-text">
+                        <h3 class="text-left">Deliver To <span class="text-info">Unite Kingdom </span></h3>
+                        <form role="form" action="{% url 'inquire-uk' %}" method="post">
+                        {% csrf_token %}
+                            <div class="form-group form-inline " class="col-md-3">
+                                <label for="length">&nbsp;Length(CM)</label>
+                                <input type="text" class="form-control " id="length"
+                                       name="length"  placeholder="Length input"
+                                        value="{{ quote_uk_form.data.length }}">
+                                <span class="text-danger">
+                                    {{ quote_uk_form.errors.length.0 }}
+                                </span>
+                            </div>
+                            <div class="form-group form-inline" class="col-md-3">
+                                <label for="width">&nbsp;&nbsp;&nbsp;Width(CM)</label>
+                                <input type="text" class="form-control" id="width" name="width"
+                                       placeholder="Width input" value="{{ quote_uk_form.data.width }}">
+                                <span class="text-danger">
+                                    {{ quote_uk_form.errors.width.0 }}
+                                </span>
+                            </div>
+                            <div class="form-group form-inline" class="col-md-3">
+                                <label for="high">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;High(CM)</label>
+                                <input type="text" class="form-control" id="high" name="high"
+                                       placeholder="High input" value="{{ quote_uk_form.data.high }}">
+                                <span class="text-danger">
+                                    {{ quote_uk_form.errors.high.0 }}
+                                </span>
+                            </div>
+                            <div class="form-group form-inline" class="col-md-3">
+                                <label for="weight">&nbsp;&nbsp;Weight(KG)</label>
+                                <input type="text" class="form-control " id="weight" name="weight"
+                                       placeholder="Weight input" value="{{ quote_uk_form.data.weight }}">
+                                <span class="text-danger">
+                                    {{ quote_uk_form.errors.weight.0 }}
+                                </span>
+                            </div>
+                            <div class="form-group form-inline" class="col-md-3">
+                                <label for="quantity">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quantity</label>
+                                <input type="text" class="form-control " id="quantity" name="qty" placeholder="Quantify input"
+                                       value="{% if quote_uk_form.data.qty == isnull %}1{% else %}{{ quote_uk_form.data.qty }}{% endif %}">
+                                <span class="text-danger">
+                                    {{ quote_uk_form.errors.qty.0 }}
+                                </span>
+                            </div>
+                            <div class="form-group form-inline" class="col-md-3">
+                                <label for="postcode">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Postcode</label>
+                                <input type="text" class="form-control " id="postcode" name="postcode" placeholder="Postcode"
+                                value="{{ quote_uk_form.data.postcode }}">
+                                <span class="text-danger">
+                                    {{ quote_uk_form.errors.postcode.0 }}
+                                </span>
+                            </div>
+                            <div class="form-group form-inline" class="col-md-4">
+                                <label for="postcode">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Address Type&nbsp;&nbsp;</label>
+                                <input type="radio" class="form-check-input" id="radio_business" name="addresstype" value="business" checked>
+                                <label class="form-check-label" for="InboundRadios">&nbsp;Business&nbsp;&nbsp;</label>
+                                <input type="radio" class="form-check-input" id="radio_resident" name="addresstype" VALUE="resident" >
+                                <label class="form-check-label" for="OutboundRadios">&nbsp;Resident</label>
+                            </div>
+                            <div class="col-md-5 mt">
+                                <input type="submit" class="btn btn-info" value="Quote">
+                            </div>
+                        </form>
+                    </div>
+                    </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -8,6 +8,7 @@ PER_PAGE = 15
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
     list_display = ('code', 'name', 'contact', 'telephone', 'email', 'is_use', 'op_user', 'op_last_update')
+    list_display_links = ('code', 'name', )
     fk_fields = ('op_user_id',)
     list_per_page = PER_PAGE
 
@@ -24,6 +25,7 @@ class ServiceTypeAdmin(admin.ModelAdmin):
 @admin.register(Surcharge)
 class SurchargeAdmin(admin.ModelAdmin):
     list_display = ('company', 'surcharge_name', 'price', 'percent', 'description', 'op_user', 'op_last_update')
+    list_display_links = ('company', 'surcharge_name', )
     list_filter = ('company',)
     fk_fields = ('op_user_id',)
     list_per_page = PER_PAGE
@@ -32,6 +34,7 @@ class SurchargeAdmin(admin.ModelAdmin):
 @admin.register(ZoneName)
 class ZoneNameAdmin(admin.ModelAdmin):
     list_display = ('company', 'zone_name', 'description', 'op_user', 'op_last_update')
+    list_display_links = ('company', 'zone_name', )
     list_filter = ('company',)
     fk_fields = ('op_user_id',)
     list_per_page = PER_PAGE
@@ -41,6 +44,7 @@ class ZoneNameAdmin(admin.ModelAdmin):
 class ZoneSurchargeAdmin(admin.ModelAdmin):
     list_display = ('company', 'service_type', 'zone', 'minimum_price', 'percent', 'plus_price', 'description',
                     'op_user', 'op_last_update')
+    list_display_links = ('company', 'service_type', 'zone', )
     list_filter = ('company', 'service_type', )
     fk_fields = ('op_user_id',)
     list_per_page = PER_PAGE
@@ -49,7 +53,9 @@ class ZoneSurchargeAdmin(admin.ModelAdmin):
 @admin.register(ZoneDetail)
 class ZoneDetailAdmin(admin.ModelAdmin):
     list_display = ('company', 'zone', 'begin', 'end', 'op_user', 'op_last_update')
+    search_fields = ('begin', 'end', )
     list_filter = ('company', 'zone', )
+    list_display_links = ('begin', 'end', )
     fk_fields = ('op_user_id',)
     list_per_page = PER_PAGE
 
@@ -58,15 +64,18 @@ class ZoneDetailAdmin(admin.ModelAdmin):
 class EuroCountryAdmin(admin.ModelAdmin):
     list_display = ('country', 'op_user', 'op_last_update')
     fk_fields = ('op_user_id',)
+    search_fields = ('country',)
     ordering = ('country',)
     list_per_page = PER_PAGE
 
 
 @admin.register(EuroPrice)
 class EuroPriceAdmin(admin.ModelAdmin):
-    list_display = ('company', 'country', 'basic_price', 'over_weight_price', 'clearance_charge',
+    list_display = ('company', 'country', 'basic_price', 'over_weight_price', 'minimum_charge', 'clearance_charge',
                     'description', 'op_user', 'op_last_update')
     list_filter = ('company', 'country', )
-    fk_fields = ('op_user_id',)
+    list_display_links = ('company', 'country', )
+    fk_fields = ('op_user_id', 'company')
+
     list_per_page = PER_PAGE
 
