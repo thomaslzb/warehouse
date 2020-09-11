@@ -14,7 +14,6 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.views.generic.base import TemplateView
 from django.urls import path, include, re_path
 from users.views import LoginView, LogoutView
 from . import views
@@ -25,9 +24,10 @@ urlpatterns = [
     path('quote/', include('quote.urls')),
     path('dcgadmin/', admin.site.urls),
     path("user/", include('users.urls')),
+    path("sku/", include('sku.urls')),
     path('captcha/', include('captcha.urls')),
-]
 
+]
 
 handler400 = views.bad_request
 handler403 = views.permission_denied

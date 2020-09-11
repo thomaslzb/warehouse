@@ -1,0 +1,38 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+        <!-- Detail -->
+        <div class="row">
+            <div >
+                <h3 class="text-left text-info">My Profile</h3>
+                <table class="table table-condensed">
+                    <tr>
+                        <td><label for="length">Username:</label></td>
+                        <td>{{ username }}</td>
+                    </tr>
+                    <tr>
+                        <td><label for="length">Email:</label></td>
+                        <td>{{ email }}</td>
+                    </tr>
+                    <tr>
+                        <td><label for="length">Telephone:</label></td>
+                        <td>{{ telephone }}</td>
+                    </tr>
+                    <tr>
+                        <td><label for="length">Last login:</label></td>
+                        <td>{{ login_date }}</td>
+                    </tr>
+                    <tr>
+                        <td><label for="length">Join Date:</label></td>
+                        <td>{{ join_date }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+`            </div>
+        </div>
+    </div>
+{% endblock %}

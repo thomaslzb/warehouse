@@ -2,7 +2,7 @@ from django.apps import AppConfig
 import os
 
 default_app_config = 'menu.MenuConfig'
-VERBOSE_APP_NAME = "Setup Menu"
+VERBOSE_APP_NAME = "Menu"
 
 
 def get_current_app_name(_file):

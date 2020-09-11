@@ -9,11 +9,13 @@ IS_USER_CHOICE = ((1, 'Normal'),
 # Create your models here.
 class Company(models.Model):
     id = models.AutoField(primary_key=True)
-    code = models.CharField(max_length=20, null=False, default="", unique=True, verbose_name="Code",)
+    code = models.CharField(max_length=4, null=False, default="", unique=True, verbose_name="Code",)
     name = models.CharField(max_length=100, default="", null=True, verbose_name="Company Name",)
     contact = models.CharField(max_length=100, blank=True, default="", null=True, verbose_name="Contact", )
     telephone = models.CharField(max_length=100, blank=True, default="", null=True, verbose_name="Telephone",)
     email = models.CharField(max_length=250, default="", null=True, blank=True, verbose_name="Email")
+    icon_lg = models.CharField(max_length=250, default="", null=True, blank=True, verbose_name="Icon URL(Big)")
+    icon_sm = models.CharField(max_length=250, default="", null=True, blank=True, verbose_name="Icon URL(Small)")
     is_use = models.IntegerField(default=1, null=False, choices=IS_USER_CHOICE, verbose_name="Is Normal", )
     op_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                                 default=1, verbose_name="Operator")
@@ -30,13 +32,16 @@ class Company(models.Model):
 
 class ServiceType(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=20, null=False, default='', verbose_name='ServiceName')
+    name = models.CharField(max_length=20, null=False, default='', verbose_name='ServiceName',)
     company = models.ForeignKey('Company', to_field='id', on_delete=models.CASCADE, verbose_name="Belong Company")
     description = models.CharField(max_length=200, blank=True, null=False, default='', verbose_name='description')
     base_price = models.DecimalField(default=0, blank=True, max_digits=6, decimal_places=2, verbose_name='Base Price')
-    max_weight = models.DecimalField(default=0, blank=True, max_digits=4, decimal_places=0, verbose_name='Max Weight(kg)')
-    max_length = models.DecimalField(default=0, blank=True, max_digits=4, decimal_places=0, verbose_name='Max Length(cm)')
-    max_girth = models.DecimalField(default=0, blank=True, max_digits=4, decimal_places=0, verbose_name='Max Girth(cm)')
+    max_weight = models.DecimalField(default=0, blank=True, max_digits=4, decimal_places=0,
+                                     verbose_name='Max Weight(kg)')
+    max_length = models.DecimalField(default=0, blank=True, max_digits=4, decimal_places=0,
+                                     verbose_name='Max Length(cm)')
+    max_girth = models.DecimalField(default=0, blank=True, max_digits=4, decimal_places=0,
+                                    verbose_name='Max Girth(cm)')
     op_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                                 default=1, verbose_name="Operator")
     op_last_update = models.DateTimeField(auto_now=True, blank=True, verbose_name="Operate Datetime", )
@@ -44,6 +49,7 @@ class ServiceType(models.Model):
     class Meta:
         db_table = "q_service_type"
         verbose_name = "Service Type"
+        unique_together = ('name', 'company',)
 
     def __str__(self):
         return '{0}({1})'.format(self.name, self.company)
@@ -61,6 +67,7 @@ class ZoneName(models.Model):
     class Meta:
         db_table = "q_zone"
         verbose_name = "Zone"
+        unique_together = ('company', 'zone_name')
 
     def __str__(self):
         return '{0}({1})'.format(self.zone_name, self.company)
@@ -79,6 +86,7 @@ class ZoneDetail(models.Model):
     class Meta:
         db_table = "q_zone_detail"
         verbose_name = "Zone Detail"
+        unique_together = ('company', 'zone', 'begin')
 
 
 class Surcharge(models.Model):
@@ -95,6 +103,7 @@ class Surcharge(models.Model):
     class Meta:
         db_table = "q_surcharge"
         verbose_name = "Surcharge"
+        unique_together = ('company', 'surcharge_name', )
 
 
 class ZoneSurcharge(models.Model):
@@ -116,11 +125,12 @@ class ZoneSurcharge(models.Model):
     class Meta:
         db_table = "q_zone_surcharge"
         verbose_name = "Zone Surcharge"
+        unique_together = ('company', 'service_type', 'zone')
 
 
 class EuroCountry(models.Model):
     id = models.AutoField(primary_key=True)
-    country = models.CharField(max_length=500, null=False, default='', verbose_name='Country')
+    country = models.CharField(max_length=50, null=False, default='', verbose_name='Country', unique=True)
     op_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                                 default=1, verbose_name="Operator")
     op_last_update = models.DateTimeField(auto_now=True, blank=True, verbose_name="Operate Datetime", )
@@ -142,6 +152,8 @@ class EuroPrice(models.Model):
                                             verbose_name='OverWeight Price')
     clearance_charge = models.DecimalField(default=0, max_digits=8, blank=True, decimal_places=2,
                                            verbose_name='Clearance Charge')
+    minimum_charge = models.DecimalField(default=0, max_digits=8, blank=True, decimal_places=2,
+                                         verbose_name='minimum_charge(PerItem)')
     description = models.CharField(max_length=300, null=False, blank=True, default='', verbose_name='description')
     op_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                                 default=1, verbose_name="Operator")
@@ -150,3 +162,4 @@ class EuroPrice(models.Model):
     class Meta:
         db_table = "q_euro_price"
         verbose_name = "Euro Price"
+        unique_together = ('company', 'country',)

@@ -9,8 +9,8 @@ PER_PAGE = 15
 
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
-    list_display = ('menu_order', 'menu_name', 'node_type', 'menu_url', 'menu_icon', 'parent_id',
-                    'level', 'path', )
+    list_display = ('menu_name', 'id',  'parent_id', 'level', 'path', 'node_type',
+                    'menu_order', 'menu_url', 'menu_icon',)
     ordering = ('menu_order', )
     list_per_page = PER_PAGE
 

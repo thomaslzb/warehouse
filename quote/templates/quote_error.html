@@ -1,0 +1,67 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+        <!-- Accounting Data  -->
+        <div class="row">
+            <div class="col-md-12 mt">
+                <div class="content-panel">
+                    <table class="table">
+                        <thead>
+                            <h4 class="text-center">Accounting Data</h4>
+                        </thead>
+                        <tbody>
+                        {% if menu_active == 'MY_SKU' %}
+                            <tr>
+                                <th><h5>SKU :{{ sku_no }}</h5></th>
+                            <th></th>
+                                <th><h5>Product Name:{{ sku_name }}</h5></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            </tr>
+                        {% endif %}
+                        <tr>
+                            <th>Destination:<span class="text-danger"> {{ postcode }}</span></th>
+                            <th>Quantity:<span class="text-danger"> {{ qty }}</span></th>
+                            <th>Address Type:<span class="text-danger"> {{ address_type }}</span></th>
+                            <th>Length:<span class="text-danger"> {{ length }}</span> CM</th>
+                            <th>Width:<span class="text-danger"> {{ width }}</span> CM </th>
+                            <th>High:<span class="text-danger"> {{ high }}</span> CM</th>
+                            <th>Weight:<span class="text-danger"> {{ weight }}</span> KG</th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mt">
+                <div class="content-panel">
+                    <table class="table">
+                        <thead>
+                            <h2 class="text-danger text-center">Sorry, We can't find suitable carrier cause too heavy or oversize or Postcode can't be find. </h2>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 mt">
+                <a href="{% if menu_active == 'UK' %}
+                    {% url 'inquire-uk' %}
+                {% elif menu_active == 'EURO' %}
+                    {% url 'inquire-euro' %}
+                {% else %}
+                    {% url 'sku:sku-list' %}
+                {% endif %}"
+                class="btn btn-info" role="button">
+                Go Back</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

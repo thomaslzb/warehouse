@@ -1,0 +1,69 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+        <!-- Detail -->
+        <div class="row">
+            <div class="col-md-4 mt">
+                <div class="content-panel">
+                    <div class="container profile-text">
+                        <h3>Deliver To <span class="text-info">Unite Kingdom </span></h3>
+                        <form role="form" action="{% url 'sku:sku-uk' object.id %}" method="post">
+                            {% csrf_token %}
+                            <div class="form-group form-inline ">
+                                <label for="length">&nbsp;SKU NO. :</label>
+                                <h4>{{ object.sku_no }}</h4>
+                            </div>
+                            <div class="form-group form-inline " class="col-md-3">
+                                <label for="length">&nbsp;Product Name:<h4>{{ object.sku_name }}</h4></label>
+                            </div>
+                            <div class="form-group form-inline " class="col-md-3">
+                                <label for="length" name="length">&nbsp;Length(CM):{{ object.sku_length }}</label>
+                                <input type="hidden" id="length"  name="length"  value="{{ object.length }}">
+                            </div>
+                            <div class="form-group form-inline" class="col-md-3">
+                                <label for="width">&nbsp;&nbsp;&nbsp;Width(CM):{{ object.sku_width }}</label>
+                            </div>
+                            <div class="form-group form-inline" class="col-md-3">
+                                <label for="high">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;High(CM):{{ object.sku_high }}</label>
+                            </div>
+                            <div class="form-group form-inline" class="col-md-3">
+                                <label for="weight">&nbsp;&nbsp;Weight(KG):{{ object.sku_weight }}</label>
+                            </div>
+                            <div class="form-group form-inline" class="col-md-3">
+                                <label for="quantity">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quantity</label>
+                                <input type="text" class="form-control " id="quantity" name="qty" placeholder="Quantify input"
+                                       value="{% if sku_uk_form.data.qty == isnull %}1{% else %}{{ sku_uk_form.data.qty }}{% endif %}">
+                                <span class="text-danger">
+                                    {{ sku_uk_form.errors.qty.0 }}
+                                </span>
+                            </div>
+                            <div class="form-group form-inline" class="col-md-3">
+                                <label for="postcode">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Postcode</label>
+                                <input type="text" class="form-control " id="postcode" name="postcode" placeholder="Postcode"
+                                value="{{ sku_uk_form.data.postcode }}">
+                                <span class="text-danger">
+                                    {{ sku_uk_form.errors.postcode.0 }}
+                                </span>
+                            </div>
+                            <div class="form-group form-inline" class="col-md-4">
+                                <label for="postcode">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Address Type&nbsp;&nbsp;</label>
+                                <input type="radio" class="form-check-input" id="radio_business" name="addresstype" value="business" checked>
+                                <label class="form-check-label" for="InboundRadios">&nbsp;Business&nbsp;&nbsp;</label>
+                                <input type="radio" class="form-check-input" id="radio_resident" name="addresstype" VALUE="resident" >
+                                <label class="form-check-label" for="OutboundRadios">&nbsp;Resident</label>
+                            </div>
+                            <div class="panel-body">
+                                <a href="{% url 'sku:sku-list' %}"  class="btn btn-info" role="button">Go Back</a>
+                                <input type="submit" class="btn btn-primary" value="Quote">
+                            </div>
+                        </form>
+                    </div>
+                    </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

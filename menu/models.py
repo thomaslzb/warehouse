@@ -1,12 +1,17 @@
 from django.db import models
 
+NODE_TYPE_CHOICE = ((1, 'WEB PAGE'),
+                    (2, 'BUTTON'),
+                    (3, 'FILE FOLDER'),
+                    )
+
 
 class Menu(models.Model):
     id = models.AutoField(primary_key=True)
     menu_order = models.CharField(max_length=50, null=False, blank=True, default='', verbose_name='Menu Order')
     menu_name = models.CharField(max_length=50, null=False, blank=True, default='', verbose_name='Menu Name')
     # node_type：节点类型，可以是1-页面或者2-按钮类型3-文件夹
-    node_type = models.PositiveSmallIntegerField(default=1, verbose_name='node_type')
+    node_type = models.PositiveSmallIntegerField(default=1, choices=NODE_TYPE_CHOICE, verbose_name='node_type')
     # 页面对应的地址，如果是文件夹或者按钮类型，可以为空
     menu_url = models.CharField(max_length=200, null=True, blank=True, default='', verbose_name='Menu URL')
     # 存icon图标的地址
@@ -22,7 +27,7 @@ class Menu(models.Model):
 
     class Meta:
         db_table = "z_menu"
-        verbose_name = "Second Menu"
+        verbose_name = "Menu"
 
     def __str__(self):
         return self.menu_name

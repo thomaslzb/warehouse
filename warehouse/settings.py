@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'utils',
     'slot',
     'quote',
-    'menu'
+    'menu',
+    'sku',
 ]
 
 MIDDLEWARE = [
