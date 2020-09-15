@@ -10,6 +10,7 @@
 11/09/2020 11:58   lzb       1.0         None
 """
 from django import forms
+from .models import Sku
 
 
 class SkuUKForm(forms.Form):
@@ -40,4 +41,36 @@ class SkuEuroForm(forms.Form):
         if qty <= 0:
             raise forms.ValidationError("Length must be more than 0")
         return qty
+
+
+class SkuForm(forms.ModelForm):
+
+    def clean_length(self):
+        length = int(self.cleaned_data.get('length'))
+        if length <= 0:
+            raise forms.ValidationError("Length must be more than 0")
+        return length
+
+    def clean_width(self):
+        width = int(self.cleaned_data.get('width'))
+        if width <= 0:
+            raise forms.ValidationError("Length must be more than 0")
+        return width
+
+    def clean_high(self):
+        high = int(self.cleaned_data.get('high'))
+        if high <= 0:
+            raise forms.ValidationError("Length must be more than 0")
+        return high
+
+    def clean_weight(self):
+        weight = float(self.cleaned_data.get('weight'))
+        if weight <= 0:
+            raise forms.ValidationError("Length must be more than 0")
+        return weight
+
+    class Meta:
+        model = Sku
+        exclude = ['last_update', ]
+
 

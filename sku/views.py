@@ -1,20 +1,26 @@
 import math
 import datetime
 
-from django.http import HttpResponseRedirect
+from django.http import request
 from django.shortcuts import render
 from django.views import View
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import UpdateView
 from quote.models import EuroCountry
 from .models import Sku
-from .forms import SkuUKForm, SkuEuroForm
+from .forms import SkuUKForm, SkuEuroForm, SkuForm
 from quote.public_func import parcel
 
 MY_MENU_LOCAL = 'MY_SKU'
 
 
-# Create your views here.
+class SkuUpdate(UpdateView):
+    model = Sku
+    form_class = SkuForm
+    template_name = 'sku_update.html'
+
+
 class SkuListView(ListView):
     model = Sku
     template_name = 'sku_list.html'
@@ -24,6 +30,25 @@ class SkuListView(ListView):
         context = super().get_context_data(**kwargs)
         context['menu_active'] = MY_MENU_LOCAL
         return context
+
+    def get_queryset(self):
+        query_status = self.request.GET.get('status')
+        query_sku = self.request.GET.get('s_sku')
+        query_product = self.request.GET.get('s_product')
+        if query_status or query_sku or query_product:
+            if query_status == '':
+                return Sku.objects.filter(sku_no__icontains=query_sku,
+                                          sku_name__icontains=query_product,
+                                          custom_id=self.request.user.id,
+                                          )
+            else:
+                return Sku.objects.filter(is_ok__exact=query_status, sku_no__icontains=query_sku,
+                                          sku_name__icontains=query_product,
+                                          custom_id=self.request.user.id,
+                                          )
+
+        else:
+            return Sku.objects.filter(custom_id=self.request.user.id)
 
 
 class SkuUKDetail(DetailView):
@@ -77,7 +102,6 @@ class SkuQuoteUK(View):
             l_pacelforce = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk)
             company_code = 'DHL'
             l_dhl = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk)
-
             company_code = 'DPD'
             l_dpd = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk)
             company_code = 'UPS'
@@ -153,16 +177,16 @@ class SkuQuoteEURO(View):
             user_id = request.user.id
 
             company_code = 'HERM'
-            l_hermes = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk)
+            l_hermes = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk,)
             company_code = 'PASC'
-            l_pacelforce = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk)
+            l_pacelforce = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk,)
             company_code = 'DHL'
-            l_dhl = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk)
+            l_dhl = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk,)
 
             company_code = 'DPD'
-            l_dpd = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk)
+            l_dpd = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk,)
             company_code = 'UPS'
-            l_ups = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk)
+            l_ups = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk,)
 
             if (not l_hermes[5]) and (not l_pacelforce[5]) and (not l_dhl[5]) and (not l_dpd[5]) and (not l_ups[5]):
                 return render(request, 'quote_error.html', {'go': 'UK',

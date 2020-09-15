@@ -11,7 +11,7 @@
 """
 
 from django.urls import path
-from .views import SkuListView, SkuUKDetail, SkuEuroDetail,  SkuQuoteUK, SkuQuoteEURO
+from .views import SkuListView, SkuUKDetail, SkuEuroDetail,  SkuQuoteUK, SkuQuoteEURO, SkuUpdate
 
 app_name = 'sku'
 urlpatterns = [
@@ -20,4 +20,5 @@ urlpatterns = [
     path('Sku/Euro/<pk>/', SkuEuroDetail.as_view(), name='sku-detail-euro'),
     path('ToUK/<slug:slug>', SkuQuoteUK.as_view(), name='sku-uk'),
     path('ToEuro/<slug:slug>', SkuQuoteEURO.as_view(), name='sku-euro'),
+    path('Sku/Update/<pk>', SkuUpdate.as_view(), name='sku-update')
 ]

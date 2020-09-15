@@ -186,8 +186,13 @@ class ModifyPwdView(View):
 class LogoutView(View):
     def get(self, request):
         logout(request)
-
-        return render(request, "sign-in.html", {})
+        # 图片验证码
+        # hashkey验证码生成的秘钥，image_url验证码的图片地址
+        hashkey = CaptchaStore.generate_key()
+        image_url = captcha_image_url(hashkey)
+        login_form = LoginForm()
+        # Python内置了一个locals()函数，它返回当前所有的本地变量字典
+        return render(request, "sign-in.html", locals())
 
 
 class MyProfile(View):

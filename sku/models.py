@@ -6,7 +6,6 @@ IS_USER_CHOICE = ((1, 'OK'),
                   )
 
 
-# Create your models here.
 class Sku(models.Model):
     id = models.AutoField(primary_key=True)
     sku_no = models.CharField(max_length=30, null=False, default='', verbose_name='SKU No', )
