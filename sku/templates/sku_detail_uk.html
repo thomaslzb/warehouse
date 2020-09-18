@@ -14,14 +14,12 @@
                             <div class="form-group form-inline ">
                                 <h4 for="length">&nbsp;SKU NO. : <span class="text-primary">{{ object.sku_no }}</span></h4>
                             </div>
-                            <div class="form-group form-inline " class="col-md-3">
+                            <div class="form-inline " class="col-md-3">
                                 <h4 for="length">&nbsp;Product : <span class="text-primary">{{ object.sku_name }}</span></h4>
                             </div>
                             <div class="form-group form-inline " class="col-md-3">
                                 <h4 for="length" name="length">&nbsp;Length(CM): <span class="text-primary">{{ object.sku_length }}</span></h4>
                                 <input type="hidden" id="length"  name="length"  value="{{ object.length }}">
-                            </div>
-                            <div class="form-group form-inline" class="col-md-3">
                                 <h4 for="width">&nbsp;&nbsp;&nbsp;Width(CM): <span class="text-primary">{{ object.sku_width }}</span></h4>
                             </div>
                             <div class="form-group form-inline" class="col-md-3">
@@ -53,9 +51,12 @@
                                 <input type="radio" class="form-check-input" id="radio_resident" name="addresstype" VALUE="resident" >
                                 <label class="form-check-label" for="OutboundRadios">&nbsp;Resident</label>
                             </div>
-                            <div class="panel-body">
-                                <a href="{% url 'sku:sku-list' %}"  class="btn btn-info" role="button">Go Back</a>
-                                <input type="submit" class="btn btn-primary" value="Quote">
+                            <hr>
+                            <div class="panel-footer text-left">
+                                <div class="panel-body">
+                                    <a href="{% url 'sku:sku-list' %}"  class="btn btn-info pull-right" role="button">Go Back</a>
+                                    <input type="submit" class="btn btn-primary" value="Quote">
+                                </div>
                             </div>
                         </form>
                     </div>

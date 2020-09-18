@@ -11,14 +11,19 @@
 """
 
 from django.urls import path
-from .views import SkuListView, SkuUKDetail, SkuEuroDetail,  SkuQuoteUK, SkuQuoteEURO, SkuUpdate
+from .views import SkuListView, SkuUKDetail, SkuEuroDetail,  SkuQuoteUK, SkuQuoteEURO
+from .views import SkuCreateView, SkuUpdateView, SkuDeleteView, SkuSaveAndAnotherView, SkuFileView
 
 app_name = 'sku'
 urlpatterns = [
-    path('SkuList/', SkuListView.as_view(), name='sku-list'),
-    path('Sku/UK/<pk>/', SkuUKDetail.as_view(), name='sku-detail-uk'),
-    path('Sku/Euro/<pk>/', SkuEuroDetail.as_view(), name='sku-detail-euro'),
-    path('ToUK/<slug:slug>', SkuQuoteUK.as_view(), name='sku-uk'),
-    path('ToEuro/<slug:slug>', SkuQuoteEURO.as_view(), name='sku-euro'),
-    path('Sku/Update/<pk>', SkuUpdate.as_view(), name='sku-update')
+    path('sku-list/', SkuListView.as_view(), name='sku-list'),
+    path('sku/<pk>/uk/', SkuUKDetail.as_view(), name='sku-detail-uk'),
+    path('sku/<pk>/euro/', SkuEuroDetail.as_view(), name='sku-detail-euro'),
+    path('touk/<slug:slug>/', SkuQuoteUK.as_view(), name='sku-uk'),
+    path('toeuro/<slug:slug>/', SkuQuoteEURO.as_view(), name='sku-euro'),
+    path('sku/add/', SkuCreateView.as_view(), name='sku-create'),
+    path('sku/add/another/', SkuSaveAndAnotherView.as_view(), name='sku-create-add'),
+    path('sku/<pk>/', SkuUpdateView.as_view(), name='sku-update'),
+    path('sku/<pk>/delete/', SkuDeleteView.as_view(), name='sku-delete'),
+    path('file/upload/', SkuFileView.as_view(), name='sku-file-upload'),
 ]

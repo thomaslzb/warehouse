@@ -53,9 +53,12 @@
                                 <input type="radio" class="form-check-input" id="radio_resident" name="addresstype" VALUE="resident" >
                                 <label class="form-check-label" for="OutboundRadios">&nbsp;Resident</label>
                             </div>
-                            <div class="panel-body">
-                                <a href="{% url 'sku:sku-list' %}"  class="btn btn-info" role="button">Go Back</a>
-                                <input type="submit" class="btn btn-primary" value="Quote">
+                            <hr>
+                            <div class="panel-footer text-left">
+                                <div class="panel-body">
+                                    <a href="{% url 'sku:sku-list' %}"  class="btn btn-info pull-right" role="button">Go Back</a>
+                                    <input type="submit" class="btn btn-primary" value="Quote">
+                                </div>
                             </div>
                         </form>
                     </div>

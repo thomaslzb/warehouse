@@ -1,11 +1,14 @@
 import datetime
 import functools
 
+from itertools import chain
+from operator import attrgetter
+from django.core.paginator import Page
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, reverse
 from django.views import View
-from django.views.generic import DetailView, DeleteView
-
+from django.views.generic import DetailView, DeleteView, ListView
+from django.db.models import Q
 from .forms import SoltTimeForm, SoltTimeUpdateForm
 from .models import Warehouse, Haulier, WarehouseProfile, FixWeekday, ProgressRecord
 from users.models import UserProfile
@@ -80,10 +83,10 @@ def reset_time(need_time):
 class SoltListView(View):
     @user_is_not_staff
     def get(self, request):
-        search_date = request.GET.get("searching_date")
+        search_date = request.GET.get("searching_date", datetime.date.today())
 
-        if search_date is None or search_date == "":
-            search_date = datetime.date.today()
+        # if search_date is None or search_date == "":
+        #     search_date = datetime.date.today()
 
         # 通过登录的用户，查找到当前操作仓库的最大 Maxslot
         location_result = UserProfile.objects.filter(user_id=request.user.id)
@@ -336,13 +339,16 @@ class SoltListView(View):
             progressRecord.progress_name = "1-Booked"
             progressRecord.remark = "Create Booked"
             progressRecord.save()
-            return render(request, "Slot_Save_Success.html", {"search_date": workdate,
-                                                              })
+            return render(request, "Slot_Save_Success.html",
+                          {"Warehouse_form": Warehouse_form,
+                           "searching_date": workdate,
+                           "slottime": slottime,
+                           })
         else:
             strError = "Delivery Reference can not be repeated or empty. "
             return render(request, "Slot_Save_Error.html",
                           {"Warehouse_form": Warehouse_form,
-                           "workdate": "",
+                           "searching_date": "",
                            "slottime": "",
                            "ErrorMsg": strError})
 
@@ -512,7 +518,8 @@ class SoltUpdateView(View):
                                                                                 status="INBOUND")
                                     count_inbound_order = warehouse_result.count()
                                     if count_inbound_order >= max_inbound_count:
-                                        strError = "INBOUND NUMBER IS FULL, Because We only can handle Max Inbound number is " + str(
+                                        strError = "INBOUND NUMBER IS FULL, Because We only can handle Max Inbound " \
+                                                   "number is " + str(
                                             max_inbound_count)
                                         return render(request, "Slot_Save_Error.html",
                                                       {"Warehouse_form": Warehouse_Updateform,
@@ -542,9 +549,17 @@ class SoltUpdateView(View):
                     progressRecord.remark = remark_reason
                     progressRecord.save()
 
-                    return render(request, "Slot_Save_Success.html", {"search_date": new_workdate, })
+                    return render(request, "Slot_Save_Success.html",
+                                  {"Warehouse_form": Warehouse_Updateform,
+                                   "search_date": new_workdate,
+                                   "slottime": new_time,
+                                   })
                 else:
-                    return render(request, "Slot_Save_Success.html", {"search_date": new_workdate, })
+                    return render(request, "Slot_Save_Success.html",
+                                  {"Warehouse_form": Warehouse_Updateform,
+                                   "search_date": new_workdate,
+                                   "slottime": new_time,
+                                   })
         else:
             strError = "Delivery Reference can not be repeated or empty. "
             return render(request, "Slot_Save_Error.html",
@@ -569,3 +584,69 @@ class SlotTimeDeleteView(DeleteView):
     @user_is_not_staff
     def get_success_url(self):
         return reverse('slot:slot_list')
+
+
+class SlotListView(ListView):
+    model = Warehouse
+    template_name = 'slot_search_list.html'
+    paginate_by = 12
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        query_delivery = self.request.GET.get('s_delivery', '')
+        query_progress = self.request.GET.get('progress', '0')
+        query_haulier = int(self.request.GET.get('s_haulier', '0'))
+        data['all_haulier'] = Haulier.objects.all()
+        data['query_delivery'] = query_delivery
+        data['query_progress'] = query_progress
+        data['query_haulier'] = query_haulier
+
+        return data
+
+    def get_queryset(self):
+        query_delivery = self.request.GET.get('s_delivery', '')
+        query_progress = self.request.GET.get('progress', '0')
+        query_haulier = self.request.GET.get('s_haulier', '0')
+
+        result_list = []
+        if not (query_haulier == '0' and query_progress == '0' and query_delivery == ''):  # 三个条件任意有一个
+            if query_haulier != '0' and query_progress != '0' and query_delivery:  # 三个条件均有
+                query1 = Q(deliveryref__icontains=query_delivery)
+                query2 = Q(progress__exact=query_progress)
+                query3 = Q(hailerid__id=query_haulier)
+                result_list = Warehouse.objects.filter(query1 & query2 & query3).order_by('-workdate', 'slottime')
+
+            if query_haulier == '0' and query_progress == '0' and query_delivery:  # 只是查询 Delivery Ref.
+                query = Q(deliveryref__icontains=query_delivery)
+                result_list = Warehouse.objects.filter(query).order_by('-workdate', 'slottime')
+
+            if query_haulier != '0' and query_progress == '0' and not query_delivery:  # 只是查询 Haulier.
+                query = Q(hailerid__id=query_haulier)
+                result_list = Warehouse.objects.filter(query).order_by('-workdate', 'slottime')
+
+            if query_haulier == '0' and query_progress != '0' and not query_delivery:  # 只是查询 Progress.
+                query = Q(progress__contains=query_progress)
+                result_list = Warehouse.objects.filter(query).order_by('-workdate', 'slottime')
+
+            # 两两组合
+            if query_haulier != '0' and query_progress == '0' and query_delivery:  # 只是查询 Delivery Ref. haulier
+                query1 = Q(deliveryref__icontains=query_delivery)
+                query3 = Q(hailerid__id=query_haulier)
+                result_list = Warehouse.objects.filter(query1 & query3).order_by('-workdate', 'slottime')
+
+            if query_haulier != '0' and query_progress != '0' and not query_delivery:  # 只是查询 progress. haulier
+                query2 = Q(progress__exact=query_progress)
+                query3 = Q(hailerid__id=query_haulier)
+                result_list = Warehouse.objects.filter(query2 & query3).order_by('-workdate', 'slottime')
+
+            if query_haulier == '0' and query_progress != '0' and query_delivery:  # 只是查询 progress. Delivery Ref.
+                query1 = Q(deliveryref__icontains=query_delivery)
+                query2 = Q(progress__exact=query_progress)
+                result_list = Warehouse.objects.filter(query1 & query2).order_by('-workdate', 'slottime')
+
+        else:
+            result_list = Warehouse.objects.all().order_by('-workdate', 'slottime')
+
+        return result_list
+
+

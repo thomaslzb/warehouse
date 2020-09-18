@@ -1,0 +1,29 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+        <!-- Detail -->
+        <div class="content-panel">
+            <div class="row">
+                <div class="col-md-12 mt">
+                    <div class="container-fluid profile-text ">
+                        <h3>Sku files loading</h3>
+                        <hr>
+                        <div class="form-row">
+                            <form role="form" action="{% url 'sku:sku-file-upload' %}" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div>
+                                <input type="file" class="form-row" name="document" class="text-info">
+                                    </div>
+                                <div>
+                                <button type="submit" class="btn btn-primary" role="button">Upload file</button>
+                                    </div>
+                            </form>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

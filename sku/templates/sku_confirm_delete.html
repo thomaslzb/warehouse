@@ -1,0 +1,52 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+        <!-- Detail -->
+        <div class="content-panel">
+            <div class="row">
+                <div class="col-md-12 mt">
+                    <div class="container profile-text">
+                        <h3>Delete SKU</h3>
+                        <hr>
+                        <div class="form-group">
+                            <h4 for="length">SKU NO.:
+                            <input type="text" class="form-control" id="sku_no" name="sku_no" value="{{ object.sku_no }}" readonly></h4>
+                        </div>
+                        <div class="form-group" class="col-md-3">
+                            <h4 for="length">Product Name:
+                            <input type="text" class="form-control" id="sku_name" name="sku_no" value="{{ object.sku_name }}" readonly></h4>
+                        </div>
+                        <div class="form-inline " class="col-md-12">
+                            <label for="length" name="length">&nbsp;Length(CM): <input type="text" class="form-control"  id="length"  name="length"  value="{{ object.sku_length }}" readonly></label>
+                            <label for="width">&nbsp;&nbsp;&nbsp;Width(CM): <input type="text" class="form-control"  id="width"  name="width"  value="{{ object.sku_width }}" readonly></label>
+                            <label for="high">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;High(CM): <input type="text" class="form-control"  id="high" name="high"  value="{{ object.sku_high }}" readonly></label>
+                            <label for="weight">&nbsp;&nbsp;Weight(KG): <input type="text" class="form-control"  id="weight"  name="weigh"  value="{{ object.sku_weight}}" readonly></label>
+                        </div>
+                        <div class="form-inline " class="col-md-12">
+                            <label for="weight">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Status:
+                            <select name = "status" class="form-control" readonly>
+                            <option value="1" {% if object.is_ok == 1 %}selected{% endif %}>OK</option>
+                            <option value="0" {% if object.is_ok == 0 %}selected{% endif %}>Suspend</option>
+                            </select></label>
+                        </div>
+                        <hr>
+                            <form action="{% url 'sku:sku-delete' object.id %} "  method="post">{% csrf_token %}
+                                <H2 class="text-danger">&nbsp;&nbsp;Are you sure you want to delete "? </H2>
+                                <div class="panel-body">
+                                    <div class="panel-footer text-left">
+                                    <input class="pull-right btn btn-danger"  type="submit" value="Confirm">
+                                    <a href="{% url 'sku:sku-update' object.id %}" class="btn btn-primary" role="button"> Back </a>
+                                    </div>
+                                </div>
+                            </form>
+                        <hr>
+                    </div>
+                    </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

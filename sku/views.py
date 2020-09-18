@@ -1,24 +1,56 @@
 import math
 import datetime
 
+from django.core.files.storage import FileSystemStorage
 from django.http import request
-from django.shortcuts import render
+from django.shortcuts import render, reverse
 from django.views import View
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from quote.models import EuroCountry
-from .models import Sku
+from .models import Sku, SkuFileUpload
 from .forms import SkuUKForm, SkuEuroForm, SkuForm
 from quote.public_func import parcel
 
 MY_MENU_LOCAL = 'MY_SKU'
 
 
-class SkuUpdate(UpdateView):
+class SkuCreateView(CreateView):
     model = Sku
     form_class = SkuForm
-    template_name = 'sku_update.html'
+    template_name = 'sku_create.html'
+    success_url = '/sku/sku-list'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu_active'] = MY_MENU_LOCAL
+
+        return context
+
+    def form_invalid(self, form):  # 定义表对象没有添加失败后跳转到的页面。
+        response = super().form_invalid(form)
+        return response
+
+
+class SkuSaveAndAnotherView(SkuCreateView):
+    success_url = '/sku/add'
+
+
+class SkuUpdateView(UpdateView):
+    model = Sku
+    form_class = SkuForm
+    template_name = 'sku_edit.html'
+    success_url = '/sku/sku-list'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu_active'] = MY_MENU_LOCAL
+        return context
+
+    def form_invalid(self, form):  # 定义表对象没有添加失败后跳转到的页面。
+        response = super().form_invalid(form)
+        return response
 
 
 class SkuListView(ListView):
@@ -150,7 +182,7 @@ class SkuQuoteUK(View):
             'sku_uk_form': sku_uk_form,
             'object': sku_queryset[0],
             'menu_active': MY_MENU_LOCAL,
-            })
+        })
 
 
 class SkuQuoteEURO(View):
@@ -177,16 +209,16 @@ class SkuQuoteEURO(View):
             user_id = request.user.id
 
             company_code = 'HERM'
-            l_hermes = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk,)
+            l_hermes = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk, )
             company_code = 'PASC'
-            l_pacelforce = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk,)
+            l_pacelforce = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk, )
             company_code = 'DHL'
-            l_dhl = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk,)
+            l_dhl = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk, )
 
             company_code = 'DPD'
-            l_dpd = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk,)
+            l_dpd = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk, )
             company_code = 'UPS'
-            l_ups = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk,)
+            l_ups = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk, )
 
             if (not l_hermes[5]) and (not l_pacelforce[5]) and (not l_dhl[5]) and (not l_dpd[5]) and (not l_ups[5]):
                 return render(request, 'quote_error.html', {'go': 'UK',
@@ -231,4 +263,40 @@ class SkuQuoteEURO(View):
             'sku_uk_form': sku_euro_form,
             'object': sku_queryset[0],
             'menu_active': MY_MENU_LOCAL,
-            })
+        })
+
+
+class SkuDeleteView(DeleteView):
+    model = Sku
+    template_name = "sku_confirm_delete.html"
+
+    def get_object(self, queryset=None):
+        """ Hook to ensure object is owned by request.user. """
+        obj = super(SkuDeleteView, self).get_object()
+        # if not obj.op_user == self.request.user.id:
+        #     raise Http404
+        return obj
+
+    def get_success_url(self):
+        return reverse('sku:sku-list')
+
+
+class SkuFileView(View):
+    def get(self, request):
+        return render(request, 'sku_upload.html', {
+                'menu_active': MY_MENU_LOCAL,
+                })
+
+    def post(self, request):
+        uploaded_file = request.FILES['document']
+        fs = FileSystemStorage()
+        new_file_name = str(request.user.id) + '-' + uploaded_file.name
+        fs.save(new_file_name, uploaded_file)
+        sku_upload = SkuFileUpload()
+        sku_upload.file_name = new_file_name
+        sku_upload.custom_id = request.user.id
+        sku_upload.save()
+
+        return render(request, 'sku_upload.html', {
+                'menu_active': MY_MENU_LOCAL,
+                })

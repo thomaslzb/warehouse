@@ -3,6 +3,7 @@
 {% block search %}
 {% endblock %}
 {% block content %}
+    ============================ searching_date:{{ searching_date }}
     <div class="container-fluid"
         <!--  主页面 -->
         <div class="row col-sm-12" >
@@ -50,7 +51,7 @@
                         <span class="controls input-append date form_date" data-date-format="dd MM yyyy"
                               data-link-field="dtp_input2" >
                             <input type="date" name="workdate" id="PickingDate" max="3000-12-31" min="2020-08-01"
-                                   class="form-control" value="{{ search_date }}">
+                                   class="form-control" value="{{ searching_date }}">
                         </span>
                      </div>
                      <div class="form-group">
@@ -61,7 +62,11 @@
                                    class="form-control" value = "08:00" required>
                         </span>
                      </div>
+                    <hr>
                 </form>
+                    <div class="form-group" >
+                        <a href="{% url 'slot:slot_list_search' %}" class="btn-info btn" name="btn btn_Save" >Delivery Reference Listing</a>
+                    </div>
             </div>
             <!-- 列出所有有时间的 slot -->
             <div class="col-md-4">
@@ -73,7 +78,7 @@
                                     <div class="controls input-append date form_date" data-date-format="dd MM yyyy"
                                          data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
                                         <label class="form-inline">
-                                        <input type="date" name="searching_date" value="{{ search_date }}"
+                                        <input type="date" name="searching_date" value="{{ searching_date }}"
                                                id="SearchingDate" max="3000-12-31" min="2020-08-01" class="form-control">
                                         </label>
                                         <button type="submit" class="btn btn-success">Searching</button>
