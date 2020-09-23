@@ -300,3 +300,5 @@ class SkuFileView(View):
         return render(request, 'sku_upload.html', {
                 'menu_active': MY_MENU_LOCAL,
                 })
+
+

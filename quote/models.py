@@ -5,6 +5,10 @@ IS_USER_CHOICE = ((1, 'Normal'),
                   (0, 'Stop'),
                   )
 
+BELONG_AREA_CHOICE = (('UK', 'UK'),
+                      ('EURO', 'EUROPEAN'),
+                      )
+
 
 # Create your models here.
 class Company(models.Model):
@@ -59,6 +63,7 @@ class ZoneName(models.Model):
     id = models.AutoField(primary_key=True)
     company = models.ForeignKey('Company', to_field='id', on_delete=models.CASCADE, verbose_name="Belong Company")
     zone_name = models.CharField(max_length=10, null=False, default='', verbose_name='Zone')
+    belong = models.ForeignKey('UKRange', to_field='id', null=True, on_delete=models.CASCADE, verbose_name="Belong UK Range")
     description = models.CharField(max_length=100, blank=True, null=False, default='', verbose_name='description')
     op_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                                 default=1, verbose_name="Operator")
@@ -130,17 +135,19 @@ class ZoneSurcharge(models.Model):
 
 class EuroCountry(models.Model):
     id = models.AutoField(primary_key=True)
-    country = models.CharField(max_length=50, null=False, default='', verbose_name='Country', unique=True)
-    op_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
-                                default=1, verbose_name="Operator")
+    country = models.CharField(max_length=50, null=False, default='', verbose_name='Country', )
+    belong = models.CharField(max_length=4, null=False, default='EURO', verbose_name='Belong',
+                              choices=BELONG_AREA_CHOICE,)
+    op_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1, verbose_name="Operator")
     op_last_update = models.DateTimeField(auto_now=True, blank=True, verbose_name="Operate Datetime", )
 
     class Meta:
         db_table = "q_euro_country"
-        verbose_name = "Euro Country"
+        verbose_name = "Country"
+        unique_together = ('country', 'belong',)
 
     def __str__(self):
-        return self.country
+        return '{0}({1})'.format(self.country, self.belong)
 
 
 class EuroPrice(models.Model):
@@ -155,11 +162,71 @@ class EuroPrice(models.Model):
     minimum_charge = models.DecimalField(default=0, max_digits=8, blank=True, decimal_places=2,
                                          verbose_name='minimum_charge(PerItem)')
     description = models.CharField(max_length=300, null=False, blank=True, default='', verbose_name='description')
-    op_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
-                                default=1, verbose_name="Operator")
+    op_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1, verbose_name="Operator")
     op_last_update = models.DateTimeField(auto_now=True, blank=True, verbose_name="Operate Datetime", )
 
     class Meta:
         db_table = "q_euro_price"
         verbose_name = "Euro Price"
         unique_together = ('company', 'country',)
+
+
+class UKRange(models.Model):
+    id = models.AutoField(primary_key=True)
+    area = models.CharField(max_length=50, null=False, default='', verbose_name='Area', unique=True)
+    op_last_update = models.DateTimeField(auto_now=True, blank=True, verbose_name="Operate Datetime", )
+
+    class Meta:
+        db_table = "q_uk_range"
+        verbose_name = "UK Area"
+        unique_together = ('area', )
+
+    def __str__(self):
+        return self.area
+
+
+class UKPostcodeRange(models.Model):
+    id = models.AutoField(primary_key=True)
+    area = models.ForeignKey('UKRange', to_field='id', on_delete=models.CASCADE, verbose_name="UK Area")
+    postcode_begin = models.CharField(max_length=10, null=False, default='', verbose_name='Begin')
+    postcode_end = models.CharField(max_length=10, null=False, default='', verbose_name='End')
+    op_last_update = models.DateTimeField(auto_now=True, blank=True, verbose_name="Operate Datetime", )
+
+    class Meta:
+        db_table = "q_uk_postcode"
+        verbose_name = "UK Postcode Range"
+        unique_together = ('area', 'postcode_begin')
+
+
+class UserSetupProfit(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1, verbose_name="Customer")
+    is_uk = models.CharField(max_length=4, null=False, default='UK', verbose_name='Belong', choices=BELONG_AREA_CHOICE,)
+    uk_area = models.ForeignKey('UKRange', to_field='id', null=True, blank=True,
+                                on_delete=models.CASCADE, verbose_name="UK Area",)
+    euro_area = models.ForeignKey('EuroCountry', to_field='id', null=True, blank=True,
+                                  on_delete=models.CASCADE, verbose_name="Euro Country")
+    fix_amount = models.DecimalField(default=0, max_digits=8, blank=True, decimal_places=2, verbose_name='Fix Amount')
+    percent = models.DecimalField(default=0, max_digits=8, blank=True, decimal_places=2, verbose_name='Percent')
+    op_last_update = models.DateTimeField(auto_now=True, blank=True, verbose_name="Operate Datetime", )
+
+    class Meta:
+        db_table = "q_user_setup_profit"
+        verbose_name = "Profit Setup"
+        unique_together = ('user', 'uk_area', 'euro_area',)
+
+
+class PriceList(models.Model):
+    id = models.AutoField(primary_key=True)
+    custom = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1, verbose_name="Custom")
+    uk_area = models.ForeignKey('UKRange', to_field='id', on_delete=models.CASCADE, default=1, verbose_name="UK Area")
+    euro_area = models.ForeignKey('EuroCountry', to_field='id', on_delete=models.CASCADE,
+                                  default=1, verbose_name="Euro Country")
+    basic_price = models.DecimalField(default=0, null=False, max_digits=8, decimal_places=2,
+                                      verbose_name='Basic Price', )
+    last_update = models.DateTimeField(auto_now=True, blank=True, verbose_name="Operate Datetime", )
+
+    class Meta:
+        db_table = "q_price_sheet"
+        verbose_name = "Price Sheet"
+

@@ -11,16 +11,17 @@
 """
 
 from django.urls import path
-from .views import SoltListView, SoltDetailView, SoltUpdateView, SlotTimeDeleteView, SlotListView
+from .views import SlotListView, SlotDetailView, SlotUpdateView, SlotTimeDeleteView, SlotSearchListView
 from django.contrib.auth.decorators import login_required
 
 
 app_name = 'slot'
 
 urlpatterns = [
-    path('', login_required(SoltListView.as_view()), name='slot_list'),
-    path('<pk>', login_required(SoltDetailView.as_view()), name='slot_detail'),
-    path('Update/', login_required(SoltUpdateView.as_view()), name='slot_update'),
+    path('', login_required(SlotListView.as_view()), name='slot_list'),
+    path('<pk>', login_required(SlotDetailView.as_view()), name='slot_detail'),
+    path('Update/', login_required(SlotUpdateView.as_view()), name='slot_update'),
     path('delete/<pk>', login_required(SlotTimeDeleteView.as_view()), name='slot_delete'),
-    path('list/', login_required(SlotListView.as_view()), name='slot_list_search'),
+    path('list/', login_required(SlotSearchListView.as_view()), name='slot_list_search'),
+
 ]

@@ -6,10 +6,14 @@ from django.contrib.auth.models import User
 from menu.models import Role
 
 STAFF_ROLE_CHOICE = ((0, 'Custom'),
-               (1, 'Staff-OP'),
-               (2, 'Staff-Warehouse'),
-               (3, 'Staff-Manager'),
-               )
+                     (1, 'Staff-OP'),
+                     (2, 'Staff-Warehouse'),
+                     (3, 'Staff-Manager'),
+                     )
+
+PERCENT_CHOICE = ((0, 'By Fix Amount'),
+                  (1, 'By Percent'),
+                  )
 
 
 # Create your models here.
@@ -18,13 +22,12 @@ class UserProfile(models.Model):
     op_position = models.CharField('Op_position', max_length=2, blank=True)
     telephone = models.CharField('Telephone', max_length=100, blank=True)
     mod_date = models.DateTimeField('Last modified', auto_now=True)
-    profit_percent = models.DecimalField(default=0, blank=True, max_digits=6, decimal_places=2,
-                                         verbose_name='Profit Pencent')
+    profit_percent = models.BooleanField(default=0, choices=PERCENT_CHOICE, verbose_name='Profit Mode')
     role = models.ForeignKey(Role, to_field='id', default='1', on_delete=models.CASCADE, related_name='user_role',
                              verbose_name="System Role")
 
     # OPERATOR  WAREHOUSE MANAGER
-    staff_role = models.IntegerField('Staff_role', blank=True, default=0,  choices=STAFF_ROLE_CHOICE,)
+    staff_role = models.IntegerField('Staff_role', blank=True, default=0, choices=STAFF_ROLE_CHOICE, )
 
     class Meta:
         verbose_name = 'User Profile'

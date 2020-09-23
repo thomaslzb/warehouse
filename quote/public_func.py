@@ -14,7 +14,38 @@ import decimal
 import math
 
 from .models import ServiceType, ZoneDetail, ZoneName, Surcharge, ZoneSurcharge, EuroPrice, Company
+from .models import UserSetupProfit, UKRange, EuroCountry
 from users.models import UserProfile
+
+
+def get_custom_profit(user_id, is_uk, destination_id):
+    """
+    查询快递公司能够接受最大的尺寸或重量
+    :param user_id: 客户id
+    :param is_uk: 快递公司
+    :param destination_id: 目的地名称id
+    :return: List[is_percent, Value]
+    """
+    is_percent = False
+    user_queryset = UserProfile.objects.filter(user_id__exact=user_id)
+    if user_queryset:
+        if user_queryset[0].profit_percent:
+            is_percent = True
+
+    value = 0
+    if is_uk:
+        profit_queryset = UserSetupProfit.objects.filter(user_id__exact=user_id, uk_area_id__exact=destination_id,
+                                                         is_uk__exact='UK')
+    else:
+        profit_queryset = UserSetupProfit.objects.filter(user_id__exact=user_id, euro_area__exact=destination_id,
+                                                         is_uk__exact='EURO')
+    if profit_queryset:
+        if is_percent:
+            value = profit_queryset[0].percent
+        else:
+            value = profit_queryset[0].fix_amount
+
+    return [is_percent, value]
 
 
 def is_can_take(server_company_id, server_type_name, length, weight, girth, zonal_name):
@@ -121,15 +152,14 @@ def hermes_calculate(server_company_id, zonal_name, weight, qty, user_id):
             if base_price_queryset:
                 base_price = base_price_queryset[0].minimum_price
 
-    # 利润率
-    profit_margin = 0
-    profit_margin_queryset = UserProfile.objects.filter(user_id__exact=int(user_id))
-    if profit_margin_queryset:
-        profit_margin = 1 + profit_margin_queryset[0].profit_percent / 100
+    Additional = 0
+    overweight = 0
+    oversize = 0
+    fuel_charges_percent = 0
 
-    total_amount = base_price * qty * profit_margin
+    result = [qty, base_price, oversize, overweight, Additional, fuel_charges_percent]
 
-    return total_amount
+    return result
 
 
 def parcelforce_calculate(server_company_id, server_type_name, zonal_name, qty, length, width, user_id, is_uk):
@@ -149,6 +179,8 @@ def parcelforce_calculate(server_company_id, server_type_name, zonal_name, qty, 
     london_congestion = 0
     zonal_surcharges = 0
     oversize_charge_per_item = 0
+    base_price = 0
+    fuel_charges_percent = 0
     if is_uk:
         base_price_queryset = ServiceType.objects.filter(name__exact=server_type_name,
                                                          company__id__exact=server_company_id)
@@ -202,18 +234,14 @@ def parcelforce_calculate(server_company_id, server_type_name, zonal_name, qty, 
         fuel_charges_queryset = Surcharge.objects.filter(company__id__exact=server_company_id,
                                                          surcharge_name__exact='FuelSurcharge')
         if fuel_charges_queryset:
-            fuel_charges_percent = 1 + fuel_charges_queryset[0].percent / 100
+            fuel_charges_percent = fuel_charges_queryset[0].percent / 100
 
-        # 利润率
-        profit_margin = 0
-        profit_margin_queryset = UserProfile.objects.filter(user_id__exact=int(user_id))
-        if profit_margin_queryset:
-            profit_margin = 1 + profit_margin_queryset[0].profit_percent / 100
+    Additional = zonal_surcharges + ISLE_FEE + london_congestion
+    oversize = oversize_charge_per_item
+    overweight = 0
+    result = [qty, base_price, oversize, overweight, Additional, fuel_charges_percent]
 
-        total_amount = ((base_price * qty + oversize_charge_per_item * qty) + zonal_surcharges + ISLE_FEE +
-                        london_congestion) * fuel_charges_percent * profit_margin
-
-    return total_amount
+    return result
 
 
 def dhl_calculate(server_company_id, zonal_name, qty, length, width, high, user_id, is_uk):
@@ -233,7 +261,12 @@ def dhl_calculate(server_company_id, zonal_name, qty, length, width, high, user_
     total_amount = 0
     london_congestion = 0
     zonal_surcharges = 0
-    oversize_charge_per_item = 0
+    BFPO_FEE = 0
+    ISLE_FEE = 0
+    over_weight_price = 0
+    oversize_price = 0
+    base_price = 0
+    fuel_charges_percent = 0
     # 获取基本价格, DHL 是根据不同的zone得到不同的价格， 根据体积重，超出部分按照体积重再计算另外的附加费
     if is_uk:
         base_price_queryset = ZoneSurcharge.objects.filter(zone__zone_name__exact=zonal_name,
@@ -252,15 +285,15 @@ def dhl_calculate(server_company_id, zonal_name, qty, length, width, high, user_
     if base_price_queryset:
         over_weight_price = 0
         oversize_price = 0
-        over_weight = math.ceil((length * width * high)/4000)
+        over_weight = math.ceil((length * width * high) / 4000)
         ISLE_FEE = 0
         BFPO_FEE = 0
         if is_uk:
             base_price = base_price_queryset[0].minimum_price
-            if zonal_name == 'ISLE':   # ISLE 需要加上额外的快递费用
+            if zonal_name == 'ISLE':  # ISLE 需要加上额外的快递费用
                 ISLE_FEE = base_price_queryset[0].percent
 
-            if zonal_name == 'BFPO':   # BFPO 需要加上额外的快递费用
+            if zonal_name == 'BFPO':  # BFPO 需要加上额外的快递费用
                 BFPO_FEE = base_price_queryset[0].percent
 
             oversize_standard_price = 3
@@ -293,28 +326,23 @@ def dhl_calculate(server_company_id, zonal_name, qty, length, width, high, user_
         if over_weight > over_weight_standard:
             over_weight_price = (over_weight - over_weight_standard) * plus_price
 
-
         # 燃油费
         fuel_charges_percent = 0
         fuel_charges_queryset = Surcharge.objects.filter(company__id__exact=server_company_id,
                                                          surcharge_name__exact=get_fuel_name)
         if fuel_charges_queryset:
-            fuel_charges_percent = 1 + fuel_charges_queryset[0].percent / 100
+            fuel_charges_percent = fuel_charges_queryset[0].percent / 100
 
-        # 利润率
-        profit_margin = 0
-        profit_margin_queryset = UserProfile.objects.filter(user_id__exact=int(user_id))
-        if profit_margin_queryset:
-            profit_margin = 1 + profit_margin_queryset[0].profit_percent / 100
+    Additional = zonal_surcharges + BFPO_FEE + ISLE_FEE + london_congestion
+    overweight = over_weight_price
+    oversize = oversize_price
 
-        total_amount = (((base_price + over_weight_price + oversize_price) * qty +
-                         oversize_charge_per_item * qty) + zonal_surcharges + BFPO_FEE + ISLE_FEE +
-                        london_congestion) * fuel_charges_percent * profit_margin
+    result = [qty, base_price, oversize, overweight, Additional, fuel_charges_percent]
 
-    return total_amount
+    return result
 
 
-def dpd_calculate(server_company_id, server_type_name,  zonal_name, qty, length, width, high, weight, user_id, is_uk):
+def dpd_calculate(server_company_id, server_type_name, zonal_name, qty, length, width, high, weight, user_id, is_uk):
     """
     计算DPD, 运输总价格
     :param server_company_id: 快递公司
@@ -329,11 +357,13 @@ def dpd_calculate(server_company_id, server_type_name,  zonal_name, qty, length,
     :param is_uk: 是否英国境内
     :return: 总价格
     """
-    total_amount = 0
     london_congestion = 0
     zonal_surcharges = 0
     oversize_charge_per_item = 0
     clearance_charge = 0
+    plus_price = 0
+    base_price = 0
+    fuel_charges_percent = 0
     if is_uk:
         base_price_queryset = ServiceType.objects.filter(name__exact=server_type_name,
                                                          company__id__exact=server_company_id)
@@ -385,32 +415,29 @@ def dpd_calculate(server_company_id, server_type_name,  zonal_name, qty, length,
         fuel_charges_queryset = Surcharge.objects.filter(company__id__exact=server_company_id,
                                                          surcharge_name__exact=get_fuel_name)
         if fuel_charges_queryset:
-            fuel_charges_percent = 1 + fuel_charges_queryset[0].percent / 100
+            fuel_charges_percent = fuel_charges_queryset[0].percent / 100
 
-        # 利润率
-        profit_margin = 0
-        profit_margin_queryset = UserProfile.objects.filter(user_id__exact=int(user_id))
-        if profit_margin_queryset:
-            profit_margin = 1 + profit_margin_queryset[0].profit_percent / 100
+    Additional = zonal_surcharges + london_congestion + clearance_charge
+    overweight = plus_price
+    oversize = oversize_charge_per_item
+    result = [qty, base_price, oversize, overweight, Additional, fuel_charges_percent]
 
-        total_amount = (((base_price + plus_price) * qty + oversize_charge_per_item * qty) + zonal_surcharges +
-                        london_congestion + clearance_charge) * fuel_charges_percent * profit_margin
-
-    return total_amount
+    return result
 
 
-def parcel(server_company_code, length, width, high, weight, postcode, qty, user_id, is_uk,):
+def parcel(server_company_code, length, width, high, weight, postcode, qty, user_id, is_uk, ):
     server_company_queryset = Company.objects.filter(code__exact=server_company_code)
     server_company_id = server_company_queryset[0].id
     company_name = server_company_queryset[0].name
     server_type_name = 'ALLSERVICE'
     service_type = ""
-    unit_price = 0
+    destination_id = 0
+    destination_name = ''
     int_qty = int(qty)
-    amount = 0
 
+    list_return = [company_name, service_type, '', qty, 0, 0, 0, 0, 0, 0, False]
+    result = [int_qty, 0, 0, 0, 0, 0]
     if not server_company_queryset[0].is_use:  # 快递公司没有启用
-        list_return = [company_name, service_type, unit_price, qty, amount, False]
         return list_return
 
     if server_company_code == 'DPD':  # DPD 周长的计算方法特别
@@ -433,83 +460,92 @@ def parcel(server_company_code, length, width, high, weight, postcode, qty, user
                     if server_company_code == 'PASC':
                         zonal_name = 'ZONE1'
                     else:
-                        return [company_name, service_type, unit_price, qty, amount, False]
+                        return list_return
+        destination_queryset = ZoneName.objects.filter(zone_name__exact=zonal_name,
+                                                       company__id__exact=server_company_id)
+        if destination_queryset:
+            destination_id = destination_queryset[0].belong_id
+            destination_name = UKRange.objects.filter(id__exact=destination_id)[0].area
     else:
         zonal_name = postcode
 
     if is_can_take(server_company_id, server_type_name, length, weight, girth, zonal_name):
-        list_return = [company_name, service_type, unit_price, qty, amount, False]
         if is_uk:  # UK local
             if server_company_code == 'HERM':
-                amount = hermes_calculate(server_company_id, zonal_name, weight, int_qty, user_id)
-                unit_price = amount / qty
+                result = hermes_calculate(server_company_id, zonal_name, weight, int_qty, user_id)
                 service_queryset = ServiceType.objects.filter(name__exact=server_type_name,
                                                               company__id__exact=server_company_id)
                 if service_queryset:
                     service_type = service_queryset[0].description
 
-                list_return = [company_name, service_type, unit_price, qty, amount, True]
-                list_return[2] = format(list_return[2], '.2f')
-                list_return[4] = format(list_return[4], '.2f')
+                list_return = [company_name, service_type,  destination_name, result[0], result[1], result[2],
+                               result[3], result[4], result[5], 0]
 
             if server_company_code == 'PASC':
-                l_express24 = [company_name, service_type, unit_price, qty, amount, False]
+                l_express24 = list_return
+                l_express48 = list_return
+                l_express48_large = list_return
+
                 # Express24
                 server_type_name = 'EXPRESS24'
+
                 if is_can_take(server_company_id, server_type_name, length, weight, girth, zonal_name):
-                    amount = parcelforce_calculate(server_company_id, server_type_name, zonal_name,
+                    # result = [qty, base_price, oversize, overweight, Additional, fuel_charges_percent]
+                    result = parcelforce_calculate(server_company_id, server_type_name, zonal_name,
                                                    int_qty, length, width, user_id, is_uk)
-                    unit_price = amount / qty
                     service_queryset = ServiceType.objects.filter(name__exact=server_type_name,
                                                                   company__id__exact=server_company_id)
                     if service_queryset:
                         service_type = service_queryset[0].description
-                    l_express24 = [company_name, service_type, unit_price, qty, amount, True]
+                    l_express24 = [company_name, service_type, destination_name, result[0], result[1], result[2],
+                                   result[3], result[4], result[5], 0]
                 # Express48
                 server_type_name = 'EXPRESS48'
                 if is_can_take(server_company_id, server_type_name, length, weight, girth, zonal_name):
-                    amount = parcelforce_calculate(server_company_id, server_type_name, zonal_name,
+                    result = parcelforce_calculate(server_company_id, server_type_name, zonal_name,
                                                    int_qty, length, width, user_id, is_uk)
-                    unit_price = amount / qty
                     service_queryset = ServiceType.objects.filter(name__exact=server_type_name,
                                                                   company__id__exact=server_company_id)
                     if service_queryset:
                         service_type = service_queryset[0].description
-                    l_express48 = [company_name, service_type, unit_price, qty, amount, True]
+                    l_express48 = [company_name, service_type, destination_name, result[0], result[1], result[2],
+                                   result[3], result[4], result[5], 0]
                 # Express48Large
                 server_type_name = 'EXPRESS48LARGE'
                 if is_can_take(server_company_id, server_type_name, length, weight, girth, zonal_name):
-                    amount = parcelforce_calculate(server_company_id, server_type_name, zonal_name,
+                    result = parcelforce_calculate(server_company_id, server_type_name, zonal_name,
                                                    int_qty, length, width, user_id, is_uk)
-                    unit_price = amount / qty
                     service_queryset = ServiceType.objects.filter(name__exact=server_type_name,
                                                                   company__id__exact=server_company_id)
                     if service_queryset:
                         service_type = service_queryset[0].description
-                    l_express48_large = [company_name, service_type, unit_price, qty, amount, True]
-
-                if l_express24[4] != 0:
+                    l_express48_large = [company_name, service_type,  destination_name, result[0], result[1], result[2],
+                                         result[3], result[4], result[5], 0]
+                price_position = 4
+                if l_express24[price_position] > 0:
                     list_return = l_express24
-                elif l_express48[4] != 0:
+                elif l_express48[price_position] > 0:
                     list_return = l_express48
                 else:
                     list_return = l_express48_large
 
-                if list_return[4] > l_express48[4]:
+                if list_return[price_position] > l_express48[price_position]:
                     list_return = l_express48
 
-                if list_return[4] > l_express48_large[4]:
+                if list_return[price_position] > l_express48_large[price_position]:
                     list_return = l_express48_large
 
             if server_company_code == 'DHL':
                 server_type_name = 'UK-DHL'
-                amount = dhl_calculate(server_company_id, zonal_name,
+                result = dhl_calculate(server_company_id, zonal_name,
                                        int_qty, length, width, high, user_id, is_uk)
-                unit_price = amount / qty
                 service_queryset = ServiceType.objects.filter(name__exact=server_type_name,
                                                               company__id__exact=server_company_id)
                 if service_queryset:
                     service_type = service_queryset[0].description
+
+                list_return = [company_name, service_type,  destination_name, result[0], result[1], result[2],
+                               result[3], result[4], result[5], 0]
 
             if server_company_code == 'DPD':
                 if zonal_name == 'OFFSHORE':
@@ -517,62 +553,78 @@ def parcel(server_company_code, length, width, high, weight, postcode, qty, user
                 else:
                     server_type_name = 'UK-Mainlands'
 
-                amount = dpd_calculate(server_company_id, server_type_name, zonal_name,
+                result = dpd_calculate(server_company_id, server_type_name, zonal_name,
                                        int_qty, length, width, high, weight, user_id, is_uk)
-                unit_price = amount / qty
                 service_queryset = ServiceType.objects.filter(name__exact=server_type_name,
                                                               company__id__exact=server_company_id)
                 if service_queryset:
                     service_type = service_queryset[0].description
+
+                list_return = [company_name, service_type,  destination_name, result[0], result[1], result[2],
+                               result[3], result[4], result[5], 0]
 
             if server_company_code == 'UPS':
-                amount = 0  # ups_calculate(server_company_id, zonal_name, int_qty, length, width, high, user_id, is_uk)
-                unit_price = amount / qty
+                result = [0, 0, 0, 0, 0, 0]
                 service_queryset = ServiceType.objects.filter(name__exact=server_type_name,
                                                               company__id__exact=server_company_id)
                 if service_queryset:
                     service_type = service_queryset[0].description
 
-            if server_company_code != 'PASC':
-                list_return[4] = unit_price
-                list_return[4] = amount
-                is_amount = True
-                if list_return[4] == 0:
-                    is_amount = False
-                list_return = [company_name, service_type, unit_price, qty, amount, is_amount]
-
-            list_return[2] = decimal.Decimal(format(list_return[2], '.2f'))
-            list_return[4] = decimal.Decimal(format(list_return[4], '.2f'))
+                list_return = [company_name, service_type,  destination_name, result[0], result[1], result[2],
+                               result[3], result[4], result[5], 0]
 
         else:  # Euro
             server_type_name = 'EURO'
             if is_can_take(server_company_id, server_type_name, length, weight, girth, zonal_name):
                 if server_company_code == 'PASC':
-                    amount = parcelforce_calculate(server_company_id, server_type_name, zonal_name,
+                    result = parcelforce_calculate(server_company_id, server_type_name, zonal_name,
                                                    int_qty, length, width, user_id, is_uk)
                 if server_company_code == 'DHL':
-                    amount = dhl_calculate(server_company_id, zonal_name,
+                    result = dhl_calculate(server_company_id, zonal_name,
                                            int_qty, length, width, high, user_id, is_uk)
 
                 if server_company_code == 'DPD':
-                    amount = dpd_calculate(server_company_id, server_type_name, zonal_name,
+                    result = dpd_calculate(server_company_id, server_type_name, zonal_name,
                                            int_qty, length, width, high, weight, user_id, is_uk)
 
-                unit_price = amount / qty
                 service_queryset = ServiceType.objects.filter(name__exact=server_type_name,
                                                               company__id__exact=server_company_id)
                 if service_queryset:
                     service_type = service_queryset[0].description
 
-                is_amount = True
-                if amount == 0:
-                    is_amount = False
+                destination_queryset = EuroCountry.objects.filter(country__exact=zonal_name)
+                if destination_queryset:
+                    destination_id = destination_queryset[0].id
 
-                list_return = [company_name, service_type, unit_price, qty, amount, is_amount]
-                list_return[2] = decimal.Decimal(format(list_return[2], '.2f'))
-                list_return[4] = decimal.Decimal(format(list_return[4], '.2f'))
+                destination_name = 'EURO - ' + zonal_name
+                list_return = [company_name, service_type,  destination_name, result[0], result[1], result[2],
+                               result[3], result[4], result[5], 0]
 
-        return list_return
-    else:
-        # can not be taken
-        return [company_name, service_type, unit_price, qty, amount, False]
+        # list_return = [company_name, service_type, destination ,qty, base_price, oversize, overweight, Additional,
+        #                   fuel_charges_percent, amount, is_display]
+        if list_return[4] > 0:
+            list_return.append(True)
+            # 查询客户的利润值
+            profit_margin = get_custom_profit(user_id, is_uk, destination_id)
+            if profit_margin[0]:  # 使用百分比
+                list_return[4] = list_return[4] * (1 + profit_margin[1])
+            else:  # 加上固定值
+                list_return[4] = list_return[4] + profit_margin[1]
+
+            # 计算总金额
+            list_return[9] = ((list_return[4] + list_return[5] + list_return[6]) * qty + list_return[7]) * (
+                        1 + list_return[8])
+        else:
+            list_return[9] = 0
+            list_return.append(False)
+
+        # 格式化所有数据
+        list_return[3] = decimal.Decimal(format(list_return[3], '>10.0f'))
+        list_return[4] = decimal.Decimal(format(list_return[4], '>10.2f'))
+        list_return[5] = decimal.Decimal(format(list_return[5], '>10.2f'))
+        list_return[6] = decimal.Decimal(format(list_return[6], '>10.2f'))
+        list_return[7] = decimal.Decimal(format(list_return[7], '>10.2f'))
+        list_return[8] = str(decimal.Decimal(format(list_return[8]*100, '<10.2f')))+'%'
+        list_return[9] = decimal.Decimal(format(list_return[9], '>10.2f'))
+
+    return list_return

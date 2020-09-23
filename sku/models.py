@@ -47,3 +47,25 @@ class SkuFileUpload(models.Model):
         db_table = "sku_upload"
         verbose_name = "SKU File"
 
+
+class SkyQuoteHistory(models.Model):
+    id = models.AutoField(primary_key=True)
+    custom = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1, verbose_name="Custom")
+    sku = models.ForeignKey('Sku', to_field='id', on_delete=models.CASCADE, default=1, verbose_name="SKU")
+    qty = models.IntegerField(default=0, null=False, verbose_name="Qty.", )
+    destination = models.CharField(max_length=50, null=False, default='', verbose_name='Destination', )
+    basic_price = models.DecimalField(default=0, null=False, max_digits=8,
+                                      decimal_places=2, verbose_name='Basic Price', )
+    oversize = models.DecimalField(default=0, null=False, max_digits=8,
+                                   decimal_places=2, verbose_name='oversize', )
+    overweight = models.DecimalField(default=0, null=False, max_digits=8,
+                                     decimal_places=2, verbose_name='overweight', )
+    additional = models.DecimalField(default=0, null=False, max_digits=8, decimal_places=2,
+                                     verbose_name='Additional', )
+    fuel_percent = models.DecimalField(default=0, null=False, max_digits=8, decimal_places=2,
+                                       verbose_name='Fuel Charge', )
+    last_update = models.DateTimeField(auto_now=True, blank=True, verbose_name="Operate Datetime", )
+
+    class Meta:
+        db_table = "sku_quote_history"
+        verbose_name = "Quote History"

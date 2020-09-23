@@ -3,7 +3,6 @@
 {% block search %}
 {% endblock %}
 {% block content %}
-    ============================ searching_date:{{ searching_date }}
     <div class="container-fluid"
         <!--  主页面 -->
         <div class="row col-sm-12" >
@@ -1563,7 +1562,7 @@
 
     $(document).ready(function () {
 
-        var time = new Date("{{ search_date }}");
+        var time = new Date("{{ searching_date }}");
         {#console.log("PickingDate Begin ====================")#}
         {#console.log(time)#}
         if (isNaN(time)){
@@ -1579,8 +1578,8 @@
 
     $(document).ready(function () {
         {#console.log("search_date orignal ====================")#}
-        {#console.log("{{ search_date }}")#}
-        var strdate = new Date("{{ search_date }}");
+        {#console.log("{{ searching_date }}")#}
+        var strdate = new Date("{{ searching_date }}");
         {#console.log("search_date begin====================")#}
         {#console.log(strdate)#}
         if (isNaN(strdate)){
