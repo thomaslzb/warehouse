@@ -199,12 +199,11 @@ class UKPostcodeRange(models.Model):
 
 
 class UserSetupProfit(models.Model):
-    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1, verbose_name="Customer")
     is_uk = models.CharField(max_length=4, null=False, default='UK', verbose_name='Belong', choices=BELONG_AREA_CHOICE,)
-    uk_area = models.ForeignKey('UKRange', to_field='id', null=True, blank=True,
+    uk_area = models.ForeignKey('UKRange', to_field='id', null=True, blank=True, default='',
                                 on_delete=models.CASCADE, verbose_name="UK Area",)
-    euro_area = models.ForeignKey('EuroCountry', to_field='id', null=True, blank=True,
+    euro_area = models.ForeignKey('EuroCountry', to_field='id', null=True, blank=True, default='',
                                   on_delete=models.CASCADE, verbose_name="Euro Country")
     fix_amount = models.DecimalField(default=0, max_digits=8, blank=True, decimal_places=2, verbose_name='Fix Amount')
     percent = models.DecimalField(default=0, max_digits=8, blank=True, decimal_places=2, verbose_name='Percent')
@@ -213,7 +212,7 @@ class UserSetupProfit(models.Model):
     class Meta:
         db_table = "q_user_setup_profit"
         verbose_name = "Profit Setup"
-        unique_together = ('user', 'uk_area', 'euro_area',)
+        unique_together = ('user', 'is_uk', 'uk_area', 'euro_area',)
 
 
 class PriceList(models.Model):

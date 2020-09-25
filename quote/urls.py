@@ -11,12 +11,13 @@
 """
 from django.urls import path
 from django.contrib.auth.decorators import login_required
-from .views import QuoteInquireUK, QuoteInquireEuro, UserListView
+from .views import QuoteInquireUK, QuoteInquireEuro, UserListView, UserSetupProfitView
 
 urlpatterns = [
     path('uk/', login_required(QuoteInquireUK.as_view()), name='inquire-uk'),
     path('euro/', login_required(QuoteInquireEuro.as_view()), name='inquire-euro'),
     path('users/', login_required(UserListView.as_view()), name='user-list'),
+    path('setup/mode/<pk>/', login_required(UserSetupProfitView.as_view()), name='profit-mode')
 
 
 ]

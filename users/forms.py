@@ -148,10 +148,3 @@ class MyProfileForm(forms.ModelForm):
         model = User
         fields = ['username', 'first_name', 'last_name', 'telephone', 'profit_mode']
 
-
-class UserProfileForm(forms.ModelForm):
-    telephone = forms.CharField(max_length=20, required=False)
-    profit_percent = forms.ChoiceField(label='profit_mode', choices=PROFIT_MODE, required=True)
-    class Meta:
-        model = UserProfile
-        fields = ['telephone', 'profit_percent']

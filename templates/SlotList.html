@@ -67,6 +67,36 @@
                         <a href="{% url 'slot:slot_list_search' %}" class="btn-info btn" name="btn btn_Save" >Delivery Reference Listing</a>
                     </div>
             </div>
+
+<!-- 上传文件事件 开始 -->
+<div>
+      <button class="btn" role="button" onclick="showModal()">Upload Files</button>
+</div>
+    <!--遮罩-->
+    <div class="overlay"></div>
+    <!--模态框-->
+    <div id="modal" class="dropbox">
+        <div class="items-container">
+            <div id="close" style="cursor:pointer;float: right;width:20px">
+                <span class="css-close"></span>
+            </div>
+            <div>
+                <p class="head"><b>Drop files</b></p>
+                <div class="content" id="content">
+                    <table class="table">
+                        <tbody class="tbody"></tbody>
+                    </table>
+                </div>
+                <div class="demo-footer">
+                    <button class="btn" onclick="upload()">Begin Upload</button>
+                </div>
+				<a href='#' onclick='clearAll()' style='position:absolute;bottom:10px;right:30px;'>Clear All</a>
+            </div>
+        </div>
+    </div>
+
+<!-- 上传文件事件 结束 -->
+
             <!-- 列出所有有时间的 slot -->
             <div class="col-md-4">
                 <table class="table">
@@ -1563,13 +1593,9 @@
     $(document).ready(function () {
 
         var time = new Date("{{ searching_date }}");
-        {#console.log("PickingDate Begin ====================")#}
-        {#console.log(time)#}
         if (isNaN(time)){
             time = new Date();
         }
-        {#console.log("PickingDate Change====================")#}
-        {#console.log(time)#}
         var day = ("0" + time.getDate()).slice(-2);
         var month = ("0" + (time.getMonth() + 1)).slice(-2);
         var today = time.getFullYear() + "-" + (month) + "-" + (day);
@@ -1577,16 +1603,10 @@
     })
 
     $(document).ready(function () {
-        {#console.log("search_date orignal ====================")#}
-        {#console.log("{{ searching_date }}")#}
         var strdate = new Date("{{ searching_date }}");
-        {#console.log("search_date begin====================")#}
-        {#console.log(strdate)#}
         if (isNaN(strdate)){
             strdate = new Date();
         }
-        {#console.log("search_date change====================")#}
-        {#console.log(strdate)#}
         var searchtime = new Date(strdate);
         var day = ("0" + searchtime.getDate()).slice(-2);
         var month = ("0" + (searchtime.getMonth() + 1)).slice(-2);
@@ -1594,4 +1614,6 @@
         $('#SearchingDate').val(today);
     })
     </script>
+    <script src="{% static 'drop-file/demo.js' %}"></script>#}
+    <link href= "{% static 'drop-file/demo.css' %}" rel="stylesheet">
 {% endblock %}

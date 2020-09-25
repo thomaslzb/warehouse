@@ -4,9 +4,9 @@ import math
 from django.shortcuts import render
 from django.views import View
 from django.views.generic.list import ListView
-from .forms import QuoteUKForm, QuoteEuroForm
+from .forms import QuoteUKForm, QuoteEuroForm, UserSetupProfitForm
 from .public_func import parcel
-from .models import EuroCountry
+from .models import EuroCountry, UserSetupProfit
 from users.models import UserProfile
 
 
@@ -208,4 +208,21 @@ class UserListView(ListView):
         return result
 
 
+class UserSetupProfitView(View):
+    def get(self, request, pk):
+        all_country = EuroCountry.objects.all()
+        # 检查国家的数据是否全部已经保存，如果没有则新增
+        user_profit_queryset = UserSetupProfit.objects.filter(user_id__exact=pk, )
+        for x in all_country:
+            if user_profit_queryset:
+                if x.belong == user_profit_queryset[0].is_uk:
+                    pass
+            else:
+                obj = UserSetupProfit.objects.create(is_uk=x.belong, fix_amount=0, percent=0,
+                                                     uk_area_id=x.id, user_id=int(pk), )
+                obj.save()
+
+        return render(request, 'user_setup_profit.html', {
+                                                            'menu_active': MY_MENU_LOCAL,
+                                                          })
 

@@ -302,3 +302,12 @@ class SkuFileView(View):
                 })
 
 
+class UserListView(ListView):
+    model = Sku
+    template_name = 'sku_list.html'
+    paginate_by = 10
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu_active'] = MY_MENU_LOCAL
+        return context

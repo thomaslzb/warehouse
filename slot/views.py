@@ -1,16 +1,17 @@
 import datetime
 import functools
+import os
+import time
 
-from itertools import chain
-from operator import attrgetter
-from django.core.paginator import Page
-from django.http import HttpResponseForbidden
-from django.shortcuts import render, reverse
+from django.http import HttpResponseForbidden, HttpResponse, JsonResponse
+from django.shortcuts import render, reverse, redirect
 from django.views import View
 from django.views.generic import DetailView, DeleteView, ListView
 from django.db.models import Q
-from .forms import SoltTimeForm, SoltTimeUpdateForm
-from .models import Warehouse, Haulier, WarehouseProfile, FixWeekday, ProgressRecord
+
+# from warehouse.settings import MEDIA_ROOT
+from .forms import SlotTimeForm, SlotTimeUpdateForm, SlotFilesForm
+from .models import Warehouse, Haulier, WarehouseProfile, FixWeekday, ProgressRecord, SlotFiles
 from users.models import UserProfile
 
 
@@ -181,13 +182,13 @@ class SlotListView(View):
 
     @user_is_not_staff
     def post(self, request):
-        Warehouse_form = SoltTimeForm(request.POST)
+        Warehouse_form = SlotTimeForm(request.POST)
         workdate = request.POST.get("workdate", 0)  # 抵达日期
         # 传达参数
         request.session['searching_date'] = workdate
         if Warehouse_form.is_valid():
             deliveryref = request.POST.get("deliveryref", "")
-            hailer = request.POST.get("hailer", 0)  # 承运人
+            haulier = request.POST.get("hailer", 0)  # 承运人
             if deliveryref == "":
                 return render(request, "Slot_Save_Error.html",
                               {"Warehouse_form": Warehouse_form,
@@ -196,7 +197,7 @@ class SlotListView(View):
                                "slottime": ""
                                })
 
-            tmp_delieryref = hailer + deliveryref
+            tmp_delieryref = haulier + deliveryref
             filter_result = Warehouse.objects.filter(deliveryref__exact=tmp_delieryref)
             if filter_result:
                 return render(request, "Slot_Save_Error.html",
@@ -232,7 +233,7 @@ class SlotListView(View):
                                "ErrorMsg": strError,
                                })
 
-            hailer_result = Haulier.objects.filter(code__exact=hailer)
+            hailer_result = Haulier.objects.filter(code__exact=haulier)
             hailer_id = 0
             if hailer_result:
                 hailer_id = hailer_result[0].id  # 承运人id
@@ -321,7 +322,7 @@ class SlotListView(View):
                                        "ErrorMsg": strError})
 
             warehouse = Warehouse()
-            warehouse.deliveryref = hailer + deliveryref.upper()
+            warehouse.deliveryref = haulier + deliveryref.upper()
             warehouse.workdate = workdate
             warehouse.slottime = slottime
             warehouse.vehiclereg = vehiclereg.upper()
@@ -335,7 +336,7 @@ class SlotListView(View):
             warehouse.save()
 
             progressRecord = ProgressRecord()
-            progressRecord.deliveryref = hailer + deliveryref.upper()
+            progressRecord.deliveryref = haulier + deliveryref.upper()
             progressRecord.progress = 1  # 1=Booked 2=Arrived 3=Loading 4=Finished 5=abnormal
             progressRecord.position = position
             progressRecord.op_user_id = request.user.id
@@ -372,7 +373,7 @@ class SlotDetailView(DetailView):
 class SlotUpdateView(View):
     @user_is_not_staff
     def post(self, request):
-        Warehouse_Updateform = SoltTimeUpdateForm(request.POST)
+        Warehouse_Updateform = SlotTimeUpdateForm(request.POST)
         new_workdate = request.POST.get("new_workdate", 0)  # 新抵达日期
         if Warehouse_Updateform.is_valid():
 
@@ -654,3 +655,28 @@ class SlotSearchListView(ListView):
         return result_list
 
 
+class UploadFileView(View):
+    def get(self, request):
+        photos_list = SlotFiles.objects.all()
+        return render(self.request, 'sku_list.html')
+
+    def post(self, request):
+        form = SlotFilesForm(self.request.POST, self.request.FILES)
+        if form.is_valid():
+            form.save()
+            dir_path = os.path.dirname(os.path.abspath(file))
+            for file in request.FILES:  # 遍历获取request请求中的文件名
+                data = request.FILES.get(file)  # 获取每个文件的InMemoryUploadedFile对象
+                file_path = os.path.join(dir_path, file)
+                with open(file_path, 'w') as f:
+                    f.write(data.read())  # data.read()方法就是在内存中读取每个文件的内容
+                return HttpResponse('Succed!')
+        return render(request, 'Slot_Save_Success.html')
+
+
+# https://simpleisbetterthancomplex.com/tutorial/2016/11/22/django-multiple-file-upload-using-ajax.html
+# https://github.com/Julyaan/dragToUpload/blob/master/upload.html
+# https://www.jianshu.com/p/0b9bdbfde29a
+# https://blog.csdn.net/tangran0526/article/details/104156857
+# https://www.pianshen.com/article/583491278/
+# https://www.pythonf.cn/read/91823

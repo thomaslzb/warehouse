@@ -52,7 +52,7 @@
                     <td>{{ this_user.user.date_joined }}</td>
                     <td>{{ this_user.user.last_login }}</td>
                     <td>
-                        <a href="">
+                        <a href="{% url 'profit-mode' this_user.user.id %}">
                         <button class="btn btn-primary btn-xs"><i class="fa fa-files-o">&nbsp;&nbsp;&nbsp;Setup Profit&nbsp;&nbsp;&nbsp;</i></button>
                         </a>
                    </td>

@@ -16,7 +16,7 @@ from captcha.helpers import captcha_image_url
 from captcha.models import CaptchaStore
 
 from .models import EmailVerifyRecord, UserProfile
-from .forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm, ModifyPwdForm, MyProfileForm, UserProfileForm
+from .forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm, ModifyPwdForm, MyProfileForm
 from django.shortcuts import redirect
 
 
@@ -91,9 +91,9 @@ class LoginView(View):
                     if user.profile.staff_role != 0:
                         today = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d")
                         request.session['searching_date'] = today
-                        return redirect("/slot/")
+                        return redirect("/slot/list")
                     else:
-                        return redirect("/quote/UK")
+                        return redirect("/quote/uk")
                     # return redirect("/slot")
 
                 else:
@@ -213,20 +213,15 @@ class MyProfileUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['menu_active'] = MY_MENU_LOCAL
-        context['form_user_profit'] = UserProfileForm
         return context
 
     def form_invalid(self, form):  # 定义表对象没有添加失败后跳转到的页面。
         response = super().form_invalid(form)
         return response
 
-    # def form_valid(self, form):
-    #     context = self.get_context_data(form=form)
-    #     user = form.save()
-    #     user_profile = context['form_user_profit'].save(commit=False)
-    #     user_profile.telephone = user
-    #     user_profile.profit_percent = user
-    #     user_profile.save()
-    #
-    #     return super(MyProfileUpdateView, self).form_valid(form)
+    def form_valid(self, form):
+        user_profile = UserProfile.objects.filter(user_id=self.kwargs['pk'])
+        user_profile.update(telephone=form.data['telephone'], profit_percent=form.data['profit_mode'])
+
+        return super(MyProfileUpdateView, self).form_valid(form)
 

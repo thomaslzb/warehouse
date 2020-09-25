@@ -10,27 +10,24 @@
 15/08/2020 14:22   lzb       1.0         None
 """
 from django import forms
-from .models import Warehouse
+from .models import Warehouse, SlotFiles
 
 
-class SoltTimeForm(forms.ModelForm):
+class SlotTimeForm(forms.ModelForm):
     class Meta:
         model = Warehouse
         exclude = ["progress", "op_user", "position", "status", "op_datetime", "hailerid", "havetime", "last_update"]
 
-"""
-    def clean_deliveryref(self):
-        deliveryref = self.cleaned_data.get('hailer')+self.cleaned_data.get('deliveryref')
 
-        filter_result = Warehouse.objects.filter(deliveryref__exact=deliveryref)
-        if filter_result:
-            raise forms.ValidationError("This Delivery Ref. is exist")
-        return deliveryref
-"""
-
-
-class SoltTimeUpdateForm(forms.ModelForm):
+class SlotTimeUpdateForm(forms.ModelForm):
     class Meta:
         model = Warehouse
         exclude = ["position", "status", "op_datetime", "hailerid", "workdate", "slottime",
                    "deliveryref", "vehiclereg", "havetime", "op_user", "progress"]
+
+
+class SlotFilesForm(forms.ModelForm):
+    class Meta:
+        model = SlotFiles
+        fields = ('file', )
+
