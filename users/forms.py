@@ -12,7 +12,10 @@
 import re
 from django import forms
 from django.contrib.auth.models import User
+from .models import UserProfile
 from captcha.fields import CaptchaField
+
+PROFIT_MODE = [(0, 'By Percent'), (1, 'By Fix Amount')]
 
 
 def email_check(email):
@@ -121,5 +124,27 @@ class ModifyPwdForm(forms.Form):
         return password2
 
 
+class MyProfileForm(forms.ModelForm):
+    # GROUP_CHOICES = [(-1, '[Choose]')]
+    # GROUP_CHOICES += [(group.id, group.name.capitalize()) for group in auth.models.Group.objects.all()]
+    #
+    # group = forms.ChoiceField(
+    #     label='Group',
+    #     choices=GROUP_CHOICES
+    # )
+    #
+    # def clean_group(self):
+    #     if self.cleaned_data['group'] != -1:
+    #         return self.cleaned_data['group']
+    #     else:
+    #         raise forms.ValidationError('Please, choose a group')
+    username = forms.CharField(max_length=20, required=True)
+    first_name = forms.CharField(max_length=20, required=False)
+    last_name = forms.CharField(max_length=20, required=False)
+    telephone = forms.CharField(max_length=20, required=False)
+    profit_mode = forms.ChoiceField(label='profit_mode', choices=PROFIT_MODE, required=True)
 
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'telephone', 'profit_mode']
 

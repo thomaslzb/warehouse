@@ -8,18 +8,21 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic.base import View
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import UpdateView
 from django.contrib.auth.models import User
 
 from captcha.helpers import captcha_image_url
 from captcha.models import CaptchaStore
 
 from .models import EmailVerifyRecord, UserProfile
-from .forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm, ModifyPwdForm
+from .forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm, ModifyPwdForm, MyProfileForm
 from django.shortcuts import redirect
 
 
 # from utils import send_register_email
 
+MY_MENU_LOCAL = 'USER'
 
 @login_required
 def logout(request):
@@ -83,13 +86,14 @@ class LoginView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    today = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d")
                     # return render(request, "slotList.html", {"search_date": today})
                     abc = user.profile.staff_role
                     if user.profile.staff_role != 0:
-                        return redirect("/slot/?searching_date=" + today)
+                        today = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d")
+                        request.session['searching_date'] = today
+                        return redirect("/slot/list")
                     else:
-                        return redirect("/quote/UK")
+                        return redirect("/quote/uk")
                     # return redirect("/slot")
 
                 else:
@@ -186,32 +190,38 @@ class ModifyPwdView(View):
 class LogoutView(View):
     def get(self, request):
         logout(request)
+        # 图片验证码
+        # hashkey验证码生成的秘钥，image_url验证码的图片地址
+        hashkey = CaptchaStore.generate_key()
+        image_url = captcha_image_url(hashkey)
+        login_form = LoginForm()
+        # Python内置了一个locals()函数，它返回当前所有的本地变量字典
+        return render(request, "sign-in.html", locals())
 
-        return render(request, "sign-in.html", {})
+
+class MyProfile(DetailView):
+    model = User
+    template_name = 'my_profile.html'
 
 
-class MyProfile(View):
-    def get(self, request):
-        username = ''
-        email = ''
-        telephone = ''
-        login_date = ''
-        join_date = ''
-        userprofile_queryset = UserProfile.objects.filter(user_id__exact=request.user.id)
-        if userprofile_queryset:
-            telephone = userprofile_queryset[0].telephone
+class MyProfileUpdateView(UpdateView):
+    model = User
+    form_class = MyProfileForm
+    template_name = 'my_profile_update.html'
+    success_url = '/quote/users/'
 
-        user_queryset = User.objects.filter(id=request.user.id)
-        if user_queryset:
-            username = user_queryset[0].username
-            email = user_queryset[0].email
-            login_date = user_queryset[0].last_login
-            join_date = user_queryset[0].date_joined
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu_active'] = MY_MENU_LOCAL
+        return context
 
-        return render(request, "my_profile.html", {'menu_active': 'MY_PROFILE',
-                                                   'username': username,
-                                                   'email': email,
-                                                   'telephone': telephone,
-                                                   'login_date': login_date,
-                                                   'join_date': join_date,
-                                                   })
+    def form_invalid(self, form):  # 定义表对象没有添加失败后跳转到的页面。
+        response = super().form_invalid(form)
+        return response
+
+    def form_valid(self, form):
+        user_profile = UserProfile.objects.filter(user_id=self.kwargs['pk'])
+        user_profile.update(telephone=form.data['telephone'], profit_percent=form.data['profit_mode'])
+
+        return super(MyProfileUpdateView, self).form_valid(form)
+

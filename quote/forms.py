@@ -11,6 +11,8 @@
 """
 from django import forms
 
+from quote.models import UserSetupProfit
+
 
 class QuoteUKForm(forms.Form):
     length = forms.IntegerField(required=True, error_messages={'required': 'Length must be required.'})
@@ -98,4 +100,10 @@ class QuoteEuroForm(forms.Form):
         if qty <= 0:
             raise forms.ValidationError("Qty. must be more than 0")
         return qty
+
+
+class UserSetupProfitForm(forms.ModelForm):
+    class Meta:
+        model = UserSetupProfit
+        fields = ['user', 'is_uk', 'uk_area', 'euro_area', 'fix_amount', 'percent', ]
 

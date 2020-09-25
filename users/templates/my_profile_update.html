@@ -1,0 +1,63 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+    <div class="row mt">
+    <div class="col-lg-12">
+        <div class="form-panel">
+              <h4><i class="fa fa-angle-right"></i> Update User Information</h4>
+            <hr>
+            <div class=" form">
+                <form class="cmxform form-horizontal style-form" id="commentForm" method="post" action="">
+                    {% csrf_token %}
+                    <div class="form-group ">
+                        <label for="cname" class="control-label col-lg-1">Email: </label>
+                        <div class="col-lg-4">
+                            <input class=" form-control " id="cname" name="username" minlength="2" value="{{ object.email }}" type="text" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="cname" class="control-label col-lg-1">User Name</label>
+                        <div class="col-lg-2">
+                            <input class=" form-control" id="cname" name="username" minlength="2" value="{{ object.username }}" type="text" required />
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="cemail" class="control-label col-lg-1">First Name</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="first_name" name="first_name"  value="{{ object.first_name }}">
+                        </div>
+                        <label for="cemail" class="control-label col-lg-1">Last Name</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="last_name"  name="last_name"  value="{{ object.last_name }}"/>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="curl" class="control-label col-lg-1">Telephone</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="telephone" name="telephone" value="{{ object.profile.telephone }}"/>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="curl" class="control-label col-lg-1">Profit Mode</label>
+                        <div class="col-lg-2">
+                            <select name = "profit_mode" class="form-control">
+                                <option value=1 {% if object.profile.profit_percent %}selected{% endif %}>By Percent</option>
+                                <option value=0 {% if not object.profile.profit_percent %}selected{% endif %}>By Fix Amount</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-offset-1 col-lg-10">
+                            <button class="btn btn-theme" type="submit">Save</button>
+                            <a href="{% url 'user-list' %}" class="btn btn-theme04" type="button">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /form-panel -->
+    </div>
+    </div>
+    </div>
+{% endblock %}

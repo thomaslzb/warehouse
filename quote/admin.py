@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Company, ServiceType, Surcharge, ZoneName, ZoneDetail, ZoneSurcharge, EuroCountry, EuroPrice
+from .models import UKRange, UKPostcodeRange, UserSetupProfit
 
 PER_PAGE = 15
 
@@ -33,7 +34,7 @@ class SurchargeAdmin(admin.ModelAdmin):
 
 @admin.register(ZoneName)
 class ZoneNameAdmin(admin.ModelAdmin):
-    list_display = ('company', 'zone_name', 'description', 'op_user', 'op_last_update')
+    list_display = ('company', 'zone_name', 'belong', 'op_user', 'op_last_update',  'description')
     list_display_links = ('company', 'zone_name', )
     list_filter = ('company',)
     fk_fields = ('op_user_id',)
@@ -62,10 +63,10 @@ class ZoneDetailAdmin(admin.ModelAdmin):
 
 @admin.register(EuroCountry)
 class EuroCountryAdmin(admin.ModelAdmin):
-    list_display = ('country', 'op_user', 'op_last_update')
+    list_display = ('country', 'belong', 'op_user', 'op_last_update')
     fk_fields = ('op_user_id',)
-    search_fields = ('country',)
-    ordering = ('country',)
+    search_fields = ('country', 'belong')
+    ordering = ('belong', 'country',)
     list_per_page = PER_PAGE
 
 
@@ -79,3 +80,31 @@ class EuroPriceAdmin(admin.ModelAdmin):
 
     list_per_page = PER_PAGE
 
+
+@admin.register(UserSetupProfit)
+class UserSetupProfitAdmin(admin.ModelAdmin):
+    list_display = ('user', 'is_uk', 'uk_area', 'euro_area', 'fix_amount', 'percent', 'op_last_update')
+    list_filter = ('user', 'is_uk')
+    list_display_links = ('user', 'uk_area', 'euro_area')
+    fk_fields = ('user', )
+
+    list_per_page = PER_PAGE
+
+
+@admin.register(UKRange)
+class UKRangeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'area', 'op_last_update')
+    list_display_links = ('area', )
+    ordering = ('id',)
+    fk_fields = ('area', )
+
+    list_per_page = PER_PAGE
+
+
+@admin.register(UKPostcodeRange)
+class UKPostcodeRangeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'area', 'postcode_begin', 'postcode_end', 'op_last_update')
+    list_display_links = ('area', )
+    fk_fields = ('area', )
+
+    list_per_page = PER_PAGE

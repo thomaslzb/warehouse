@@ -147,7 +147,7 @@
                 </div>
                 <div class="panel-footer text-left">
                       <div class="panel-body">
-                            <a href="{% url 'slot:slot_list' %}" class="btn btn-primary" role="button">Back</a>
+                            <a href="{% url 'slot:slot_list' %}?searching_date={{ object.workdate }}" class="btn btn-primary" role="button">Back</a>
                             {% if object.progress != 4 %} {# 状态是 4=Finished 不能再做变更 #}
                                 {% if request.user.id == object.op_user_id and object.progress == 1 and request.user.profile.staff_role != 3%} {#  如果是或者操作员本人并且状态是 1=Booked ，则允许更新时间 #}
                                     <input class="form-inline btn btn-info" type="submit" value="Update">
@@ -161,7 +161,7 @@
                             {% endif %}
                             {% if request.user.id == object.op_user_id or request.user.profile.staff_role == 3 %} {#  如果是或者操作员本人或经理，则允许删除操作 #}
                                 {% if object.progress == 1 %} {# 状态是 1=Booked 才能删除操作 #}
-                                    <a href="{% url 'slot:slot_delete' object.id %}" class="pull-right btn btn-danger" role="button">Delete</a>
+                                    <a href="{% url 'slot:slot_delete' object.id %}?searching_date={{ object.workdate }} " class="pull-right btn btn-danger" role="button">Delete</a>
                                 {% endif %}
                             {% endif %}
                       </div>
@@ -171,7 +171,7 @@
             <!-- 是完成的状态下，仅仅显示返回按钮 -->
             <div class="panel-footer text-left">
               <div class="panel-body">
-                <a href="{% url 'slot:slot_list' %}"  class="btn btn-primary" role="button">Back</a>
+                <a href="{% url 'slot:slot_list' %}?searching_date={{ object.workdate }}"  class="btn btn-primary" role="button">Back</a>
               </div>
             </div>
         {% endif %}

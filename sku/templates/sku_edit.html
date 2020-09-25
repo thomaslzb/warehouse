@@ -1,0 +1,94 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+        <!-- Detail -->
+        <div class="content-panel">
+            <div class="row">
+                <div class="col-md-12 mt">
+                    <div class="container-fluid profile-text">
+                        <h3>Edit SKU</h3>
+                        <hr>
+                        <form role="form" action="" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <h4 for="length">SKU NO.:
+                                <input type="text" class="form-control" id="sku_no" name="sku_no" value="{{ object.sku_no }}" placeholder="Sku No"></h4>
+                                <span class="text-danger">
+                                    {{ form.errors.sku_no.0 }}
+                                </span>
+                                <span class="text-danger">
+                                    {{ form.non_field_errors }}
+                                </span>
+                            </div>
+                            <div class="form-group" class="col-md-3">
+                                <h4 for="length">Product Name:
+                                <input type="text" class="form-control" id="sku_name" name="sku_name" value="{{ object.sku_name }}" placeholder="Product Name"></h4>
+                                <span class="text-danger">
+                                    {{ form.errors.sku_name.0 }}
+                                </span>
+                            </div>
+                            <div class="form-inline " class="col-md-12">
+                                <label for="length" name="length">&nbsp;Length(CM): <input type="text" class="form-control"
+                                       id="length"  name="sku_length" value="{{ object.sku_length }}" placeholder="Length"></label>
+                                <span class="text-danger">
+                                    {{ form.errors.sku_length.0 }}
+                                </span>
+                            </div>
+                            <div class="form-inline " class="col-md-12">
+                                <label for="width">&nbsp;&nbsp;&nbsp;Width(CM): <input type="text" class="form-control"  id="sku_width"  name="sku_width"
+                                                                                       value="{{ object.sku_width }}" placeholder="width"></label>
+                                <span class="text-danger">
+                                    {{ form.errors.sku_width.0 }}
+                                </span>
+                            </div>
+                            <div class="form-inline " class="col-md-12">
+                                <label for="high">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;High(CM): <input type="text" class="form-control"  id="high" name="sku_high"
+                                       value="{{ object.sku_high }}"  placeholder="High"></label>
+                                <span class="text-danger">
+                                    {{ form.errors.sku_high.0 }}
+                                </span>
+                            </div>
+                            <div class="form-inline " class="col-md-12">
+                                <label for="weight">&nbsp;&nbsp;Weight(KG): <input type="text" class="form-control"  id="weight"  name="sku_weight"
+                                       value="{{ object.sku_weight}}" placeholder="Weight"></label>
+                                <span class="text-danger">
+                                    {{ form.errors.sku_weight.0 }}
+                                </span>
+                                <span class="text-danger">
+                                    {{ form.errors.weight.0 }}
+                                </span>
+                                <input type="hidden" id="custom_id"  name="custom"  value="{{ request.user.id }}"></label>
+                            </div>
+                            <div class="form-inline " class="col-md-12">
+                                <label for="weight">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Status:
+                                <select name = "is_ok" class="form-control">
+                                {% if object.is_ok == 0  %}
+                                    <option value=1 >OK</option>
+                                    <option value=0 selected>Suspend</option>
+                                {% else %}
+                                    <option value=1 >OK</option>
+                                    <option value=0 >Suspend</option>
+                                {% endif %}
+                                </select></label>
+                            </div>
+                            <hr>
+                            <div class="panel-footer text-left">
+
+                                <div class="panel-body">
+                                <a href="{% url 'sku:sku-list' %}"  class="btn btn-success" role="button"> Go Back </a>
+                                <input type="submit" class="btn btn-primary" value="Save">
+                                <a href="{% url 'sku:sku-delete' object.id %}" class="pull-right btn btn-danger" role="button">Delete</a>
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+                    </div>
+                    </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,13 +1,17 @@
 import datetime
 import functools
+import os
+import time
 
-from django.http import HttpResponseForbidden
-from django.shortcuts import render, reverse
+from django.http import HttpResponseForbidden, HttpResponse, JsonResponse
+from django.shortcuts import render, reverse, redirect
 from django.views import View
-from django.views.generic import DetailView, DeleteView
+from django.views.generic import DetailView, DeleteView, ListView
+from django.db.models import Q
 
-from .forms import SoltTimeForm, SoltTimeUpdateForm
-from .models import Warehouse, Haulier, WarehouseProfile, FixWeekday, ProgressRecord
+# from warehouse.settings import MEDIA_ROOT
+from .forms import SlotTimeForm, SlotTimeUpdateForm, SlotFilesForm
+from .models import Warehouse, Haulier, WarehouseProfile, FixWeekday, ProgressRecord, SlotFiles
 from users.models import UserProfile
 
 
@@ -77,13 +81,14 @@ def reset_time(need_time):
 
 
 # Create your views here.
-class SoltListView(View):
+class SlotListView(View):
     @user_is_not_staff
     def get(self, request):
-        search_date = request.GET.get("searching_date")
+        search_date = request.session.get("searching_date", datetime.date.today())
+        search_date = request.GET.get("searching_date", datetime.date.today())
 
-        if search_date is None or search_date == "":
-            search_date = datetime.date.today()
+        # if search_date is None or search_date == "":
+        #     search_date = datetime.date.today()
 
         # 通过登录的用户，查找到当前操作仓库的最大 Maxslot
         location_result = UserProfile.objects.filter(user_id=request.user.id)
@@ -149,7 +154,7 @@ class SoltListView(View):
         all_Hailers = Haulier.objects.all()
 
         return render(request, "SlotList.html", {
-            "search_date": search_date,
+            "searching_date": search_date,
             "all_slots0600": all_slots0600, "all_slots0630": all_slots0630,
             "all_slots0700": all_slots0700, "all_slots0730": all_slots0730,
             "all_slots0800": all_slots0800, "all_slots0830": all_slots0830,
@@ -177,31 +182,33 @@ class SoltListView(View):
 
     @user_is_not_staff
     def post(self, request):
-        Warehouse_form = SoltTimeForm(request.POST)
+        Warehouse_form = SlotTimeForm(request.POST)
+        workdate = request.POST.get("workdate", 0)  # 抵达日期
+        # 传达参数
+        request.session['searching_date'] = workdate
         if Warehouse_form.is_valid():
             deliveryref = request.POST.get("deliveryref", "")
-            hailer = request.POST.get("hailer", 0)  # 承运人
+            haulier = request.POST.get("hailer", 0)  # 承运人
             if deliveryref == "":
                 return render(request, "Slot_Save_Error.html",
                               {"Warehouse_form": Warehouse_form,
                                "ErrorMsg": "This Delivery Ref. can not be empty. ",
-                               "workdate": "",
+                               "searching_date": workdate,
                                "slottime": ""
                                })
 
-            tmp_delieryref = hailer + deliveryref
+            tmp_delieryref = haulier + deliveryref
             filter_result = Warehouse.objects.filter(deliveryref__exact=tmp_delieryref)
             if filter_result:
                 return render(request, "Slot_Save_Error.html",
                               {"Warehouse_form": Warehouse_form,
                                "ErrorMsg": "This Delivery Ref. is Existed",
-                               "workdate": "",
+                               "searching_date": workdate,
                                "slottime": ""
                                })
 
             # 根据用户能够操作的地点， 判断仓库的位置
             position = request.user.profile.op_position  # 仓库位置
-            workdate = request.POST.get("workdate", 0)  # 抵达日期
             yesterday = datetime.datetime.now() + datetime.timedelta(days=-1)
             d_workdate = datetime.datetime.strptime(workdate, "%Y-%m-%d")
 
@@ -209,7 +216,7 @@ class SoltListView(View):
                 strError = "You can not select the date before today. "
                 return render(request, "Slot_Save_Error.html",
                               {"deliveryref": deliveryref,
-                               "workdate": "",
+                               "searching_date": workdate,
                                "slottime": "",
                                "ErrorMsg": strError,
                                })
@@ -221,12 +228,12 @@ class SoltListView(View):
                 strError = " You cannot set the date more than 10 days after the current date"
                 return render(request, "Slot_Save_Error.html",
                               {"Warehouse_form": Warehouse_form,
-                               "workdate": workdate,
+                               "searching_date": workdate,
                                "slottime": '',
                                "ErrorMsg": strError,
                                })
 
-            hailer_result = Haulier.objects.filter(code__exact=hailer)
+            hailer_result = Haulier.objects.filter(code__exact=haulier)
             hailer_id = 0
             if hailer_result:
                 hailer_id = hailer_result[0].id  # 承运人id
@@ -245,7 +252,7 @@ class SoltListView(View):
                            ", Please check your input time ( " + slottime + ")"
                 return render(request, "Slot_Save_Error.html",
                               {"Warehouse_form": Warehouse_form,
-                               "workdate": workdate,
+                               "searching_date": workdate,
                                "slottime": slottime,
                                "ErrorMsg": strError,
                                })
@@ -292,7 +299,7 @@ class SoltListView(View):
                                str(count_orders) + " and Preserves number is " + str(count_preserves)
                     return render(request, "Slot_Save_Error.html",
                                   {"Warehouse_form": Warehouse_form,
-                                   "workdate": workdate,
+                                   "searching_date": workdate,
                                    "slottime": slottime,
                                    "ErrorMsg": strError
                                    })
@@ -310,12 +317,12 @@ class SoltListView(View):
                             max_inbound_count)
                         return render(request, "Slot_Save_Error.html",
                                       {"Warehouse_form": Warehouse_form,
-                                       "workdate": workdate,
+                                       "searching_date": workdate,
                                        "slottime": slottime,
                                        "ErrorMsg": strError})
 
             warehouse = Warehouse()
-            warehouse.deliveryref = hailer + deliveryref.upper()
+            warehouse.deliveryref = haulier + deliveryref.upper()
             warehouse.workdate = workdate
             warehouse.slottime = slottime
             warehouse.vehiclereg = vehiclereg.upper()
@@ -329,25 +336,29 @@ class SoltListView(View):
             warehouse.save()
 
             progressRecord = ProgressRecord()
-            progressRecord.deliveryref = hailer + deliveryref.upper()
+            progressRecord.deliveryref = haulier + deliveryref.upper()
             progressRecord.progress = 1  # 1=Booked 2=Arrived 3=Loading 4=Finished 5=abnormal
             progressRecord.position = position
             progressRecord.op_user_id = request.user.id
             progressRecord.progress_name = "1-Booked"
             progressRecord.remark = "Create Booked"
             progressRecord.save()
-            return render(request, "Slot_Save_Success.html", {"search_date": workdate,
-                                                              })
+
+            return render(request, "Slot_Save_Success.html",
+                          {"Warehouse_form": Warehouse_form,
+                           "searching_date": workdate,
+                           "slottime": slottime,
+                           })
         else:
             strError = "Delivery Reference can not be repeated or empty. "
             return render(request, "Slot_Save_Error.html",
                           {"Warehouse_form": Warehouse_form,
-                           "workdate": "",
+                           "searching_date": workdate,
                            "slottime": "",
                            "ErrorMsg": strError})
 
 
-class SoltDetailView(DetailView):
+class SlotDetailView(DetailView):
     queryset = Warehouse.objects.all()
     template_name = "Slot_Detail.html"
 
@@ -359,16 +370,16 @@ class SoltDetailView(DetailView):
         return object
 
 
-class SoltUpdateView(View):
+class SlotUpdateView(View):
     @user_is_not_staff
     def post(self, request):
-        Warehouse_Updateform = SoltTimeUpdateForm(request.POST)
+        Warehouse_Updateform = SlotTimeUpdateForm(request.POST)
+        new_workdate = request.POST.get("new_workdate", 0)  # 新抵达日期
         if Warehouse_Updateform.is_valid():
 
             deliveryref = request.POST.get("deliveryref", "")
             slot_result = Warehouse.objects.filter(deliveryref=deliveryref)
             if slot_result:
-                new_workdate = request.POST.get("new_workdate", 0)  # 新抵达日期
                 new_time = request.POST.get("new_slottime", 0)  # 新旧抵达时间
                 old_workdate = slot_result[0].workdate
                 old_time = slot_result[0].slottime
@@ -424,7 +435,7 @@ class SoltUpdateView(View):
                             strError = "You can not select the date before today. "
                             return render(request, "Slot_Save_Error.html",
                                           {"Warehouse_form": Warehouse_Updateform,
-                                           "workdate": new_workdate,
+                                           "searching_date": old_workdate,
                                            "slottime": new_time,
                                            "ErrorMsg": strError,
                                            })
@@ -436,7 +447,7 @@ class SoltUpdateView(View):
                             strError = " You cannot set the date more than 10 days after the current date"
                             return render(request, "Slot_Save_Error.html",
                                           {"Warehouse_form": Warehouse_Updateform,
-                                           "workdate": new_workdate,
+                                           "searching_date": old_workdate,
                                            "slottime": new_time,
                                            "ErrorMsg": strError,
                                            })
@@ -454,7 +465,7 @@ class SoltUpdateView(View):
                                        ", Please check your input time ( " + new_time + ")"
                             return render(request, "Slot_Save_Error.html",
                                           {"Warehouse_form": Warehouse_Updateform,
-                                           "workdate": new_workdate,
+                                           "searching_date": new_workdate,
                                            "slottime": new_time,
                                            "ErrorMsg": strError,
                                            })
@@ -498,7 +509,7 @@ class SoltUpdateView(View):
                                                str(count_orders) + " and Preserves number is " + str(count_preserves)
                                     return render(request, "Slot_Save_Error.html",
                                                   {"Warehouse_form": Warehouse_Updateform,
-                                                   "workdate": new_workdate,
+                                                   "searching_date": new_workdate,
                                                    "slottime": new_time,
                                                    "ErrorMsg": strError
                                                    })
@@ -512,11 +523,12 @@ class SoltUpdateView(View):
                                                                                 status="INBOUND")
                                     count_inbound_order = warehouse_result.count()
                                     if count_inbound_order >= max_inbound_count:
-                                        strError = "INBOUND NUMBER IS FULL, Because We only can handle Max Inbound number is " + str(
+                                        strError = "INBOUND NUMBER IS FULL, Because We only can handle Max Inbound " \
+                                                   "number is " + str(
                                             max_inbound_count)
                                         return render(request, "Slot_Save_Error.html",
                                                       {"Warehouse_form": Warehouse_Updateform,
-                                                       "workdate": new_workdate,
+                                                       "searching_date": new_workdate,
                                                        "slottime": new_time,
                                                        "ErrorMsg": strError})
 
@@ -542,14 +554,22 @@ class SoltUpdateView(View):
                     progressRecord.remark = remark_reason
                     progressRecord.save()
 
-                    return render(request, "Slot_Save_Success.html", {"search_date": new_workdate, })
+                    return render(request, "Slot_Save_Success.html",
+                                  {"Warehouse_form": Warehouse_Updateform,
+                                   "searching_date": new_workdate,
+                                   "slottime": new_time,
+                                   })
                 else:
-                    return render(request, "Slot_Save_Success.html", {"search_date": new_workdate, })
+                    return render(request, "Slot_Save_Success.html",
+                                  {"Warehouse_form": Warehouse_Updateform,
+                                   "searching_date": new_workdate,
+                                   "slottime": new_time,
+                                   })
         else:
             strError = "Delivery Reference can not be repeated or empty. "
             return render(request, "Slot_Save_Error.html",
                           {"Warehouse_form": Warehouse_Updateform,
-                           "workdate": "",
+                           "searching_date": new_workdate,
                            "slottime": "",
                            "ErrorMsg": strError})
 
@@ -569,3 +589,94 @@ class SlotTimeDeleteView(DeleteView):
     @user_is_not_staff
     def get_success_url(self):
         return reverse('slot:slot_list')
+
+
+class SlotSearchListView(ListView):
+    model = Warehouse
+    template_name = 'slot_search_list.html'
+    paginate_by = 12
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        query_delivery = self.request.GET.get('s_delivery', '')
+        query_progress = self.request.GET.get('progress', '0')
+        query_haulier = int(self.request.GET.get('s_haulier', '0'))
+        data['all_haulier'] = Haulier.objects.all()
+        data['query_delivery'] = query_delivery
+        data['query_progress'] = query_progress
+        data['query_haulier'] = query_haulier
+
+        return data
+
+    def get_queryset(self):
+        query_delivery = self.request.GET.get('s_delivery', '')
+        query_progress = self.request.GET.get('progress', '0')
+        query_haulier = self.request.GET.get('s_haulier', '0')
+
+        result_list = []
+        if not (query_haulier == '0' and query_progress == '0' and query_delivery == ''):  # 三个条件任意有一个
+            if query_haulier != '0' and query_progress != '0' and query_delivery:  # 三个条件均有
+                query1 = Q(deliveryref__icontains=query_delivery)
+                query2 = Q(progress__exact=query_progress)
+                query3 = Q(hailerid__id=query_haulier)
+                result_list = Warehouse.objects.filter(query1 & query2 & query3).order_by('-workdate', 'slottime')
+
+            if query_haulier == '0' and query_progress == '0' and query_delivery:  # 只是查询 Delivery Ref.
+                query = Q(deliveryref__icontains=query_delivery)
+                result_list = Warehouse.objects.filter(query).order_by('-workdate', 'slottime')
+
+            if query_haulier != '0' and query_progress == '0' and not query_delivery:  # 只是查询 Haulier.
+                query = Q(hailerid__id=query_haulier)
+                result_list = Warehouse.objects.filter(query).order_by('-workdate', 'slottime')
+
+            if query_haulier == '0' and query_progress != '0' and not query_delivery:  # 只是查询 Progress.
+                query = Q(progress__contains=query_progress)
+                result_list = Warehouse.objects.filter(query).order_by('-workdate', 'slottime')
+
+            # 两两组合
+            if query_haulier != '0' and query_progress == '0' and query_delivery:  # 只是查询 Delivery Ref. haulier
+                query1 = Q(deliveryref__icontains=query_delivery)
+                query3 = Q(hailerid__id=query_haulier)
+                result_list = Warehouse.objects.filter(query1 & query3).order_by('-workdate', 'slottime')
+
+            if query_haulier != '0' and query_progress != '0' and not query_delivery:  # 只是查询 progress. haulier
+                query2 = Q(progress__exact=query_progress)
+                query3 = Q(hailerid__id=query_haulier)
+                result_list = Warehouse.objects.filter(query2 & query3).order_by('-workdate', 'slottime')
+
+            if query_haulier == '0' and query_progress != '0' and query_delivery:  # 只是查询 progress. Delivery Ref.
+                query1 = Q(deliveryref__icontains=query_delivery)
+                query2 = Q(progress__exact=query_progress)
+                result_list = Warehouse.objects.filter(query1 & query2).order_by('-workdate', 'slottime')
+
+        else:
+            result_list = Warehouse.objects.all().order_by('-workdate', 'slottime')
+
+        return result_list
+
+
+class UploadFileView(View):
+    def get(self, request):
+        photos_list = SlotFiles.objects.all()
+        return render(self.request, 'sku_list.html')
+
+    def post(self, request):
+        form = SlotFilesForm(self.request.POST, self.request.FILES)
+        if form.is_valid():
+            form.save()
+            dir_path = os.path.dirname(os.path.abspath(file))
+            for file in request.FILES:  # 遍历获取request请求中的文件名
+                data = request.FILES.get(file)  # 获取每个文件的InMemoryUploadedFile对象
+                file_path = os.path.join(dir_path, file)
+                with open(file_path, 'w') as f:
+                    f.write(data.read())  # data.read()方法就是在内存中读取每个文件的内容
+                return HttpResponse('Succed!')
+        return render(request, 'Slot_Save_Success.html')
+
+
+# https://simpleisbetterthancomplex.com/tutorial/2016/11/22/django-multiple-file-upload-using-ajax.html
+# https://github.com/Julyaan/dragToUpload/blob/master/upload.html
+# https://www.jianshu.com/p/0b9bdbfde29a
+# https://blog.csdn.net/tangran0526/article/details/104156857
+# https://www.pianshen.com/article/583491278/
+# https://www.pythonf.cn/read/91823

@@ -9,7 +9,10 @@
 ------------      -------    --------    -----------
 11/09/2020 11:58   lzb       1.0         None
 """
+import decimal
+
 from django import forms
+from .models import Sku
 
 
 class SkuUKForm(forms.Form):
@@ -40,4 +43,45 @@ class SkuEuroForm(forms.Form):
         if qty <= 0:
             raise forms.ValidationError("Length must be more than 0")
         return qty
+
+
+class SkuForm(forms.ModelForm):
+    class Meta:
+        model = Sku
+        fields = ['sku_no', 'sku_name', 'sku_length', 'sku_width', 'sku_high', 'sku_weight',
+                  'sku_width', 'is_ok', 'custom']
+        # exclude = ['last_update', ]
+
+    # def clean_sku_no(self):
+    #     sku_no = self.cleaned_data.get('sku_no')
+    #     queryset = Sku.objects.filter(sku_no__exact=sku_no, custom_id=request.user.id)
+    #     if queryset:
+    #         raise forms.ValidationError("This Sku No. is exist.")
+    #     return sku_no
+
+    def clean_sku_length(self):
+        length = int(self.cleaned_data.get('sku_length'))
+        if length <= 0:
+            raise forms.ValidationError("Length must be more than 0")
+        return length
+
+    def clean_sku_width(self):
+        width = int(self.cleaned_data.get('sku_width'))
+        if width <= 0:
+            raise forms.ValidationError("Width must be more than 0")
+        return width
+
+    def clean_sku_high(self):
+        high = int(self.cleaned_data.get('sku_high'))
+        if high <= 0:
+            raise forms.ValidationError("High must be more than 0")
+        return high
+
+    def clean_sku_weight(self):
+        weight = decimal.Decimal(self.cleaned_data.get('sku_weight'))
+        if weight <= 0:
+            raise forms.ValidationError("Weight must be more than 0")
+        return weight
+
+
 

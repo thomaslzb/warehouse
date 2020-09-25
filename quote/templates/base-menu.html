@@ -30,9 +30,21 @@
                           </a>
                       </li>
                       <li class="mt">
-                        <a {% if menu_active == 'MY_PROFILE' %}class="active"{% endif %}  href="{% url 'users:my_profile' %}">
+                        <a {% if menu_active == 'Price List' %}class="active"{% endif %}  href="">
+                          <i class="fa fa-dashboard"></i>
+                          <span>Price List</span>
+                          </a>
+                      </li>
+                      <li class="mt">
+                        <a {% if menu_active == 'MY_PROFILE' %}class="active"{% endif %}  href="{% url 'users:my_profile'  request.user.id %}">
                           <i class="fa fa-dashboard"></i>
                           <span>My Profile</span>
+                          </a>
+                      </li>
+                      <li class="mt">
+                        <a {% if menu_active == 'USERS' %}class="active"{% endif %}  href="{% url 'user-list' %}">
+                          <i class="fa fa-dashboard"></i>
+                          <span>User Maintenance</span>
                           </a>
                       </li>
             </ul>

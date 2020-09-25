@@ -3,9 +3,11 @@ import math
 
 from django.shortcuts import render
 from django.views import View
-from .forms import QuoteUKForm, QuoteEuroForm
+from django.views.generic.list import ListView
+from .forms import QuoteUKForm, QuoteEuroForm, UserSetupProfitForm
 from .public_func import parcel
-from .models import EuroCountry
+from .models import EuroCountry, UserSetupProfit
+from users.models import UserProfile
 
 
 # Create your views here.
@@ -17,6 +19,9 @@ from .models import EuroCountry
 #             render(request, 'base-menu.html', {"all_menu": role_result})
 #             return True
 #     return False
+
+MY_MENU_LOCAL = 'USERS'
+LAST_POSITION = 10
 
 
 class QuoteInquireUK(View):
@@ -49,13 +54,13 @@ class QuoteInquireUK(View):
             l_pacelforce = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk)
             company_code = 'DHL'
             l_dhl = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk)
-
             company_code = 'DPD'
             l_dpd = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk)
             company_code = 'UPS'
             l_ups = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk)
 
-            if (not l_hermes[5]) and (not l_pacelforce[5]) and (not l_dhl[5]) and (not l_dpd[5]) and (not l_ups[5]):
+            if (not l_hermes[LAST_POSITION]) and (not l_pacelforce[LAST_POSITION]) and \
+                    (not l_dhl[LAST_POSITION]) and (not l_dpd[LAST_POSITION]) and (not l_ups[LAST_POSITION]):
                 return render(request, 'quote_error.html', {'go': 'UK',
                                                             'length': length,
                                                             'width': width,
@@ -93,12 +98,12 @@ class QuoteInquireUK(View):
         return render(request, "inquire_uk.html", {
             "quote_uk_form": quote_uk_form,
             'menu_active': 'UK',
-            })
+        })
 
 
 class QuoteInquireEuro(View):
     def get(self, request):
-        all_euro = EuroCountry.objects.all().order_by('country')
+        all_euro = EuroCountry.objects.all().filter(belong='EURO')
         return render(request, 'inquire_euro.html', {'all_euro': all_euro, 'menu_active': 'EURO', }, )
 
     def post(self, request):
@@ -132,7 +137,8 @@ class QuoteInquireEuro(View):
             company_code = 'UPS'
             l_ups = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk)
 
-            if (not l_pacelforce[5]) and (not l_dhl[5]) and (not l_dpd[5]) and (not l_ups[5]):
+            if (not l_pacelforce[LAST_POSITION]) and (not l_dhl[LAST_POSITION]) \
+                    and (not l_dpd[LAST_POSITION]) and (not l_ups[LAST_POSITION]):
                 return render(request, 'quote_error.html', {'go': 'EURO',
                                                             'length': length,
                                                             'width': width,
@@ -168,3 +174,55 @@ class QuoteInquireEuro(View):
             'all_euro': all_euro,
             'menu_active': 'EURO',
         })
+
+
+class UserListView(ListView):
+    model = UserProfile
+    template_name = 'users_list.html'
+    paginate_by = 15
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu_active'] = MY_MENU_LOCAL
+        return context
+
+    def get_queryset(self):
+        query_status = self.request.GET.get('status')
+        query_email = self.request.GET.get('s_email')
+        if query_status and query_email:
+            result = UserProfile.objects.filter(user__email__icontains=query_email,
+                                                profit_percent=query_status,
+                                                staff_role__exact=0,
+                                                )
+        elif query_email:
+            result = UserProfile.objects.filter(user__email__icontains=query_email,
+                                                staff_role__exact=0,
+                                                )
+        elif query_status:
+            result = UserProfile.objects.filter(profit_percent=query_status,
+                                                staff_role__exact=0,
+                                                )
+        else:
+            result = UserProfile.objects.filter(staff_role=0)
+
+        return result
+
+
+class UserSetupProfitView(View):
+    def get(self, request, pk):
+        all_country = EuroCountry.objects.all()
+        # 检查国家的数据是否全部已经保存，如果没有则新增
+        user_profit_queryset = UserSetupProfit.objects.filter(user_id__exact=pk, )
+        for x in all_country:
+            if user_profit_queryset:
+                if x.belong == user_profit_queryset[0].is_uk:
+                    pass
+            else:
+                obj = UserSetupProfit.objects.create(is_uk=x.belong, fix_amount=0, percent=0,
+                                                     uk_area_id=x.id, user_id=int(pk), )
+                obj.save()
+
+        return render(request, 'user_setup_profit.html', {
+                                                            'menu_active': MY_MENU_LOCAL,
+                                                          })
+

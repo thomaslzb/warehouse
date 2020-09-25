@@ -36,7 +36,7 @@ class Haulier(models.Model):
     id = models.AutoField(primary_key=True)
     code = models.CharField(max_length=4, null=False, default="", unique=True, verbose_name="Code")
     name = models.CharField(max_length=50, default="", null=True, verbose_name="Company Name")
-    contact = models.CharField(max_length=100, default="", null=True, verbose_name="Contact",)
+    contact = models.CharField(max_length=100, default="", null=True, verbose_name="Contact", )
     telephone = models.CharField(max_length=100, blank=True, default="", null=True, verbose_name="Telephone")
     email = models.CharField(max_length=250, default="", null=True, blank=True, verbose_name="Email")
     is_use = models.IntegerField(default=1, null=False, choices=IS_USER_CHOICE, verbose_name="Is Normal", )
@@ -54,7 +54,7 @@ class Haulier(models.Model):
 
 class WarehouseProfile(models.Model):
     id = models.AutoField(primary_key=True)
-    position = models.CharField(max_length=2, null=False, default="UK", verbose_name="Position",)
+    position = models.CharField(max_length=2, null=False, default="UK", verbose_name="Position", )
     beginworktime = models.TimeField(blank=True, default="", verbose_name="Open Time", )
     overworktime = models.TimeField(blank=True, default="", verbose_name="Close time", )
     maxslot = models.PositiveIntegerField(null=False, default="2", verbose_name="Max Slot Num", )
@@ -87,7 +87,7 @@ class FixWeekday(models.Model):
 
 class Warehouse(models.Model):
     id = models.AutoField(primary_key=True)
-    deliveryref = models.CharField(max_length=25, null=False, default="", verbose_name="Delivery Ref.")
+    deliveryref = models.CharField(max_length=25, null=False, default="", verbose_name="Delivery Ref.", )
     workdate = models.DateField(null=False, default="", verbose_name="Date")
     slottime = models.TimeField(null=False, default="", verbose_name="Time")
     vehiclereg = models.CharField(max_length=15, null=True, blank=True, default="", verbose_name="Vehicle Reg.")
@@ -109,6 +109,23 @@ class Warehouse(models.Model):
         verbose_name = "Slot List"
 
 
+class SlotFiles(models.Model):
+    FILE_CHOICE = ((1, 'Delivery Manifest'),
+                   (0, 'Other'),
+                   )
+    # delivery_ref = models.ForeignKey('Warehouse', to_field='id', on_delete=models.CASCADE,
+    # verbose_name="Delivery Ref.")
+    file_name = models.CharField(max_length=80, null=True, blank=True, default="", verbose_name="File name")
+    file = models.FileField(upload_to='slot/')
+    # save_path = models.CharField(max_length=80, null=True, blank=True, default="", verbose_name="File path")
+    # file_type = models.PositiveIntegerField(null=False, default=1, choices=FILE_CHOICE, verbose_name="FILE TYPE")
+    uploaded_at = models.DateTimeField(auto_now=True, blank=True, verbose_name="Upload DateTime")
+
+    class Meta:
+        db_table = "slot_files"
+        verbose_name = "Slot Files"
+
+
 class ProgressRecord(models.Model):
     id = models.AutoField(primary_key=True)
     deliveryref = models.CharField(max_length=25, null=False, default="", verbose_name="Delivery Ref.")
@@ -122,3 +139,4 @@ class ProgressRecord(models.Model):
 
     class Meta:
         db_table = "Progress_record"
+

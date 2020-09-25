@@ -3,32 +3,32 @@
 {% block content %}
     <div class="container-fluid">
         <!-- Detail -->
-        <div class="row">
-            <div class="col-md-4 mt">
-                <div class="content-panel">
+        <div class="content-panel">
+            <div class="row">
+                <div class="col-md-12 mt">
                     <div class="container profile-text">
                         <h3>Deliver To <span class="text-info">European </span></h3>
+                        <hr>
                         <form role="form" action="{% url 'sku:sku-euro' object.id %}" method="post">
                             {% csrf_token %}
                             <div class="form-group form-inline ">
-                                <label for="length">&nbsp;SKU NO. :</label>
-                                <h4>{{ object.sku_no }}</h4>
+                                <h4 for="length">&nbsp;SKU NO. : <span class="text-primary">{{ object.sku_no }}</span></h4>
                             </div>
                             <div class="form-group form-inline " class="col-md-3">
-                                <label for="length">&nbsp;Product Name:<h4>{{ object.sku_name }}</h4></label>
+                                <h4 for="length">&nbsp;Product : <span class="text-primary">{{ object.sku_name }}</span></h4>
                             </div>
                             <div class="form-group form-inline " class="col-md-3">
-                                <label for="length" name="length">&nbsp;Length(CM):{{ object.sku_length }}</label>
+                                <h4 for="length" name="length">&nbsp;Length(CM): <span class="text-primary">{{ object.sku_length }}</span></h4>
                                 <input type="hidden" id="length"  name="length"  value="{{ object.length }}">
                             </div>
                             <div class="form-group form-inline" class="col-md-3">
-                                <label for="width">&nbsp;&nbsp;&nbsp;Width(CM):{{ object.sku_width }}</label>
+                                <h4 for="width">&nbsp;&nbsp;&nbsp;Width(CM): <span class="text-primary">{{ object.sku_width }}</span></h4>
                             </div>
                             <div class="form-group form-inline" class="col-md-3">
-                                <label for="high">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;High(CM):{{ object.sku_high }}</label>
+                                <h4 for="high">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;High(CM): <span class="text-primary">{{ object.sku_high }}</span></h4>
                             </div>
                             <div class="form-group form-inline" class="col-md-3">
-                                <label for="weight">&nbsp;&nbsp;Weight(KG):{{ object.sku_weight }}</label>
+                                <h4 for="weight">&nbsp;&nbsp;Weight(KG): <span class="text-primary">{{ object.sku_weight }}</span></h4>
                             </div>
                             <div class="form-group form-inline" class="col-md-3">
                                 <label for="quantity">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quantity</label>
@@ -53,9 +53,12 @@
                                 <input type="radio" class="form-check-input" id="radio_resident" name="addresstype" VALUE="resident" >
                                 <label class="form-check-label" for="OutboundRadios">&nbsp;Resident</label>
                             </div>
-                            <div class="panel-body">
-                                <a href="{% url 'sku:sku-list' %}"  class="btn btn-info" role="button">Go Back</a>
-                                <input type="submit" class="btn btn-primary" value="Quote">
+                            <hr>
+                            <div class="panel-footer text-left">
+                                <div class="panel-body">
+                                    <a href="{% url 'sku:sku-list' %}"  class="btn btn-info pull-right" role="button">Go Back</a>
+                                    <input type="submit" class="btn btn-primary" value="Quote">
+                                </div>
                             </div>
                         </form>
                     </div>
