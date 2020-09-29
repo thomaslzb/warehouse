@@ -46,6 +46,11 @@ dz.ondragleave = function () {
 	this.style.borderColor = 'gray';
 }
 dz.ondrop = function (ev) {
+	var oldlen = this.childNodes[1].childNodes[1].childNodes.length;
+	if (oldlen >= 5) {
+		alert('one times only 5 files can be uploading...');
+		return;
+	}
 	//恢复边框颜色
 	this.style.borderColor = 'gray';
 	//阻止浏览器默认打开文件的操作
@@ -57,13 +62,15 @@ dz.ondrop = function (ev) {
 	var tr,time,size;
 	var newForm=Dragfiles(); //获取单例
 	var it=newForm.entries(); //创建一个迭代器，测试用
+	if (len + oldlen > 5) len = 5 - oldlen;
 	while(i<len){
 		tr=document.createElement('tr');
 		//获取文件大小
 		size=Math.round(files[i].size * 100 / 1024) / 100 + 'KB';
 		//获取格式化的修改时间
 		time = files[i].lastModifiedDate.toLocaleDateString() + ' '+files[i].lastModifiedDate.toTimeString().split(' ')[0];
-		tr.innerHTML='<td>'+files[i].name+'</td><td>'+time+'</td><td>'+size+'</td><td>删除</td>';
+		tr.innerHTML='<td>'+files[i].name+'</td><td>'+size+'</td><td>删除</td>';
+
 		console.log(size+' '+time);
 		frag.appendChild(tr);
 		//添加文件到newForm
@@ -71,6 +78,7 @@ dz.ondrop = function (ev) {
 		//console.log(it.next());
 		i++;
 	}
+	newForm.append('ref_no',$('#ref').val());
 	this.childNodes[1].childNodes[1].appendChild(frag);
 	//为什么是‘1’？文档里几乎每一样东西都是一个节点，甚至连空格和换行符都会被解释成节点。而且都包含在childNodes属性所返回的数组中.不同于jade模板
 }
@@ -88,21 +96,21 @@ function upload(){
 	}
 	var data=Dragfiles(); //获取formData
 	$.ajax({
-		url: 'slot/upload/',
+		url: '/slot/uploads/',
 		type: 'POST',
 		data: data,
 		async: true,
 		cache: false,
 		contentType: false,
 		processData: false,
-		success: function (data) {
-			alert('succeed!')  //可以替换为自己的方法
+		success: function () {
+			// alert('Files uploading succeed!')
 			closeModal();
 			data.deleteAll(); //清空formData
 			$('.tbody').empty(); //清空列表
 		},
 		error: function (returndata) {
-			alert('failed!')  //可以替换为自己的方法
+			alert('Files uploading failed!')
 		}
 	});
 }

@@ -25,9 +25,3 @@ class SlotTimeUpdateForm(forms.ModelForm):
         exclude = ["position", "status", "op_datetime", "hailerid", "workdate", "slottime",
                    "deliveryref", "vehiclereg", "havetime", "op_user", "progress"]
 
-
-class SlotFilesForm(forms.ModelForm):
-    class Meta:
-        model = SlotFiles
-        fields = ('file', )
-
