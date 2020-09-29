@@ -14,7 +14,7 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from .views import SlotListView, SlotDetailView, SlotUpdateView, SlotTimeDeleteView, SlotSearchListView
-from .views import UploadFileView
+from .views import uploads, file_download
 from . import views
 from django.contrib.auth.decorators import login_required
 
@@ -28,7 +28,8 @@ urlpatterns = [
     path('delete/<pk>/', login_required(SlotTimeDeleteView.as_view()), name='slot_delete'),
     path('search-list/', login_required(SlotSearchListView.as_view()), name='slot_list_search'),
 
-    path('upload/', UploadFileView.as_view(), name='upload_files'),
+    path('uploads/', login_required(uploads), name='uploads_files'),
+    path('files/download/', login_required(file_download), name='download_file'),
 
 ]
 

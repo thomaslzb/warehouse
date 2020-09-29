@@ -2,15 +2,21 @@ import datetime
 import functools
 import os
 import time
+import re
 
-from django.http import HttpResponseForbidden, HttpResponse, JsonResponse
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.core.files.storage import default_storage
+from django.http import HttpResponseForbidden, HttpResponse, JsonResponse, StreamingHttpResponse, Http404
 from django.shortcuts import render, reverse, redirect
 from django.views import View
 from django.views.generic import DetailView, DeleteView, ListView
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
 
 # from warehouse.settings import MEDIA_ROOT
-from .forms import SlotTimeForm, SlotTimeUpdateForm, SlotFilesForm
+from warehouse.settings import MEDIA_URL, MEDIA_ROOT
+from .forms import SlotTimeForm, SlotTimeUpdateForm
 from .models import Warehouse, Haulier, WarehouseProfile, FixWeekday, ProgressRecord, SlotFiles
 from users.models import UserProfile
 
@@ -320,9 +326,9 @@ class SlotListView(View):
                                        "searching_date": workdate,
                                        "slottime": slottime,
                                        "ErrorMsg": strError})
-
+            new_ref = haulier + deliveryref.upper()
             warehouse = Warehouse()
-            warehouse.deliveryref = haulier + deliveryref.upper()
+            warehouse.deliveryref = new_ref
             warehouse.workdate = workdate
             warehouse.slottime = slottime
             warehouse.vehiclereg = vehiclereg.upper()
@@ -344,11 +350,13 @@ class SlotListView(View):
             progressRecord.remark = "Create Booked"
             progressRecord.save()
 
-            return render(request, "Slot_Save_Success.html",
-                          {"Warehouse_form": Warehouse_form,
-                           "searching_date": workdate,
-                           "slottime": slottime,
-                           })
+            # return render(request, "Slot_Save_Success.html",
+            #               {"Warehouse_form": Warehouse_form,
+            #                "searching_date": workdate,
+            #                "slottime": slottime,
+            #                })
+            pk = Warehouse.objects.filter(deliveryref__exact=new_ref)[0].id
+            return redirect('slot:slot_detail', pk=pk)
         else:
             strError = "Delivery Reference can not be repeated or empty. "
             return render(request, "Slot_Save_Error.html",
@@ -361,6 +369,11 @@ class SlotListView(View):
 class SlotDetailView(DetailView):
     queryset = Warehouse.objects.all()
     template_name = "Slot_Detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(SlotDetailView, self).get_context_data(**kwargs)
+        context['files'] = SlotFiles.objects.filter(delivery_ref=self.object)
+        return context
 
     @user_is_not_staff
     def get_object(self):
@@ -380,6 +393,7 @@ class SlotUpdateView(View):
             deliveryref = request.POST.get("deliveryref", "")
             slot_result = Warehouse.objects.filter(deliveryref=deliveryref)
             if slot_result:
+                pk = slot_result[0].id
                 new_time = request.POST.get("new_slottime", 0)  # 新旧抵达时间
                 old_workdate = slot_result[0].workdate
                 old_time = slot_result[0].slottime
@@ -554,17 +568,12 @@ class SlotUpdateView(View):
                     progressRecord.remark = remark_reason
                     progressRecord.save()
 
-                    return render(request, "Slot_Save_Success.html",
-                                  {"Warehouse_form": Warehouse_Updateform,
-                                   "searching_date": new_workdate,
-                                   "slottime": new_time,
-                                   })
-                else:
-                    return render(request, "Slot_Save_Success.html",
-                                  {"Warehouse_form": Warehouse_Updateform,
-                                   "searching_date": new_workdate,
-                                   "slottime": new_time,
-                                   })
+                # return render(request, "Slot_Save_Success.html",
+                #               {"Warehouse_form": Warehouse_Updateform,
+                #                "searching_date": new_workdate,
+                #                "slottime": new_time,
+                #                })
+                return redirect('slot:slot_detail', pk=pk)
         else:
             strError = "Delivery Reference can not be repeated or empty. "
             return render(request, "Slot_Save_Error.html",
@@ -655,28 +664,92 @@ class SlotSearchListView(ListView):
         return result_list
 
 
-class UploadFileView(View):
-    def get(self, request):
-        photos_list = SlotFiles.objects.all()
-        return render(self.request, 'sku_list.html')
-
-    def post(self, request):
-        form = SlotFilesForm(self.request.POST, self.request.FILES)
-        if form.is_valid():
-            form.save()
-            dir_path = os.path.dirname(os.path.abspath(file))
-            for file in request.FILES:  # 遍历获取request请求中的文件名
-                data = request.FILES.get(file)  # 获取每个文件的InMemoryUploadedFile对象
-                file_path = os.path.join(dir_path, file)
-                with open(file_path, 'w') as f:
-                    f.write(data.read())  # data.read()方法就是在内存中读取每个文件的内容
-                return HttpResponse('Succed!')
-        return render(request, 'Slot_Save_Success.html')
-
-
 # https://simpleisbetterthancomplex.com/tutorial/2016/11/22/django-multiple-file-upload-using-ajax.html
 # https://github.com/Julyaan/dragToUpload/blob/master/upload.html
 # https://www.jianshu.com/p/0b9bdbfde29a
 # https://blog.csdn.net/tangran0526/article/details/104156857
 # https://www.pianshen.com/article/583491278/
 # https://www.pythonf.cn/read/91823
+# https://zhuanlan.zhihu.com/p/47287495  Django文件上传需要考虑的重要事项
+
+
+def get_new_file_name(file_name, ref):
+    ext = file_name.split('.')[-1].upper()
+    file_name = re.findall(r'(.+?)\.', file_name)
+    all_file = SlotFiles.objects.filter(delivery_ref__deliveryref__exact=ref)
+    file_version = ref + '-V' + str(all_file.count() + 1) + '-'
+
+    file_name = file_version + file_name[0] + '.' + ext
+    return file_name
+
+
+@csrf_exempt
+def uploads(request):
+    if request.is_ajax():
+        if request.method == "POST":
+            ref = request.POST['ref_no']  # 获取前台传入的delivery ref
+            ref_id = Warehouse.objects.filter(deliveryref=ref)[0].id
+            for file in request.FILES:  # 遍历获取request请求中的文件名
+                ext = file.split('.')[-1].lower()
+                if ext == 'xls' or ext == 'xlsx':
+
+                    file_name = get_new_file_name(file, ref)
+                    upload_file_path = os.path.join('slot_files', file_name)  # 此目录为文件上传后的服务器目录及文件名
+
+                    # 目前，此段新建目录总是失败，需要检查原因
+                    # absolute_file_path = os.path.join('media', upload_file_path,)
+                    # #
+                    # directory = os.path.dirname(absolute_file_path)
+                    # print('absolute_file_path = ' + absolute_file_path)
+                    # if not os.path.exists(directory):   # 文件夹不存在，则创建新的文件夹，目前不成功
+                    #     print('make dir')
+                    #     os.makedirs(directory, mode=0o777)
+                    # print('directory = ' + directory)
+                    # file_name = '{}.{}'.format(uuid.uuid4().hex[:10], ext)  随机文件名
+                    # file path relative to 'media' folder
+
+                    file_data = request.FILES.get(file)  # 将在内存中本地文件内容读入data中
+
+                    with default_storage.open(upload_file_path, 'wb') as new_file:  # 写入空文件到服务器
+                        for chunk in file_data.chunks():  # 将文件内容写入到文件中去
+                            new_file.write(chunk)
+
+                    # 将数据保存到数据库中
+                    slot_files = SlotFiles()
+                    slot_files.delivery_ref_id = ref_id
+                    slot_files.file_name = file_name
+                    slot_files.file = upload_file_path
+                    slot_files.file_type = 0
+                    slot_files.save()
+                    # HttpResponse("<p>Files Uploading Success<a href=''>Back</a></p>")
+                else:
+                    HttpResponse("<p>Files Uploading Failure<a href=''>Back</a></p>")
+            return redirect('slot:slot_detail', pk=ref_id)
+    return HttpResponse('Failure!')
+
+
+def file_iterator(file_name, chunk_size=512):
+    with open(file_name, 'rb') as f:
+        while True:
+            c = f.read(chunk_size)
+            if c:
+                yield c
+            else:
+                break
+
+
+def file_download(request):
+    if request.method == 'GET':
+        file_original_name = request.GET['filename']
+        file_path_name = os.path.join(MEDIA_ROOT, file_original_name)
+        if not os.path.exists(file_path_name):
+            raise IOError('file not found')
+
+        # response = StreamingHttpResponse(open(file_path_name, 'rb'))
+        response = StreamingHttpResponse(file_iterator(file_path_name))
+        response['Content-Type'] = 'application/octet-stream'
+        response['Content-Disposition'] = 'attachment;filename=' + file_original_name
+        return response
+        # print FilePath
+    else:
+        return HttpResponse('method must be GET')

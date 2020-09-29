@@ -68,35 +68,6 @@
                     </div>
             </div>
 
-<!-- 上传文件事件 开始 -->
-<div>
-      <button class="btn" role="button" onclick="showModal()">Upload Files</button>
-</div>
-    <!--遮罩-->
-    <div class="overlay"></div>
-    <!--模态框-->
-    <div id="modal" class="dropbox">
-        <div class="items-container">
-            <div id="close" style="cursor:pointer;float: right;width:20px">
-                <span class="css-close"></span>
-            </div>
-            <div>
-                <p class="head"><b>Drop files</b></p>
-                <div class="content" id="content">
-                    <table class="table">
-                        <tbody class="tbody"></tbody>
-                    </table>
-                </div>
-                <div class="demo-footer">
-                    <button class="btn" onclick="upload()">Begin Upload</button>
-                </div>
-				<a href='#' onclick='clearAll()' style='position:absolute;bottom:10px;right:30px;'>Clear All</a>
-            </div>
-        </div>
-    </div>
-
-<!-- 上传文件事件 结束 -->
-
             <!-- 列出所有有时间的 slot -->
             <div class="col-md-4">
                 <table class="table">
@@ -1614,6 +1585,4 @@
         $('#SearchingDate').val(today);
     })
     </script>
-    <script src="{% static 'drop-file/demo.js' %}"></script>#}
-    <link href= "{% static 'drop-file/demo.css' %}" rel="stylesheet">
 {% endblock %}

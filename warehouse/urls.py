@@ -31,6 +31,7 @@ urlpatterns = [
     path("user/", include('users.urls')),
     path("sku/", include('sku.urls')),
     path('captcha/', include('captcha.urls')),
+    path('aa/bb', views.aa)
 
 ]
 
