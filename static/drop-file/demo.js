@@ -62,20 +62,28 @@ dz.ondrop = function (ev) {
 	var tr,time,size;
 	var newForm=Dragfiles(); //获取单例
 	var it=newForm.entries(); //创建一个迭代器，测试用
+	var file_type = ['xlsx', 'xls'];
+	var k = 0;
 	if (len + oldlen > 5) len = 5 - oldlen;
-	while(i<len){
-		tr=document.createElement('tr');
-		//获取文件大小
-		size=Math.round(files[i].size * 100 / 1024) / 100 + 'KB';
-		//获取格式化的修改时间
-		time = files[i].lastModifiedDate.toLocaleDateString() + ' '+files[i].lastModifiedDate.toTimeString().split(' ')[0];
-		tr.innerHTML='<td>'+files[i].name+'</td><td>'+size+'</td><td>删除</td>';
-
-		console.log(size+' '+time);
-		frag.appendChild(tr);
-		//添加文件到newForm
-		newForm.append(files[i].name,files[i]);
-		//console.log(it.next());
+	while(k<len){
+		let filename = files[i].name;
+		let extension = filename.split('.').pop().toLowerCase();  //jpg
+		console.log('extension = ' + extension);
+		if (file_type.indexOf(extension)>=0)
+		{
+			tr=document.createElement('tr');
+			//获取文件大小
+			size=Math.round(files[i].size * 100 / 1024) / 100 + 'KB';
+			//获取格式化的修改时间
+			time = files[i].lastModifiedDate.toLocaleDateString() + ' '+files[i].lastModifiedDate.toTimeString().split(' ')[0];
+			tr.innerHTML='<td>'+files[i].name+'</td><td>'+size+'</td><td>DELETE</td>';
+			console.log(size+' '+time);
+			frag.appendChild(tr);
+			//添加文件到newForm
+			newForm.append(files[i].name,files[i]);
+			//console.log(it.next());
+			k++;
+		}
 		i++;
 	}
 	newForm.append('ref_no',$('#ref').val());
@@ -104,10 +112,11 @@ function upload(){
 		contentType: false,
 		processData: false,
 		success: function () {
-			// alert('Files uploading succeed!')
+			alert('Files uploading succeed!')
 			closeModal();
 			data.deleteAll(); //清空formData
 			$('.tbody').empty(); //清空列表
+			window.location.reload();
 		},
 		error: function (returndata) {
 			alert('Files uploading failed!')

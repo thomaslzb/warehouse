@@ -144,13 +144,24 @@ STATICFILES_FNDERS = (
 # 配置登录url地址
 LOGIN_URL = '/'
 
+# EMAIL_HOST: SMTP服务器主机。默认为localhost；
+# EMAIL_PORT: SMTP服务器端口。默认为25；
+# EMAIL_HOST_USER: the SMTP 服务器的用户名；
+# EMAIL_HOST_PASSWORD: SMTP 服务器的密码；
+# EMAIL_USE_TLS: 是否使用TLS安全连接；
+# EMAIL_USE_SSL: 是否使用隐式TLS安全连接。
+# 配置中，EMAIL_USE_TLS和EMAIL_USE_SSL都默认设置为False，需要配置其中一个为True，但是不能两个都设置为True。
+# 一般端口587对应TLS，端口465对应SSL（加强TSL）
+# https://www.jianshu.com/p/bf736e4add8d
+
+EMAIL_IS_SEND = False
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST = "smtp.office365.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "thomaslzbuk@gmail.com"
-EMAIL_FROM = "thomaslzbuk@gmail.com"
-EMAIL_HOST_PASSWORD = ""
+EMAIL_HOST_USER = "thomas.li@dcg-uk.co.uk"
+EMAIL_FROM = "thomas.li@dcg-uk.co.uk"
+EMAIL_HOST_PASSWORD = "Yhnedc456789"
 
 # django_simple_captcha 验证码配置其他配置项查看文档
 # 默认格式

@@ -4,18 +4,16 @@ import os
 import time
 import re
 
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
-from django.http import HttpResponseForbidden, HttpResponse, JsonResponse, StreamingHttpResponse, Http404
+from django.http import HttpResponseForbidden, HttpResponse, StreamingHttpResponse
 from django.shortcuts import render, reverse, redirect
 from django.views import View
 from django.views.generic import DetailView, DeleteView, ListView
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import send_mail
 
-# from warehouse.settings import MEDIA_ROOT
-from warehouse.settings import MEDIA_URL, MEDIA_ROOT
+from warehouse.settings import MEDIA_ROOT, EMAIL_FROM, EMAIL_IS_SEND
 from .forms import SlotTimeForm, SlotTimeUpdateForm
 from .models import Warehouse, Haulier, WarehouseProfile, FixWeekday, ProgressRecord, SlotFiles
 from users.models import UserProfile
@@ -689,6 +687,10 @@ def uploads(request):
         if request.method == "POST":
             ref = request.POST['ref_no']  # 获取前台传入的delivery ref
             ref_id = Warehouse.objects.filter(deliveryref=ref)[0].id
+            ref_status = Warehouse.objects.filter(deliveryref=ref)[0].status
+            op_name = request.user.username
+
+            file_list = []
             for file in request.FILES:  # 遍历获取request请求中的文件名
                 ext = file.split('.')[-1].lower()
                 if ext == 'xls' or ext == 'xlsx':
@@ -721,9 +723,28 @@ def uploads(request):
                     slot_files.file = upload_file_path
                     slot_files.file_type = 0
                     slot_files.save()
+                    file_list.append(file_name)
                     # HttpResponse("<p>Files Uploading Success<a href=''>Back</a></p>")
                 else:
                     HttpResponse("<p>Files Uploading Failure<a href=''>Back</a></p>")
+
+            # 发送邮件
+            email_to_list = ['thomas.li@dcg-uk.co.uk', ]
+            subject = 'DOCS Uploaded: CM-' + ref_status + ' Ref:' + ref + ' Op:' + op_name
+            message = 'Dear Warehouse Team: \n\r'
+            message += 'Operator(' + op_name + ') has uploaded documents for Ref(' + ref + ') in the System: \n\n'
+            for file_list_name in file_list:
+                message += '           ' + file_list_name + '\n'
+
+            message += '\n'
+            message += 'Please check detail in the System. Thank you. \n\n'
+            message += 'Slot Booking System Notification.\n'
+            message += 'Please do not reply, this email will not be monitored. \n'
+            message += 'Please contact relevant operators regarding any queries.\n'
+
+            if EMAIL_IS_SEND:
+                send_mail(subject, message, EMAIL_FROM, email_to_list, False)
+
             return redirect('slot:slot_detail', pk=ref_id)
     return HttpResponse('Failure!')
 
