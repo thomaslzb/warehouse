@@ -689,6 +689,7 @@ def uploads(request):
             ref_id = Warehouse.objects.filter(deliveryref=ref)[0].id
             ref_status = Warehouse.objects.filter(deliveryref=ref)[0].status
             op_name = request.user.username
+            email_to_list = [request.user.email, ]
 
             file_list = []
             for file in request.FILES:  # 遍历获取request请求中的文件名
@@ -729,7 +730,7 @@ def uploads(request):
                     HttpResponse("<p>Files Uploading Failure<a href=''>Back</a></p>")
 
             # 发送邮件
-            email_to_list = ['thomas.li@dcg-uk.co.uk', ]
+
             subject = 'DOCS Uploaded: CM-' + ref_status + ' Ref:' + ref + ' Op:' + op_name
             message = 'Dear Warehouse Team: \n\r'
             message += 'Operator(' + op_name + ') has uploaded documents for Ref(' + ref + ') in the System: \n\n'

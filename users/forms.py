@@ -36,9 +36,9 @@ class LoginForm(forms.Form):
             if not filter_result:
                 raise forms.ValidationError("This email does not exist.")
         else:
-            filter_result = User.objects.filter(email__exact=username)
+            filter_result = User.objects.filter(username__exact=username)
             if not filter_result:
-                raise forms.ValidationError("This username does not exist. Please register first.")
+                raise forms.ValidationError("This username does not exist. ")
 
         return username
 

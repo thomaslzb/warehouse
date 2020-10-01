@@ -62,20 +62,20 @@ dz.ondrop = function (ev) {
 	var tr,time,size;
 	var newForm=Dragfiles(); //获取单例
 	var it=newForm.entries(); //创建一个迭代器，测试用
-	var file_type = ['xlsx', 'xls'];
+	var file_type = ['xlsx', 'xls', 'pdf'];
 	var k = 0;
 	if (len + oldlen > 5) len = 5 - oldlen;
 	while(k<len){
+		// 获取文件名
 		let filename = files[i].name;
 		let extension = filename.split('.').pop().toLowerCase();  //jpg
-		console.log('extension = ' + extension);
+		//获取文件大小
+		size=Math.round(files[i].size * 100 / 1024) / 100 + 'KB';
+		//获取格式化的修改时间
+		time = files[i].lastModifiedDate.toLocaleDateString() + ' '+files[i].lastModifiedDate.toTimeString().split(' ')[0];
 		if (file_type.indexOf(extension)>=0)
 		{
 			tr=document.createElement('tr');
-			//获取文件大小
-			size=Math.round(files[i].size * 100 / 1024) / 100 + 'KB';
-			//获取格式化的修改时间
-			time = files[i].lastModifiedDate.toLocaleDateString() + ' '+files[i].lastModifiedDate.toTimeString().split(' ')[0];
 			tr.innerHTML='<td>'+files[i].name+'</td><td>'+size+'</td><td>DELETE</td>';
 			console.log(size+' '+time);
 			frag.appendChild(tr);
@@ -97,7 +97,7 @@ function blink()
 
 //ajax上传文件
 function upload(){
-	if(document.getElementsByTagName('tbody')[0].hasChildNodes()==false){
+	if(document.getElementsByTagName('tbody')[1].hasChildNodes()==false){
 		document.getElementById('content').style.borderColor = 'red';
 		setTimeout(blink,200);
 		return false;
@@ -134,7 +134,7 @@ $(".tbody").on('click','tr td:last-child',function(){
 });
 //清空所有内容
 function clearAll(){
-	if(document.getElementsByTagName('tbody')[0].hasChildNodes()==false){
+	if(document.getElementsByTagName('tbody')[1].hasChildNodes()==false){
 		document.getElementById('content').style.borderColor = 'red';
 		setTimeout(blink,300);
 		return false;
@@ -142,5 +142,5 @@ function clearAll(){
 	var data=Dragfiles(); 
 	data.deleteAll(); //清空formData
 	//$('.tbody').empty(); 等同于以下方法
-	document.getElementsByTagName('tbody')[0].innerHTML='';
+	document.getElementsByTagName('tbody')[1].innerHTML='';
 }

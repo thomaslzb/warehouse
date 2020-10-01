@@ -16,13 +16,14 @@ from captcha.helpers import captcha_image_url
 from captcha.models import CaptchaStore
 
 from .models import EmailVerifyRecord, UserProfile
-from .forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm, ModifyPwdForm, MyProfileForm
+from .forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm, MyProfileForm
+from .forms import email_check
 from django.shortcuts import redirect
-
 
 # from utils import send_register_email
 
 MY_MENU_LOCAL = 'USER'
+
 
 @login_required
 def logout(request):
@@ -76,12 +77,17 @@ class LoginView(View):
     def post(self, request):
         login_form = LoginForm(request.POST)
         if login_form.is_valid():
-            InputEmail = request.POST.get("username", "")
+            input_username = request.POST.get("username", "")
             pass_word = request.POST.get("password", "")
 
-            filter_result = User.objects.filter(email__exact=InputEmail)
-            if filter_result:
-                username = filter_result[0].username
+            if email_check(input_username):
+                filter_result = User.objects.filter(email__exact=input_username)
+                if filter_result:
+                    username = filter_result[0].username
+            else:
+                filter_result = User.objects.filter(username__exact=input_username)
+                if filter_result:
+                    username = filter_result[0].username
             user = authenticate(username=username, password=pass_word)
             if user is not None:
                 if user.is_active:
@@ -95,7 +101,6 @@ class LoginView(View):
                     else:
                         return redirect("/quote/uk")
                     # return redirect("/slot")
-
                 else:
                     return render(request, "sign-in.html", {"form": "User is Activated!"})
             else:
@@ -105,19 +110,15 @@ class LoginView(View):
                 image_url = captcha_image_url(hashkey)
                 login_form = LoginForm()
                 # Python内置了一个locals()函数，它返回当前所有的本地变量字典
-                msg = "UserName or Email or Password isn't correct."
+                msg = 'Password is not correct.!'
                 return render(request, "sign-in.html", locals(), )
-                # return render(request, "sign-in.html", {"msg": "UserName or Email or Password isn't correct.", })
         else:
-            # 图片验证码
-            # hashkey验证码生成的秘钥，image_url验证码的图片地址
+            msg = login_form.errors
             hashkey = CaptchaStore.generate_key()
             image_url = captcha_image_url(hashkey)
             login_form = LoginForm()
             # Python内置了一个locals()函数，它返回当前所有的本地变量字典
-            msg = "Captcha isn't Correct."
-            return render(request, "sign-in.html", locals())
-            # return render(request, "sign-in.html", {"login_form": login_form})
+            return render(request, "sign-in.html", locals(), )
 
 
 class RegisterView(View):
@@ -224,4 +225,3 @@ class MyProfileUpdateView(UpdateView):
         user_profile.update(telephone=form.data['telephone'], profit_percent=form.data['profit_mode'])
 
         return super(MyProfileUpdateView, self).form_valid(form)
-
