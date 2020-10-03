@@ -161,7 +161,7 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "thomas.li@dcg-uk.co.uk"
 EMAIL_FROM = "thomas.li@dcg-uk.co.uk"
-EMAIL_HOST_PASSWORD = "Yhnedc456789"
+EMAIL_HOST_PASSWORD = ""
 
 # django_simple_captcha 验证码配置其他配置项查看文档
 # 默认格式
