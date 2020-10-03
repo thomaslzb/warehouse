@@ -110,14 +110,13 @@ class Warehouse(models.Model):
 
 
 class SlotFiles(models.Model):
-    FILE_CHOICE = ((1, 'Delivery Manifest'),
-                   (0, 'Other'),
-                   )
     delivery_ref = models.ForeignKey('Warehouse', to_field='id', on_delete=models.CASCADE, verbose_name="Delivery Ref.")
     file_name = models.CharField(max_length=80, null=True, blank=True, default="", verbose_name="File name")
-    file = models.FileField(upload_to='slot/')
-    file_type = models.PositiveIntegerField(null=False, default=1, choices=FILE_CHOICE, verbose_name="FILE TYPE")
+    files_profile = models.CharField(max_length=80, null=True, blank=True, default="", verbose_name="File profile")
+    local_file_name = models.CharField(max_length=80, null=True, blank=True, default="", verbose_name="Local file name")
     uploaded_at = models.DateTimeField(auto_now=True, blank=True, verbose_name="Upload DateTime")
+    is_void = models.BooleanField(default=0, verbose_name="Is Void")
+    order = models.IntegerField(default=0, verbose_name="Order")
 
     class Meta:
         db_table = "slot_files"

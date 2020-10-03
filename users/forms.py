@@ -12,7 +12,6 @@
 import re
 from django import forms
 from django.contrib.auth.models import User
-from .models import UserProfile
 from captcha.fields import CaptchaField
 
 PROFIT_MODE = [(0, 'By Percent'), (1, 'By Fix Amount')]

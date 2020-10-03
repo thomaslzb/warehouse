@@ -13,12 +13,35 @@
             <tbody>
               <tr>
                 <td class="col-lg-2">Delivery Ref.</td>
-                <td>{{ object.deliveryref }}</td>
-                <td>
+                <td class="col-lg-8">{{ object.deliveryref }}</td>
+                <td class="col-sm-1">
                     {% if object.progress != 4 %}
-                        <!-- 上传文件事件 开始 -->
-                        <button class="btn" role="button" onclick="showModal()">Upload Files</button>
+                            <!-- 上传文件事件 的按钮-->
+                        {% if request.user.profile.staff_role == 1 %} <!-- 是操作员 -->
+                            {% if object.status == 'INBOUND' %}
+                                <button class="btn" role="button" onclick="showModal()">Upload Inbound File</button>
+{#                                <select  id="send_type" name = "send_type" class="form-control">#}
+{#                                    <option value="Delivery Manifest" selected>Delivery Manifest</option>#}
+{#                                    <option value="OP Form">OP Form</option>#}
+{#                                </select>#}
+                            {% endif %}
+                            {% if object.status == 'OUTBOUND' %}
+                                <button class="btn" role="button" onclick="showModal()">Upload Delivery Note</button>
+                                <input type="hidden" id="send_type" name="send_type"  value="Delivery Note" readonly>
+                            {% endif %}
+                        {% endif %}
+                        {% if request.user.profile.staff_role == 2 %} <!-- 是仓库管理员 -->
+                            {% if object.status == 'INBOUND' %}
+                                <button class="btn" role="button" onclick="showModal()">Upload Breakdown</button>
+                                <input type="hidden" id="send_type" name="send_type"  value="Breakdown" readonly>
+                           {% endif %}
+                            {% if object.status == 'OUTBOUND' %}
+                                <button class="btn" role="button" onclick="showModal()">Upload Paperwork</button>
+                                <input type="hidden" id="send_type" name="send_type"  value="Paperwork" readonly>
+                            {% endif %}
+                        {% endif %}
                     {% endif %}
+
                     <!--遮罩-->
                     <div class="overlay"></div>
                     <!--模态框-->
@@ -51,7 +74,16 @@
               <tr>
                 <td>IN/OUTBOUND</td>
                 <td>{{ object.status }}</td>
-                <td></td>
+                <td class="col-sm-2">
+                    {% if request.user.profile.staff_role == 1 %} <!-- 是操作员 -->
+                        {% if object.status == 'INBOUND' %}
+                            <select  id="send_type" name = "send_type" class="form-control">
+                                <option value="Delivery Manifest" selected>Delivery Manifest</option>
+                                <option value="OP Form">OP Form</option>
+                            </select>
+                        {% endif %}
+                    {% endif %}
+                </td>
               </tr>
               <tr>
                 <td>Vehicle Reg.</td>
@@ -117,18 +149,23 @@
               <tr>
                   <td>File List</td>
                 <td>
-                  {% for file in files %}
-                      <a>
-                        <div  class="col-sm-6">
-                          <a href="{% url 'slot:download_file' %}?filename=slot_files/{{ file.file_name }}">
-                                  {{ file.file_name }}
-                              </input></a>
-                        </div>
-                        <div class="col-sm-4">
-                          {{ file.uploaded_at }}
-                        </div>
-                      </li>
-                  {% endfor %}
+                    <div class="explore"><h5 onclick="toggle(this.parentNode)">Click here to expand or retract files list</h5>
+                          {% for file in files %}
+                                <div  class="col-sm-6">
+                                  <a href="{% url 'slot:download_file' %}?filename=slot_files/{{ file.file_name }}">
+                                        {% if file.is_void %}
+                                            <del>{{ file.files_profile }} - {{ file.file_name }}</del>
+                                        {% else %}
+                                            {{ file.files_profile }} - {{ file.file_name }}
+                                        {% endif %}
+                                  </a>
+                                </div>
+                                <div class="col-sm-3">
+                                  {{ file.uploaded_at }}
+                                </div>
+                              </li>
+                          {% endfor %}
+                    </div>
                 </td>
                   <td></td>
               </tr>
@@ -149,17 +186,12 @@
                 <input type="hidden" name="deliveryref" value="{{ object.deliveryref }}">
                 {% if request.user.id == object.op_user_id or request.user.profile.staff_role == 3 %} {#  如果是或者操作员本人或经理，则允许更新时间 #}
                     {% if object.progress == 1 %} {# 状态是 1=Booked 才能修改时间#}
-                        <div class="form-group" >
-                            <input type="checkbox" class="form-check-input" name="new_haveTime" value="0">
+                        <div class="form-group form-inline" >
+                            <input type="checkbox" class="checkbox" name="new_haveTime" value="0">
                             <label class="form-check-label" for="NotHaveSlotTime">&nbspHaven't Slot Time</label>
-                        </div>
-                        <div class="form-group col-sm-2">
-                                <label>Date</label>
-                                <input type="date" class="form-control" name="new_workdate" id="PickingDate"
-                                       max="2025-12-31"  min="2020-08-01" value="{{ object.workdate|date:"d-m-Y" }}">
-                        </div>
-                        <div class="form-group col-sm-2">
-                            <label>&nbsp;Time</label>
+                            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DateTime</label>
+                            <input type="date" class="form-control" name="new_workdate" id="PickingDate"
+                                   max="2025-12-31"  min="2020-08-01" value="{{ object.workdate|date:"Y-m-d" }}">
                                 <input type="time" class="form-control" name="new_slottime" id="PickingTime"
                                        max="20:30" min="06:00"   value = "{{ object.slottime|time:"H:i"}}" required>
                         </div>
@@ -236,6 +268,7 @@
         {% endif %}
     </div>
     <br>
+
 {% endblock %}
 {% block  myscript %}
    <script>
@@ -249,5 +282,58 @@
     </script>
     <script src="{% static 'drop-file/demo.js' %}"></script>
     <link href= "{% static 'drop-file/demo.css' %}" rel="stylesheet">
+
+    <!-- 此段代码为文件展开或收回的js -->
+    <script type="text/javascript">
+    var mh = 20;//高度
+    var step = 1;//每次变化的量
+    var ms = 1;//循环时间
+    function toggle(o){
+     if (!o.tid)o.tid = "_" + Math.random() * 100;
+     if (!window.toggler)window.toggler = {};
+     if (!window.toggler[o.tid]){
+      window.toggler[o.tid]={
+       obj:o,
+       maxHeight:o.offsetHeight,
+       minHeight:mh,
+       timer:null,
+       action:1
+      };
+     }
+     o.style.height = o.offsetHeight + "px";
+     if (window.toggler[o.tid].timer)clearTimeout(window.toggler[o.tid].timer);
+     window.toggler[o.tid].action *= -1;
+     window.toggler[o.tid].timer = setTimeout("anim('"+o.tid+"')",ms );
+    }
+    function anim(id){
+     var t = window.toggler[id];
+     var o = window.toggler[id].obj;
+     if (t.action < 0){
+      if (o.offsetHeight <= t.minHeight){
+       clearTimeout(t.timer);
+       return;
+      }
+     }
+     else{
+      if (o.offsetHeight >= t.maxHeight){
+       clearTimeout(t.timer);
+       return;
+      }
+     }
+     o.style.height = (parseInt(o.style.height, 10) + t.action * step) + "px";
+     window.toggler[id].timer = setTimeout("anim('"+id+"')",ms );
+    }
+    </script>
+    <style type="text/css">
+    div.explore{
+     border:solid 1px;overflow:hidden;
+    }
+    div.explore h5{
+     border:solid 1px;border-width:0 0 1px;
+     padding:0;margin:0;height:28px;
+     line-height:32px;cursor:pointer;
+     background:#eee;
+    }
+    </style>
 {% endblock %}
 
