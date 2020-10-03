@@ -12,7 +12,6 @@
 import re
 from django import forms
 from django.contrib.auth.models import User
-from .models import UserProfile
 from captcha.fields import CaptchaField
 
 PROFIT_MODE = [(0, 'By Percent'), (1, 'By Fix Amount')]
@@ -36,9 +35,9 @@ class LoginForm(forms.Form):
             if not filter_result:
                 raise forms.ValidationError("This email does not exist.")
         else:
-            filter_result = User.objects.filter(email__exact=username)
+            filter_result = User.objects.filter(username__exact=username)
             if not filter_result:
-                raise forms.ValidationError("This username does not exist. Please register first.")
+                raise forms.ValidationError("This username does not exist. ")
 
         return username
 

@@ -1,3 +1,17 @@
+```bash
+pip install -r requirements.txt
+```
+
+```bash
+python manage.py migrate
+```
+
+```bash
+python manage.py runserver
+```
+
+mysql
+
 staff_role: 
 1 - operator
 2 - warehouse

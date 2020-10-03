@@ -4,21 +4,20 @@ import os
 import time
 import re
 
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
-from django.http import HttpResponseForbidden, HttpResponse, JsonResponse, StreamingHttpResponse, Http404
-from django.shortcuts import render, reverse, redirect
+from django.http import HttpResponseForbidden, HttpResponse, StreamingHttpResponse
+from django.shortcuts import render, reverse, redirect, get_list_or_404
 from django.views import View
 from django.views.generic import DetailView, DeleteView, ListView
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
 
-# from warehouse.settings import MEDIA_ROOT
-from warehouse.settings import MEDIA_URL, MEDIA_ROOT
+from warehouse.settings import MEDIA_ROOT, EMAIL_FROM, EMAIL_IS_SEND
 from .forms import SlotTimeForm, SlotTimeUpdateForm
 from .models import Warehouse, Haulier, WarehouseProfile, FixWeekday, ProgressRecord, SlotFiles
 from users.models import UserProfile
+from utils.email_send import system_sendmail
 
 
 def user_is_not_staff(func):
@@ -372,7 +371,13 @@ class SlotDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(SlotDetailView, self).get_context_data(**kwargs)
-        context['files'] = SlotFiles.objects.filter(delivery_ref=self.object)
+        context['files'] = SlotFiles.objects.filter(delivery_ref=self.object).order_by(
+                                                                                        'is_void',
+                                                                                        'order',
+                                                                                        'files_profile',
+                                                                                        'file_name',
+                                                                                        'uploaded_at',
+                                                                                        )
         return context
 
     @user_is_not_staff
@@ -389,7 +394,7 @@ class SlotUpdateView(View):
         Warehouse_Updateform = SlotTimeUpdateForm(request.POST)
         new_workdate = request.POST.get("new_workdate", 0)  # 新抵达日期
         if Warehouse_Updateform.is_valid():
-
+            is_update_progress = False  # 变更状态初始值为假
             deliveryref = request.POST.get("deliveryref", "")
             slot_result = Warehouse.objects.filter(deliveryref=deliveryref)
             if slot_result:
@@ -416,6 +421,7 @@ class SlotUpdateView(View):
                         progress = new_progress
                         progress_name = get_progress_name(new_progress)
                         remark_reason = " | Modify Status: From " + old_progress_name + " To " + progress_name  # 记录修改状态
+                        is_update_progress = True
                         # 判断进程的顺序， 如果顺序不对，则返回失败信息
                         if new_progress != '5' and old_progress != '5':
                             if new_progress < old_progress:  # 返回保存错误
@@ -538,8 +544,7 @@ class SlotUpdateView(View):
                                     count_inbound_order = warehouse_result.count()
                                     if count_inbound_order >= max_inbound_count:
                                         strError = "INBOUND NUMBER IS FULL, Because We only can handle Max Inbound " \
-                                                   "number is " + str(
-                                            max_inbound_count)
+                                                   "number is " + str(max_inbound_count)
                                         return render(request, "Slot_Save_Error.html",
                                                       {"Warehouse_form": Warehouse_Updateform,
                                                        "searching_date": new_workdate,
@@ -568,11 +573,18 @@ class SlotUpdateView(View):
                     progressRecord.remark = remark_reason
                     progressRecord.save()
 
-                # return render(request, "Slot_Save_Success.html",
-                #               {"Warehouse_form": Warehouse_Updateform,
-                #                "searching_date": new_workdate,
-                #                "slottime": new_time,
-                #                })
+                    if EMAIL_IS_SEND and is_update_progress:
+                        # 状态变更为 arrived 或 finished, 需要发邮件提醒原操作员
+                        op_id = slot_result[0].op_user_id
+                        user_queryset = User.objects.filter(id=op_id)
+                        op_name = user_queryset[0].username
+                        file_list = []
+                        email_to_list = [user_queryset[0].email]
+                        if progress == '2':  # 2 - Arrived
+                            system_sendmail(deliveryref, op_name, file_list, email_to_list, 'Arrived')
+                        elif progress == '4':  # 4 - Finished
+                            system_sendmail(deliveryref, op_name, file_list, email_to_list, 'Finished')
+
                 return redirect('slot:slot_detail', pk=pk)
         else:
             strError = "Delivery Reference can not be repeated or empty. "
@@ -673,13 +685,31 @@ class SlotSearchListView(ListView):
 # https://zhuanlan.zhihu.com/p/47287495  Django文件上传需要考虑的重要事项
 
 
-def get_new_file_name(file_name, ref):
+def get_new_file_name(file_name, ref, send_type):
+    # file_name = re.findall(r'(.+?)\.', file_name) //去掉扩展名后的文件名
     ext = file_name.split('.')[-1].upper()
-    file_name = re.findall(r'(.+?)\.', file_name)
-    all_file = SlotFiles.objects.filter(delivery_ref__deliveryref__exact=ref)
-    file_version = ref + '-V' + str(all_file.count() + 1) + '-'
-
-    file_name = file_version + file_name[0] + '.' + ext
+    if send_type == 'OP Form':
+        # 根据本地文件名，判断是否有重名，如果有，则自动增加版本号
+        all_file = SlotFiles.objects.filter(delivery_ref__deliveryref__exact=ref, local_file_name__exact=file_name,
+                                            files_profile__exact=send_type)
+        if all_file:
+            if (all_file.count() + 1) < 10:
+                version = '-V0' + str(all_file.count() + 1)
+            else:
+                version = 'V' + str(all_file.count() + 1)
+            file_name = file_name + version + '.' + ext
+        else:
+            file_name = file_name + '-V01' + '.' + ext
+    else:
+        all_file = SlotFiles.objects.filter(delivery_ref__deliveryref__exact=ref, files_profile__exact=send_type)
+        if all_file:
+            if (all_file.count() + 1) < 10:
+                version = '-V0' + str(all_file.count() + 1)
+            else:
+                version = 'V' + str(all_file.count() + 1)
+            file_name = ref + version + '.' + ext
+        else:
+            file_name = ref + '-V01' + '.' + ext
     return file_name
 
 
@@ -687,43 +717,92 @@ def get_new_file_name(file_name, ref):
 def uploads(request):
     if request.is_ajax():
         if request.method == "POST":
-            ref = request.POST['ref_no']  # 获取前台传入的delivery ref
-            ref_id = Warehouse.objects.filter(deliveryref=ref)[0].id
-            for file in request.FILES:  # 遍历获取request请求中的文件名
-                ext = file.split('.')[-1].lower()
-                if ext == 'xls' or ext == 'xlsx':
+            ref = request.POST['ref_no']  # 获取前台传入的 delivery ref send_type
+            send_type = request.POST['send_type']  # 获取前台传入的 send_type
+            warehouse_queryset = get_list_or_404(Warehouse.objects.filter(deliveryref=ref))
+            ref_id = warehouse_queryset[0].id
+            op_name = request.user.username
+            email_to_list = [request.user.email, ]
+            file_list = []
+            is_send_mail = False
+            for local_file_name in request.FILES:  # 遍历获取request请求中的文件名
+                file_name = get_new_file_name(local_file_name, ref, send_type)
+                upload_file_path = os.path.join('slot_files', file_name)  # 此目录为文件上传后的服务器目录及文件名
 
-                    file_name = get_new_file_name(file, ref)
-                    upload_file_path = os.path.join('slot_files', file_name)  # 此目录为文件上传后的服务器目录及文件名
+                # 目前，此段新建目录总是失败，需要检查原因
+                # absolute_file_path = os.path.join('media', upload_file_path,)
+                # #
+                # directory = os.path.dirname(absolute_file_path)
+                # print('absolute_file_path = ' + absolute_file_path)
+                # if not os.path.exists(directory):   # 文件夹不存在，则创建新的文件夹，目前不成功
+                #     print('make dir')
+                #     os.makedirs(directory, mode=0o777)
+                # print('directory = ' + directory)
+                # file_name = '{}.{}'.format(uuid.uuid4().hex[:10], ext)  随机文件名
+                # file path relative to 'media' folder
 
-                    # 目前，此段新建目录总是失败，需要检查原因
-                    # absolute_file_path = os.path.join('media', upload_file_path,)
-                    # #
-                    # directory = os.path.dirname(absolute_file_path)
-                    # print('absolute_file_path = ' + absolute_file_path)
-                    # if not os.path.exists(directory):   # 文件夹不存在，则创建新的文件夹，目前不成功
-                    #     print('make dir')
-                    #     os.makedirs(directory, mode=0o777)
-                    # print('directory = ' + directory)
-                    # file_name = '{}.{}'.format(uuid.uuid4().hex[:10], ext)  随机文件名
-                    # file path relative to 'media' folder
+                file_data = request.FILES.get(local_file_name)  # 将在内存中本地文件内容读入data中
 
-                    file_data = request.FILES.get(file)  # 将在内存中本地文件内容读入data中
+                with default_storage.open(upload_file_path, 'wb') as new_file:  # 写入空文件到服务器
+                    for chunk in file_data.chunks():  # 将文件内容写入到文件中去
+                        new_file.write(chunk)
 
-                    with default_storage.open(upload_file_path, 'wb') as new_file:  # 写入空文件到服务器
-                        for chunk in file_data.chunks():  # 将文件内容写入到文件中去
-                            new_file.write(chunk)
-
-                    # 将数据保存到数据库中
-                    slot_files = SlotFiles()
-                    slot_files.delivery_ref_id = ref_id
-                    slot_files.file_name = file_name
-                    slot_files.file = upload_file_path
-                    slot_files.file_type = 0
-                    slot_files.save()
-                    # HttpResponse("<p>Files Uploading Success<a href=''>Back</a></p>")
+                # 将数据保存到数据库中
+                if send_type == 'OP Form':
+                    conditions_dic = {
+                                        'delivery_ref__deliveryref__exact': ref,
+                                        'local_file_name__exact': local_file_name,
+                                        'files_profile__exact': send_type,
+                                        'is_void': 0
+                                      }
                 else:
-                    HttpResponse("<p>Files Uploading Failure<a href=''>Back</a></p>")
+                    # 将现有的文件有效的作废
+                    conditions_dic = {
+                                        'delivery_ref__deliveryref__exact': ref,
+                                        'files_profile__exact': send_type,
+                                        'is_void': 0
+                                    }
+                old_file = SlotFiles.objects.filter(**conditions_dic)
+                if old_file:
+                    old_file = SlotFiles.objects.get(**conditions_dic)
+                    old_file.is_void = 1
+                    old_file.save()
+
+                # 操作员：Inbound :  Delivery Manifest
+                #                   OP Form
+                #        Outbound: Delivery Note
+                # 仓库： 状态变更：   Arrived
+                #                   Finished
+                #       上传文件：Inbound: Breakdown
+                #                Outbound: Paperwork
+
+                if send_type == 'Delivery Manifest':
+                    order_by = 1
+                elif send_type == 'Breakdown':
+                    order_by = 2
+                elif send_type == 'OP Form':
+                    order_by = 3
+                elif send_type == 'Delivery Note':
+                    order_by = 1
+                elif send_type == 'Paperwork':
+                    order_by = 4
+
+                # 保存新的文件
+                slot_files = SlotFiles()
+                slot_files.delivery_ref_id = ref_id
+                slot_files.file_name = file_name
+                slot_files.files_profile = send_type
+                slot_files.local_file_name = local_file_name
+                slot_files.is_void = 0
+                slot_files.order = order_by
+                slot_files.save()
+                file_list.append(file_name)
+                is_send_mail = True
+
+            # 发送邮件
+            if EMAIL_IS_SEND and is_send_mail:
+                system_sendmail(ref, op_name, file_list, email_to_list, send_type)
+
             return redirect('slot:slot_detail', pk=ref_id)
     return HttpResponse('Failure!')
 

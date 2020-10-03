@@ -1,6 +1,8 @@
 升级注意事项
 
-1. setting.py
+数据库的表结构修改（完成）slot_files 有修改
+
+1. setting.py(完成)
 TEMPLATES = [
              'django.template.context_processors.media',
 
@@ -9,4 +11,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 
-2. media目录下面增加一个新的目录， /slot_files/  权限可以读写
+2. media目录下面增加一个新的目录， /slot_files/  权限可以读写(完成程度)
+
+
+3. 上传所有的py， static文件
