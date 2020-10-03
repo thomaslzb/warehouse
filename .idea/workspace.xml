@@ -11,86 +11,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c41a3cb-ed83-4987-9df8-3e22d8167175" name="Default Changelist" comment="2020.08.25 EndUpdate">
-      <change afterPath="$PROJECT_DIR$/media/slot_files/001.xlsx-V01.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/001.xlsx-V02.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/002.xlsx-V01.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/002.xlsx-V02.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/0036.xlsx-V01.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/0036.xlsx-V02.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/0036.xlsx-V03.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/DCGC-00-V1.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/DCGC-00-V2.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/DCGC-001-A-V01.PDF" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/DCGC-001-A-V01.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/DCGC-001-A-V02.PDF" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/DCGC-001-A-V02.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/DCGC-001-A-V03.PDF" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/DCGC-001-A-V03.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/DCGC-001-A-V04.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/DCGTEST001-V01.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/DCGTEST001-V02.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/DCGTEST001-V03.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/DCGTEST001-V04.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/DCGTEST555-V01.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/DCGTEST555-V02.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/DCGTEST555-V03.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/DCGTEST555-V04.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/DCGTEST555-V05.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/slot_files/DCGTEST555-V06.XLSX" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sku/migrations/0006_auto_20201001_1205.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/slot/migrations/0003_auto_20201001_1205.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/slot/migrations/0004_slotfiles_is_void.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/slot/migrations/0005_slotfiles_order.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V1-ukmail国际20200928173431.XLS" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V1-user_password.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V10-0036.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V11-001.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V12-0036.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V13-002.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V14-002.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V15-0036.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V16-slot_files_DCGTEST-V1-001.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V17-slot_files_DCGTEST-V1-001.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V2-slot_files_DCGTEST-V1-001.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V2-英国Parcelforce20200928173347.XLS" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V3-002.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V3-user_password.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V4-0036.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V4-ukmail国际20200928173431.XLS" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V4-user_password.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V4-英国Parcelforce20200928173347.XLS" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V5-002.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V5-slot_files_DCGTEST-V1-001.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V6-0036.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V6-slot_files_DCGTEST-V1-001.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V7-002.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V7-slot_files_DCGTEST-V1-001.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V8-001.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/ASC-001-AC-V9-002.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/DCG1234-V1-TEST.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/DCG1234-V2-TEST.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/DCG1234-V3-TEST.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/DCG1234-V4-Tes2.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/DCGDEW55-V1-user001_password.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/DCGDEW55-V2-001.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/DCGDEW55-V3-001.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/DCGTEST-V1-001.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/DCGTEST-V2-002.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/DCGTEST-V3-0036.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/TRDEW-V1-slot_files_DCGTEST-V1-001.XLSX" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/TRDEW-V2-英国Parcelforce20200928173347.XLS" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/slot_files/TRDEW-V3-国际Parcelforce20200928173326.XLS" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/slot/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/slot/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/slot/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/slot/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/drop-file/demo.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/drop-file/demo.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/Slot_Detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/Slot_Detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/email_send.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/email_send.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/warehouse/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/warehouse/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/warehouse/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/warehouse/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/warehouse/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/warehouse/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/新建文本文档.txt" beforeDir="false" afterPath="$PROJECT_DIR$/新建文本文档.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -296,6 +220,7 @@
       <workItem from="1601622427671" duration="1536000" />
       <workItem from="1601629991244" duration="4371000" />
       <workItem from="1601642201282" duration="12366000" />
+      <workItem from="1601714203425" duration="60000" />
     </task>
     <task id="LOCAL-00001" summary="today">
       <created>1597329118319</created>
