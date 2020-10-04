@@ -75,12 +75,14 @@
                 <td>IN/OUTBOUND</td>
                 <td>{{ object.status }}</td>
                 <td class="col-sm-2">
-                    {% if request.user.profile.staff_role == 1 %} <!-- 是操作员 -->
-                        {% if object.status == 'INBOUND' %}
-                            <select  id="send_type" name = "send_type" class="form-control">
-                                <option value="Delivery Manifest" selected>Delivery Manifest</option>
-                                <option value="OP Form">OP Form</option>
-                            </select>
+                    {% if object.progress != 4 %}
+                        {% if request.user.profile.staff_role == 1 %} <!-- 是操作员 -->
+                            {% if object.status == 'INBOUND' %}
+                                <select  id="send_type" name = "send_type" class="form-control">
+                                    <option value="Delivery Manifest" selected>Delivery Manifest</option>
+                                    <option value="OP Form">OP Form</option>
+                                </select>
+                            {% endif %}
                         {% endif %}
                     {% endif %}
                 </td>
@@ -146,29 +148,42 @@
                 <td>{{ object.remark }}</td>
                 <td></td>
               </tr>
+             {% for file in files %}
               <tr>
                   <td>File List</td>
-                <td>
-                    <div class="explore"><h5 onclick="toggle(this.parentNode)">Click here to expand or retract files list</h5>
-                          {% for file in files %}
-                                <div  class="col-sm-6">
-                                  <a href="{% url 'slot:download_file' %}?filename=slot_files/{{ file.file_name }}">
-                                        {% if file.is_void %}
-                                            <del>{{ file.files_profile }} - {{ file.file_name }}</del>
-                                        {% else %}
-                                            {{ file.files_profile }} - {{ file.file_name }}
-                                        {% endif %}
-                                  </a>
-                                </div>
-                                <div class="col-sm-3">
-                                  {{ file.uploaded_at }}
-                                </div>
-                              </li>
-                          {% endfor %}
-                    </div>
+                  <td>
+                      <div class="explore"><h5 onclick="toggle(this.parentNode)">Click here to hide or display files list</h5>
+                          <a href="{% url 'slot:download_file' %}?filename=slot_files/{{ file.file_name }}">
+                              {% if file.is_void %}
+                                  <div  class="col-sm-3 gray">
+                                      {{ file.files_profile }}
+                                  </div>
+                                  <div  class="col-sm-6 gray">
+                                      <del>{{ file.file_name }}</del>
+                                  </div>
+                                  <div class="col-sm-3 gray">
+                                      {{ file.uploaded_at }}
+                                  </div>
+                                  </span>
+                              {% else %}
+                                  <span class="green">
+                                  <div  class="col-sm-3">
+                                      {{ file.files_profile }}
+                                  </div>
+                                  <div  class="col-sm-6">
+                                      {{ file.file_name }}
+                                  </div>
+                                  <div class="col-sm-3">
+                                      {{ file.uploaded_at }}
+                                  </div>
+                                  </span>
+                            {% endif %}
+                          </a>
+                      </div>
                 </td>
                   <td></td>
               </tr>
+                          {% endfor %}
               <tr>
                   <td></td>
                   <td></td>
