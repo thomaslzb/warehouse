@@ -154,7 +154,7 @@ LOGIN_URL = '/'
 # 一般端口587对应TLS，端口465对应SSL（加强TSL）
 # https://www.jianshu.com/p/bf736e4add8d
 
-EMAIL_IS_SEND = True
+EMAIL_IS_SEND = False
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.office365.com"
 EMAIL_USE_TLS = True

@@ -16,6 +16,7 @@ from django.core.mail import send_mail
 
 from users.models import EmailVerifyRecord
 from warehouse.settings import EMAIL_FROM
+from utils.record_log import get_logger
 
 
 def random_string(randomlength=8):
@@ -60,7 +61,7 @@ def send_register_email(e_mail, send_type="register"):
 #       上传文件：Inbound: Breakdown
 #                Outbound: Paperwork
 
-def system_sendmail(ref, op_name, file_list, email_to,  send_type, ):
+def system_sendmail(ref, op_name, file_list, email_to, send_type, ):
     warehouse_mail = 'cmwarehouse.dpt@dcg-uk.co.uk'
     ecom_mail = 'ecom.dpt@dcg-uk.co.uk'
     today_now = datetime.datetime.now().strftime("%Y-%m-%d %H:%I")
@@ -68,16 +69,19 @@ def system_sendmail(ref, op_name, file_list, email_to,  send_type, ):
         email_to.append(warehouse_mail)
         subject = 'DOCS Uploaded: CM-Inbound Delivery Manifest' + ' Ref:(   ' + ref + '    ) Op:' + op_name
         email_body = 'Dear Warehouse Team: \n\r'
-        email_body += 'Operator(   ' + op_name + '   ) has uploaded documents for Ref(   ' + ref + '   ) in the System: \n\n'
+        email_body += 'Operator(   ' + op_name + '   ) has uploaded documents for Ref(   ' + ref + \
+                      '   ) in the System: \n\n'
     elif send_type == "OP Form":
         email_to.append(warehouse_mail)
         subject = 'DOCS Uploaded: CM-Inbound OP Form' + ' Ref:(   ' + ref + '   ) Op:' + op_name
         email_body = 'Dear Warehouse Team: \n\r'
-        email_body += 'Operator(   ' + op_name + '   ) has uploaded documents for Ref(   ' + ref + '   ) in the System: \n\n'
+        email_body += 'Operator(   ' + op_name + '   ) has uploaded documents for Ref(   ' + ref + \
+                      '   ) in the System: \n\n'
     elif send_type == "Delivery Note":
         subject = 'DOCS Uploaded: CM-Outbound Delivery Note' + ' Ref:(   ' + ref + '   ) Op:' + op_name
         email_body = 'Dear Warehouse Team: \n\r'
-        email_body += 'Operator(   ' + op_name + '   ) has uploaded documents for Ref(   ' + ref + '   ) in the System: \n\n'
+        email_body += 'Operator(   ' + op_name + '   ) has uploaded documents for Ref(   ' + ref + \
+                      '   ) in the System: \n\n'
     elif send_type == "Arrived":
         subject = 'Ref: (   ' + ref + '   ) has just arrive, '
         email_body = 'Dear ' + op_name + ': \n\r'
@@ -86,19 +90,21 @@ def system_sendmail(ref, op_name, file_list, email_to,  send_type, ):
     elif send_type == "Finished":
         subject = 'Ref: (   ' + ref + '    ) has finished'
         email_body = 'Dear ' + op_name + ': \n\r'
-        email_body += '(   '+ref + '   ) has finished at CM Warehouse on ----   ' + today_now + '   ----'
+        email_body += '(   ' + ref + '   ) has finished at CM Warehouse on ----   ' + today_now + '   ----'
         email_body += ', thank you.\n\n'
     elif send_type == "Breakdown":
         subject = 'Breakdown for (    ' + ref + '   ) has uploaded'
         email_body = 'Dear E-commerce Team: \n\r'
-        email_body += 'Inbound Breakdown for (   ' + ref + '    ) has uploaded in the system on ----    ' + today_now + '    ----'
+        email_body += 'Inbound Breakdown for (   ' + ref + '    ) has uploaded in the system on ----    '\
+                      + today_now + '---- '
         email_body += ', you can now check the docs by click on the ref.\n\n'
     else:
         send_type == "Paperwork"
         email_to.append(ecom_mail)
         subject = 'Documents for Outbound (   ' + ref + '   ) has uploaded'
         email_body = 'Dear ' + op_name + ': \n\r'
-        email_body += 'Outbound paperwork for (    ' + ref + '    ) has uploaded in the system on ----   ' + today_now + '    -----'
+        email_body += 'Outbound paperwork for (    ' + ref + '    ) has uploaded in the system on ----   '\
+                      + today_now + '    -----'
         email_body += ', you can now check the docs by click on the ref.\n\n'
 
     for file_list_name in file_list:
@@ -113,8 +119,14 @@ def system_sendmail(ref, op_name, file_list, email_to,  send_type, ):
     email_title = subject
     email_body = email_body + email_footer
 
-    send_status = send_mail(email_title, email_body, EMAIL_FROM, email_to)
-    if send_status:
-        pass
+    # send_status = send_mail(email_title, email_body, EMAIL_FROM, email_to)
+    # if send_status:
+    #     pass
 
-
+    try:
+        send_status = send_mail(email_title, email_body, EMAIL_FROM, email_to)
+        if send_status:
+            pass
+    except:
+        logger = get_logger()
+        logger.debug('send_mail is wrong EMAIL_FROM ' + EMAIL_FROM)

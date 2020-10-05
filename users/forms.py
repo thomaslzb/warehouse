@@ -18,8 +18,9 @@ PROFIT_MODE = [(0, 'By Percent'), (1, 'By Fix Amount')]
 
 
 def email_check(email):
-    pattern = re.compile(r"\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?")
-    return re.match(pattern, email)
+    if re.match(r'[^@]+@[^@]+\.[^@]', email):
+        return True
+    return False
 
 
 class LoginForm(forms.Form):
