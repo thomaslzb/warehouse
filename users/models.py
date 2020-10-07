@@ -16,15 +16,27 @@ PERCENT_CHOICE = ((0, 'By Fix Amount'),
                   )
 
 
-# Create your models here.
+class SlotEmailGroup(models.Model):
+    email = models.EmailField(max_length=50, verbose_name=u"Email")
+    desc = models.CharField(max_length=20, verbose_name="Description")
+
+    class Meta:
+        verbose_name = 'Email Group'
+
+    def __str__(self):
+        return self.desc.__str__()
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    op_position = models.CharField('Op_position', max_length=2, blank=True)
+    op_position = models.CharField('Op_position', max_length=2, blank=True, default='UK')
     telephone = models.CharField('Telephone', max_length=100, blank=True)
     mod_date = models.DateTimeField('Last modified', auto_now=True)
     profit_percent = models.BooleanField(default=0, choices=PERCENT_CHOICE, verbose_name='Profit Mode')
     role = models.ForeignKey(Role, to_field='id', default='1', on_delete=models.CASCADE, related_name='user_role',
                              verbose_name="System Role")
+    email_group = models.ForeignKey(SlotEmailGroup, to_field='id', default='1', on_delete=models.CASCADE,
+                                    related_name='to_email_group', verbose_name="Email Group")
 
     # OPERATOR  WAREHOUSE MANAGER
     staff_role = models.IntegerField('Staff_role', blank=True, default=0, choices=STAFF_ROLE_CHOICE, )

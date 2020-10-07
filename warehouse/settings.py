@@ -68,8 +68,7 @@ ROOT_URLCONF = 'warehouse.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -154,14 +153,14 @@ LOGIN_URL = '/'
 # 一般端口587对应TLS，端口465对应SSL（加强TSL）
 # https://www.jianshu.com/p/bf736e4add8d
 
-EMAIL_IS_SEND = False
+EMAIL_IS_SEND = True
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.office365.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "thomas.li@dcg-uk.co.uk"
-EMAIL_FROM = "thomas.li@dcg-uk.co.uk"
-EMAIL_HOST_PASSWORD = ""
+EMAIL_HOST_USER = "notify@dcg-uk.co.uk"
+EMAIL_FROM = "notify@dcg-uk.co.uk"
+EMAIL_HOST_PASSWORD = "UjmEdc456789"
 
 # django_simple_captcha 验证码配置其他配置项查看文档
 # 默认格式

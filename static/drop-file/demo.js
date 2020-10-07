@@ -79,6 +79,7 @@ dz.ondrop = function (ev) {
 	var k = 0;
 	if (len + oldlen > max_files) len = max_files - oldlen;
 	console.log('max_files = ' + max_files)
+	console.log('send_type = ' + send_type)
 	while(k<len){
 		// 获取文件名
 		let filename = files[i].name;

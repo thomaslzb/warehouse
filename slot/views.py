@@ -581,9 +581,9 @@ class SlotUpdateView(View):
                         file_list = []
                         email_to_list = [user_queryset[0].email]
                         if progress == '2':  # 2 - Arrived
-                            system_sendmail(deliveryref, op_name, file_list, email_to_list, 'Arrived')
+                            system_sendmail(deliveryref, op_name, file_list, email_to_list, 'Arrived', )
                         elif progress == '4':  # 4 - Finished
-                            system_sendmail(deliveryref, op_name, file_list, email_to_list, 'Finished')
+                            system_sendmail(deliveryref, op_name, file_list, email_to_list, 'Finished', )
 
                 return redirect('slot:slot_detail', pk=pk)
         else:

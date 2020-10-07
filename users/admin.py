@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
-from .models import UserProfile
+from .models import UserProfile, SlotEmailGroup
 
 admin.site.unregister(User)
 
@@ -13,6 +13,11 @@ class UserProfileInline(admin.StackedInline):
 
 class UserProfileAdmin(UserAdmin):
     inlines = [UserProfileInline, ]
+
+
+@admin.register(SlotEmailGroup)
+class SlotEmailGroupAdmin(admin.ModelAdmin):
+    list_display = ('id',  'desc', 'email',)
 
 
 admin.site.register(User, UserProfileAdmin)

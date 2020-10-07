@@ -174,3 +174,5 @@ menu/migrations/0006_auto_20200904_1723.py
 *.XLSX
 *.XLSX
 *.XLSX
+warehouse/settings.py
+*.pyc
