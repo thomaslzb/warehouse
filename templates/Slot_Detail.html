@@ -26,19 +26,19 @@
                                 <input type="hidden" id="send_type" name="send_type"  value="Delivery Note" readonly>
                             {% endif %}
                         {% endif %}
-                        {% if request.user.profile.staff_role == 2 %} <!-- 是仓库管理员 则将文件类型隐藏输入-->
-                            {% if object.status == 'INBOUND' %}
-                                <button class="btn" role="button" onclick="showModal()">Upload Breakdown</button>
-                                <input type="hidden" id="send_type" name="send_type"  value="Breakdown" readonly>
-                           {% endif %}
-                            {% if object.status == 'OUTBOUND' %}
-                                <button class="btn" role="button" onclick="showModal()">Upload Paperwork</button>
-                                <input type="hidden" id="send_type" name="send_type"  value="Paperwork" readonly>
-                            {% endif %}
+                    {% endif %}
+                    {% if request.user.profile.staff_role == 2 %} <!-- 是仓库管理员 则将文件类型隐藏输入-->
+                        {% if object.status == 'INBOUND' %}
+                            <button class="btn" role="button" onclick="showModal()">Upload Breakdown</button>
+                            <input type="hidden" id="send_type" name="send_type"  value="Breakdown" readonly>
+                       {% endif %}
+                        {% if object.status == 'OUTBOUND' %}
+                            <button class="btn" role="button" onclick="showModal()">Upload Paperwork</button>
+                            <input type="hidden" id="send_type" name="send_type"  value="Paperwork" readonly>
                         {% endif %}
-                        {% if request.user.profile.staff_role == 3 %} <!-- 是经理级别-->
-                            <button class="btn" role="button" onclick="showModal()">Manager Upload File</button>
-                        {% endif %}
+                    {% endif %}
+                    {% if request.user.profile.staff_role == 3 %} <!-- 是经理级别-->
+                        <button class="btn" role="button" onclick="showModal()">Manager Upload File</button>
                     {% endif %}
 
                     <!--遮罩-->

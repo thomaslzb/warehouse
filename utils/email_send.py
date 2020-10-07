@@ -17,7 +17,7 @@ from django.core.mail import send_mail
 from users.models import EmailVerifyRecord
 from warehouse.settings import EMAIL_FROM
 from utils.record_log import get_logger
-
+from users.models import SlotEmailGroup, UserProfile
 
 def random_string(randomlength=8):
     str = ""
@@ -62,17 +62,18 @@ def send_register_email(e_mail, send_type="register"):
 #                Outbound: Paperwork
 
 def system_sendmail(ref, op_name, file_list, email_to, send_type, ):
-    warehouse_mail = 'cmwarehouse.dpt@dcg-uk.co.uk'
-    ecom_mail = 'ecom.dpt@dcg-uk.co.uk'
+    user_mail_group = SlotEmailGroup.objects.filter(to_email_group__user__username=op_name)
+    if user_mail_group:
+        group_mail = user_mail_group[0].email.strip()
+        if len(group_mail) != 0:
+            email_to.append(group_mail)
     today_now = datetime.datetime.now().strftime("%Y-%m-%d %H:%I")
     if send_type == "Delivery Manifest":
-        email_to.append(warehouse_mail)
         subject = 'DOCS Uploaded: CM-Inbound Delivery Manifest' + ' Ref:(   ' + ref + '    ) Op:' + op_name
         email_body = 'Dear Warehouse Team: \n\r'
         email_body += 'Operator(   ' + op_name + '   ) has uploaded documents for Ref(   ' + ref + \
                       '   ) in the System: \n\n'
     elif send_type == "OP Form":
-        email_to.append(warehouse_mail)
         subject = 'DOCS Uploaded: CM-Inbound OP Form' + ' Ref:(   ' + ref + '   ) Op:' + op_name
         email_body = 'Dear Warehouse Team: \n\r'
         email_body += 'Operator(   ' + op_name + '   ) has uploaded documents for Ref(   ' + ref + \
@@ -100,7 +101,6 @@ def system_sendmail(ref, op_name, file_list, email_to, send_type, ):
         email_body += ', you can now check the docs by click on the ref.\n\n'
     else:
         send_type == "Paperwork"
-        email_to.append(ecom_mail)
         subject = 'Documents for Outbound (   ' + ref + '   ) has uploaded'
         email_body = 'Dear ' + op_name + ': \n\r'
         email_body += 'Outbound paperwork for (    ' + ref + '    ) has uploaded in the system on ----   '\
@@ -118,10 +118,6 @@ def system_sendmail(ref, op_name, file_list, email_to, send_type, ):
 
     email_title = subject
     email_body = email_body + email_footer
-
-    # send_status = send_mail(email_title, email_body, EMAIL_FROM, email_to)
-    # if send_status:
-    #     pass
 
     try:
         send_status = send_mail(email_title, email_body, EMAIL_FROM, email_to)
