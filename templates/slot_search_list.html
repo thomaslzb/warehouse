@@ -52,8 +52,7 @@
                 {% for delivery in object_list %}
                 <tr>
                     <td>
-{#                        <a href="{% url 'sku:sku-update' sku.id %}">{{ sku.sku_no }}</a>#}
-                        {{ delivery.deliveryref }}
+                        <a href ="{% url 'slot:slot_detail' delivery.id %}">{{ delivery.deliveryref }}</a>
                     </td>
                     {% if delivery.havetime %}
                         <td>{{ delivery.workdate}} {{ delivery.slottime }}</td>

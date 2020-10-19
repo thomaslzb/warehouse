@@ -92,15 +92,11 @@ class LoginView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    # return render(request, "slotList.html", {"search_date": today})
                     abc = user.profile.staff_role
                     if user.profile.staff_role != 0:
-                        today = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d")
-                        request.session['searching_date'] = today
                         return redirect("/slot/list")
                     else:
                         return redirect("/quote/uk")
-                    # return redirect("/slot")
                 else:
                     return render(request, "sign-in.html", {"form": "User is Activated!"})
             else:

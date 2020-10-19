@@ -19,6 +19,7 @@ from warehouse.settings import EMAIL_FROM
 from utils.record_log import get_logger
 from users.models import SlotEmailGroup, UserProfile
 
+
 def random_string(randomlength=8):
     str = ""
     chars = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789"
@@ -59,6 +60,9 @@ def send_register_email(e_mail, send_type="register"):
 # 仓库： 状态变更：   Arrived
 #                   Finished
 #       上传文件：Inbound: Breakdown
+#                         Parcel List
+#                         Delivery POD
+#
 #                Outbound: Paperwork
 
 def system_sendmail(ref, op_name, file_list, email_to, send_type, ):
@@ -67,6 +71,10 @@ def system_sendmail(ref, op_name, file_list, email_to, send_type, ):
         group_mail = user_mail_group[0].email.strip()
         if len(group_mail) != 0:
             email_to.append(group_mail)
+        else:
+            email_to.append('ecom.dpt@dcg-uk.co.uk')
+            email_to.append('cmwarehouse.dpt@dcg-uk.co.uk')
+            email_to.append('transport@dcg-uk.co.uk')
     today_now = datetime.datetime.now().strftime("%Y-%m-%d %H:%I")
     if send_type == "Delivery Manifest":
         subject = 'DOCS Uploaded: CM-Inbound Delivery Manifest' + ' Ref:(   ' + ref + '    ) Op:' + op_name
@@ -94,9 +102,21 @@ def system_sendmail(ref, op_name, file_list, email_to, send_type, ):
         email_body += '(   ' + ref + '   ) has finished at CM Warehouse on ----   ' + today_now + '   ----'
         email_body += ', thank you.\n\n'
     elif send_type == "Breakdown":
-        subject = 'Breakdown for (    ' + ref + '   ) has uploaded'
+        subject = 'Inbound Breakdown for (    ' + ref + '   ) has uploaded'
         email_body = 'Dear E-commerce Team: \n\r'
         email_body += 'Inbound Breakdown for (   ' + ref + '    ) has uploaded in the system on ----    '\
+                      + today_now + '---- '
+        email_body += ', you can now check the docs by click on the ref.\n\n'
+    elif send_type == "Parcel List":
+        subject = 'Inbound Parcel List for (    ' + ref + '   ) has uploaded'
+        email_body = 'Dear E-commerce Team: \n\r'
+        email_body += 'Inbound Parcel List for (   ' + ref + '    ) has uploaded in the system on ----    ' \
+                      + today_now + '---- '
+        email_body += ', you can now check the docs by click on the ref.\n\n'
+    elif send_type == "Delivery POD":
+        subject = 'Inbound Delivery POD for (    ' + ref + '   ) has uploaded'
+        email_body = 'Dear E-commerce Team: \n\r'
+        email_body += 'Inbound Delivery POD for (   ' + ref + '    ) has uploaded in the system on ----    ' \
                       + today_now + '---- '
         email_body += ', you can now check the docs by click on the ref.\n\n'
     else:
@@ -124,5 +144,6 @@ def system_sendmail(ref, op_name, file_list, email_to, send_type, ):
         if send_status:
             pass
     except:
-        logger = get_logger()
-        logger.debug('send_mail is wrong EMAIL_FROM ' + EMAIL_FROM)
+        # logger = get_logger()
+        #  logger.debug('send_mail is wrong EMAIL_FROM ' + EMAIL_FROM)
+        print('send_mail is wrong EMAIL_FROM')

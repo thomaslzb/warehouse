@@ -60,6 +60,16 @@ dz.ondrop = function (ev) {
 	if (send_type === 'Paperwork'){
 		file_type = ['pdf']
 	}
+	if (send_type === 'Breakdown'){
+		file_type = ['xls','xlsx', 'xlsm', 'pdf']
+	}
+	if (send_type === 'Parcel List'){
+		file_type = ['pdf']
+	}
+	if (send_type === 'Delivery POD'){
+		file_type = ['pdf']
+	}
+	console.log()
 	var max_size = 5000  //限制一次上传文件的大小 5000KB = 5M
 	if (oldlen >= max_files) {
 		alert('one times only ' + max_files + ' files can be uploading...');
@@ -78,8 +88,9 @@ dz.ondrop = function (ev) {
 	var it=newForm.entries(); //创建一个迭代器，测试用
 	var k = 0;
 	if (len + oldlen > max_files) len = max_files - oldlen;
-	console.log('max_files = ' + max_files)
-	console.log('send_type = ' + send_type)
+	console.log('file_type = ' + file_type )
+	console.log('max_files == ' + max_files)
+	console.log('send_type == ' + send_type)
 	while(k<len){
 		// 获取文件名
 		let filename = files[i].name;

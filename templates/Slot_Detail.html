@@ -29,8 +29,7 @@
                     {% endif %}
                     {% if request.user.profile.staff_role == 2 %} <!-- 是仓库管理员 则将文件类型隐藏输入-->
                         {% if object.status == 'INBOUND' %}
-                            <button class="btn" role="button" onclick="showModal()">Upload Breakdown</button>
-                            <input type="hidden" id="send_type" name="send_type"  value="Breakdown" readonly>
+                            <button class="btn" role="button" onclick="showModal()">Upload Inbound File</button>
                        {% endif %}
                         {% if object.status == 'OUTBOUND' %}
                             <button class="btn" role="button" onclick="showModal()">Upload Paperwork</button>
@@ -74,26 +73,37 @@
                 <td>IN/OUTBOUND</td>
                 <td>{{ object.status }}</td>
                 <td class="col-sm-2">
+                    {% if request.user.profile.staff_role == 2 %} <!-- 是仓库管理 -->
+                        {% if object.status == 'INBOUND' %}
+                            <select  id="send_type" name = "send_type" class="form-control">
+                                <option value="Breakdown" selected>Breakdown</option>
+                                <option value="Parcel List">Parcel List</option>
+                                <option value="Delivery POD">Delivery POD</option>
+                            </select>
+                        {% endif %}
+                    {% endif %}
+                    {% if request.user.profile.staff_role == 3 %} <!-- 是经理级别 -->
+                            {% if object.status == 'INBOUND' %}
+                                <select  id="send_type" name = "send_type" class="form-control">
+                                    <option value="Delivery Manifest" selected>Delivery Manifest</option>
+                                    <option value="OP Form">OP Form</option>
+                                    <option value="Breakdown">Breakdown</option>
+                                    <option value="Parcel List">Parcel List</option>
+                                    <option value="Delivery POD">Delivery POD</option>
+                                </select>
+                            {% else %}
+                                <select  id="send_type" name = "send_type" class="form-control">
+                                    <option value="Delivery Note">Delivery Note</option>
+                                    <option value="Paperwork">Paperwork</option>
+                                </select>
+                            {% endif %}
+                        {% endif %}
                     {% if object.progress != 4 %}
                         {% if request.user.profile.staff_role == 1 %} <!-- 是操作员 -->
                             {% if object.status == 'INBOUND' %}
                                 <select  id="send_type" name = "send_type" class="form-control">
                                     <option value="Delivery Manifest" selected>Delivery Manifest</option>
                                     <option value="OP Form">OP Form</option>
-                                </select>
-                            {% endif %}
-                        {% endif %}
-                        {% if request.user.profile.staff_role == 3 %} <!-- 是经理级别 -->
-                            {% if object.status == 'INBOUND' %}
-                                <select  id="send_type" name = "send_type" class="form-control">
-                                    <option value="Delivery Manifest" selected>Delivery Manifest</option>
-                                    <option value="OP Form">OP Form</option>
-                                    <option value="Breakdown">Breakdown</option>
-                                </select>
-                            {% else %}
-                                <select  id="send_type" name = "send_type" class="form-control">
-                                    <option value="Delivery Note">Delivery Note</option>
-                                    <option value="Paperwork">Paperwork</option>
                                 </select>
                             {% endif %}
                         {% endif %}
@@ -164,7 +174,7 @@
               <tr>
                   <td>File List</td>
                   <td>
-                      <div class="explore"><h5 onclick="toggle(this.parentNode)">Click here to hide or display files list</h5>
+{#                      <div class="explore"><h5 onclick="toggle(this.parentNode)">Click here to hide or display files list</h5>#}
                      {% for file in files %}
                           <a href="{% url 'slot:download_file' %}?filename=slot_files/{{ file.file_name }}">
                               {% if file.is_void %}
@@ -177,7 +187,6 @@
                                   <div class="col-sm-3 gray">
                                       {{ file.uploaded_at }}
                                   </div>
-                                  </span>
                               {% else %}
                                   <span class="green">
                                   <div  class="col-sm-3">
@@ -192,7 +201,7 @@
                                   </span>
                             {% endif %}
                           </a>
-                      </div>
+{#                      </div>#}
                  {% endfor %}
                 </td>
                   <td></td>

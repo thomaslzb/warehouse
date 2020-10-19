@@ -117,6 +117,8 @@ class SlotFiles(models.Model):
     uploaded_at = models.DateTimeField(auto_now=True, blank=True, verbose_name="Upload DateTime")
     is_void = models.BooleanField(default=0, verbose_name="Is Void")
     order = models.IntegerField(default=0, verbose_name="Order")
+    op_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='op_file_user',
+                                on_delete=models.CASCADE, default=1, verbose_name="Operator")
 
     class Meta:
         db_table = "slot_files"

@@ -1,8 +1,9 @@
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
 import datetime
 import functools
 import os
-import time
-import re
+import codecs
 
 from django.core.files.storage import default_storage
 from django.http import HttpResponseForbidden, HttpResponse, StreamingHttpResponse
@@ -18,6 +19,7 @@ from .forms import SlotTimeForm, SlotTimeUpdateForm
 from .models import Warehouse, Haulier, WarehouseProfile, FixWeekday, ProgressRecord, SlotFiles
 from users.models import UserProfile
 from utils.email_send import system_sendmail
+from utils.tools import exchange_string
 
 
 def user_is_not_staff(func):
@@ -89,11 +91,7 @@ def reset_time(need_time):
 class SlotListView(View):
     @user_is_not_staff
     def get(self, request):
-        search_date = request.session.get("searching_date", datetime.date.today())
         search_date = request.GET.get("searching_date", datetime.date.today())
-
-        # if search_date is None or search_date == "":
-        #     search_date = datetime.date.today()
 
         # 通过登录的用户，查找到当前操作仓库的最大 Maxslot
         location_result = UserProfile.objects.filter(user_id=request.user.id)
@@ -697,9 +695,9 @@ def get_new_file_name(file_name, ref, send_type):
                 version = '-V0' + str(all_file.count() + 1)
             else:
                 version = 'V' + str(all_file.count() + 1)
-            file_name = file_name + version + '.' + ext
+            file_name = file_name + version
         else:
-            file_name = file_name + '-V01' + '.' + ext
+            file_name = file_name + '-V01'
     else:
         all_file = SlotFiles.objects.filter(delivery_ref__deliveryref__exact=ref, files_profile__exact=send_type)
         if all_file:
@@ -707,9 +705,10 @@ def get_new_file_name(file_name, ref, send_type):
                 version = '-V0' + str(all_file.count() + 1)
             else:
                 version = 'V' + str(all_file.count() + 1)
-            file_name = ref + version + '.' + ext
+            file_name = ref + version
         else:
-            file_name = ref + '-V01' + '.' + ext
+            file_name = ref + '-V01'
+    file_name = exchange_string(file_name) + '.' + ext
     return file_name
 
 
@@ -728,7 +727,6 @@ def uploads(request):
             for local_file_name in request.FILES:  # 遍历获取request请求中的文件名
                 file_name = get_new_file_name(local_file_name, ref, send_type)
                 upload_file_path = os.path.join('slot_files', file_name)  # 此目录为文件上传后的服务器目录及文件名
-
                 # 目前，此段新建目录总是失败，需要检查原因
                 # absolute_file_path = os.path.join('media', upload_file_path,)
                 # #
@@ -743,9 +741,10 @@ def uploads(request):
 
                 file_data = request.FILES.get(local_file_name)  # 将在内存中本地文件内容读入data中
 
-                with default_storage.open(upload_file_path, 'wb') as new_file:  # 写入空文件到服务器
+                with default_storage.open(upload_file_path, mode="wb") as new_file:  # 写入文件到服务器
                     for chunk in file_data.chunks():  # 将文件内容写入到文件中去
                         new_file.write(chunk)
+                    new_file.close()
 
                 # 将数据保存到数据库中
                 if send_type == 'OP Form':
@@ -768,26 +767,34 @@ def uploads(request):
                     old_file.is_void = 1
                     old_file.save()
 
+                # send_type
                 # 操作员：Inbound :  Delivery Manifest
                 #                   OP Form
                 #        Outbound: Delivery Note
                 # 仓库： 状态变更：   Arrived
                 #                   Finished
                 #       上传文件：Inbound: Breakdown
+                #                         Parcel List
+                #                         Delivery POD
+                #
                 #                Outbound: Paperwork
 
                 if send_type == 'Delivery Manifest':
                     order_by = 1
                 elif send_type == 'Breakdown':
                     order_by = 2
+                elif send_type == 'Parcel List':
+                    order_by = 2
+                elif send_type == 'Delivery POD':
+                    order_by = 2
                 elif send_type == 'OP Form':
-                    order_by = 3
+                    order_by = 5
                 elif send_type == 'Delivery Note':
                     order_by = 1
                 elif send_type == 'Paperwork':
                     order_by = 4
 
-                # 保存新的文件
+                # 保存新的文件记录
                 slot_files = SlotFiles()
                 slot_files.delivery_ref_id = ref_id
                 slot_files.file_name = file_name
@@ -795,6 +802,7 @@ def uploads(request):
                 slot_files.local_file_name = local_file_name
                 slot_files.is_void = 0
                 slot_files.order = order_by
+                slot_files.op_user_id = request.user.id
                 slot_files.save()
                 file_list.append(file_name)
                 is_send_mail = True
