@@ -211,7 +211,11 @@ class UserListView(ListView):
 class UserSetupProfitView(View):
     def get(self, request, pk):
         all_country = EuroCountry.objects.all()
-        # 检查国家的数据是否全部已经保存，如果没有则新增
+        """
+        每个用户均有一个国家代码表，因为不同客户每个国家的利润率可能会单独设置
+        所以，必须先检查国家的数据是否全部已经保存，如果没有则新增,
+        还有一种情况，系统新增了国家代码，所以用户也必须有新增的国家代码的费用设置
+        """
         user_profit_queryset = UserSetupProfit.objects.filter(user_id__exact=pk, )
         for x in all_country:
             if user_profit_queryset:

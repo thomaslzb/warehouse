@@ -3,7 +3,7 @@
 import datetime
 import functools
 import os
-import codecs
+from django.utils import timezone
 
 from django.core.files.storage import default_storage
 from django.http import HttpResponseForbidden, HttpResponse, StreamingHttpResponse
@@ -186,7 +186,7 @@ class SlotListView(View):
     @user_is_not_staff
     def post(self, request):
         Warehouse_form = SlotTimeForm(request.POST)
-        workdate = request.POST.get("workdate", 0)  # 抵达日期
+        workdate = request.POST.get("workdate", datetime.datetime.now())  # 抵达日期
         # 传达参数
         request.session['searching_date'] = workdate
         if Warehouse_form.is_valid():
@@ -335,7 +335,7 @@ class SlotListView(View):
             warehouse.hailerid_id = hailer_id
             warehouse.position = position
             warehouse.op_user_id = request.user.id
-            warehouse.op_datetime = datetime.datetime.now()
+            warehouse.op_datetime = timezone.now()
             warehouse.save()
 
             progressRecord = ProgressRecord()

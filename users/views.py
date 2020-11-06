@@ -110,6 +110,12 @@ class LoginView(View):
                 return render(request, "sign-in.html", locals(), )
         else:
             msg = login_form.errors
+            if "username" in msg:
+                msg = "This email or username does not exist."
+
+            if "captcha" in msg:
+                msg = "Invalid CAPTCHA"
+
             hashkey = CaptchaStore.generate_key()
             image_url = captcha_image_url(hashkey)
             login_form = LoginForm()
