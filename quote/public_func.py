@@ -20,19 +20,20 @@ from users.models import UserProfile
 
 def get_custom_profit(user_id, is_uk, destination_id):
     """
-    查询快递公司能够接受最大的尺寸或重量
+    查询客户的利润计算方式及单价
     :param user_id: 客户id
     :param is_uk: 快递公司
     :param destination_id: 目的地名称id
     :return: List[is_percent, Value]
     """
     is_percent = False
-    user_queryset = UserProfile.objects.filter(user_id__exact=user_id)
-    if user_queryset:
-        if user_queryset[0].profit_percent:
-            is_percent = True
+    # user_queryset = UserProfile.objects.filter(user_id__exact=user_id)
+    # if user_queryset:
+    #     if user_queryset[0].profit_percent:
+    #         is_percent = True
 
-    value = 0
+    value_fix_amount = 0
+    value_percent = 0
     if is_uk:
         profit_queryset = UserSetupProfit.objects.filter(user_id__exact=user_id, uk_area_id__exact=destination_id,
                                                          is_uk__exact='UK')
@@ -40,17 +41,22 @@ def get_custom_profit(user_id, is_uk, destination_id):
         profit_queryset = UserSetupProfit.objects.filter(user_id__exact=user_id, euro_area__exact=destination_id,
                                                          is_uk__exact='EURO')
     if profit_queryset:
-        if is_percent:
-            value = profit_queryset[0].percent
-        else:
-            value = profit_queryset[0].fix_amount
+        value_percent = profit_queryset[0].percent
+        value_fix_amount = profit_queryset[0].fix_amount
+        if value_fix_amount == 0:
+            is_percent = True
+
+    if is_percent:
+        value = value_percent
+    else:
+        value = value_fix_amount
 
     return [is_percent, value]
 
 
 def is_can_take(server_company_id, server_type_name, length, weight, girth, zonal_name):
     """
-    查询快递公司能够接受最大的尺寸或重量
+    查询快递公司能够接受最大的尺寸或重量, 判断是否能够承运
     :param server_company_id: 快递公司
     :param server_type_name: 快递公司的服务类型
     :param length: 最大的长度

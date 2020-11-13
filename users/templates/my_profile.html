@@ -40,10 +40,10 @@
                         </div>
                     </div>
                     <div class="form-group ">
-                        <label for="curl" class="control-label col-lg-1">Profit Mode</label>
+                        <label for="curl" class="control-label col-lg-1">Favorite Company</label>
                         <div class="col-lg-2">
                               <input class="form-control " id="status" name="status"
-                                 value="{% if object.profile.profit_percent %}By Percent{% else %}By Fix Amount{% endif %}"
+                                 value="{{ object.profile.favorite_company }}"
                                  readonly />
                         </div>
                     </div>

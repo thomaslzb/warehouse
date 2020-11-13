@@ -1,13 +1,11 @@
 {% extends 'base-menu.html' %}
 {% load static %}
 {% block content %}
-    <div class="container-fluid">
-        <!-- Detail -->
-        <div class="row">
-            <div class="col-md-5 mt">
-                <div class="content-panel">
-                    <div class="container profile-text">
-                        <h3 class="text-left">Deliver To <span class="text-info">European</span></h3>
+<div class="row mt container-fluid">
+    <div class="col-lg-12">
+        <div class="form-panel">
+              <h4><i class="fa fa-angle-right"></i>&nbsp;&nbsp;Deliver To <span class="text-info">European</span></h4>
+            <hr>
                     <form role="form" action="{% url 'inquire-euro' %}" method="post">
                         {% csrf_token %}
                             <div class="form-group form-inline " class="col-md-3">

@@ -30,8 +30,7 @@ class Company(models.Model):
         verbose_name = "Company"
 
     def __str__(self):
-        # return '{0}({1})'.format(self.code, self.name)
-        return self.code
+        return '{0}({1})'.format(self.code, self.name)
 
 
 class ServiceType(models.Model):
@@ -213,6 +212,7 @@ class UserSetupProfit(models.Model):
         db_table = "q_user_setup_profit"
         verbose_name = "Profit Setup"
         unique_together = ('user', 'is_uk', 'uk_area', 'euro_area',)
+        ordering = ('user', 'is_uk', 'uk_area', 'euro_area',)
 
 
 class PriceList(models.Model):

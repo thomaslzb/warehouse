@@ -3,6 +3,7 @@ from django.conf import settings
 
 from warehouse.settings import MEDIA_ROOT
 from .validators import validate_file_extension
+from quote.models import Company
 
 IS_USER_CHOICE = ((1, 'OK'),
                   (0, 'Suspend'),
@@ -29,6 +30,7 @@ class Sku(models.Model):
         db_table = "sku"
         verbose_name = "SKU"
         unique_together = ('custom', 'sku_no',)
+        ordering = ['sku_no']
 
     def __str__(self):
         return '{0}({1})'.format(self.sku_no, self.sku_name)
@@ -48,12 +50,14 @@ class SkuFileUpload(models.Model):
         verbose_name = "SKU File"
 
 
-class SkyQuoteHistory(models.Model):
+class SkuQuoteHistory(models.Model):
     id = models.AutoField(primary_key=True)
     custom = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1, verbose_name="Custom")
     sku = models.ForeignKey('Sku', to_field='id', on_delete=models.CASCADE, default=1, verbose_name="SKU")
     qty = models.IntegerField(default=0, null=False, verbose_name="Qty.", )
     destination = models.CharField(max_length=50, null=False, default='', verbose_name='Destination', )
+    favorite_company = models.ForeignKey(Company, to_field='id', default='1', on_delete=models.CASCADE,
+                                         related_name='suk_favorite_company', verbose_name="Favorite Company")
     basic_price = models.DecimalField(default=0, null=False, max_digits=8,
                                       decimal_places=2, verbose_name='Basic Price', )
     oversize = models.DecimalField(default=0, null=False, max_digits=8,

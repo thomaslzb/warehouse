@@ -1,14 +1,13 @@
 {% extends 'base-menu.html' %}
 {% load static %}
 {% block content %}
-    <div class="container-fluid">
-    <div class="row mt">
+<div class="row mt container-fluid">
     <div class="col-lg-12">
         <div class="form-panel">
               <h4><i class="fa fa-angle-right"></i> Update User Information</h4>
             <hr>
             <div class=" form">
-                <form class="cmxform form-horizontal style-form" id="commentForm" method="post" action="">
+                <form class="cmxform form-horizontal style-form" id="commentForm" method="post" action="{% url 'users:my_profile_update' object.id %}">
                     {% csrf_token %}
                     <div class="form-group ">
                         <label for="cname" class="control-label col-lg-1">Email: </label>
@@ -39,18 +38,29 @@
                         </div>
                     </div>
                     <div class="form-group ">
-                        <label for="curl" class="control-label col-lg-1">Profit Mode</label>
-                        <div class="col-lg-2">
-                            <select name = "profit_mode" class="form-control">
-                                <option value=1 {% if object.profile.profit_percent %}selected{% endif %}>By Percent</option>
-                                <option value=0 {% if not object.profile.profit_percent %}selected{% endif %}>By Fix Amount</option>
-                            </select>
-                        </div>
+                        <label for="curl" class="control-label col-lg-1">Favorite Company</label>
+                            <div class="col-lg-2">
+                                <select name = "favorite_company" class="form-control">
+                                {% for company in all_company %}
+                                    <option value={{ company.id }} {% if object.profile.favorite_company_id == company.id %}selected{% endif %}>
+                                        {{ company.name }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
                     </div>
+                    {% if form.errors.items %}
+                        <div class="alert alert-info" id="jsLoginTips">
+                            <label> Save Failure : </label>
+                                {%for key, error in form.errors.items %}
+                                     {{ error }}
+                                {% endfor %}
+                            {{ msg }}
+                        </div>
+                    {% endif %}
                     <div class="form-group">
-                        <div class="col-lg-offset-1 col-lg-10">
+                        <div class="col-lg-offset-1">
                             <button class="btn btn-theme" type="submit">Save</button>
-                            <a href="{% url 'user-list' %}" class="btn btn-theme04" type="button">Cancel</a>
+                            <a href="{% url 'users:my_profile_update' object.id %}" class="btn btn-theme04" type="button">Cancel</a>
                         </div>
                     </div>
                 </form>
@@ -58,6 +68,5 @@
         </div>
         <!-- /form-panel -->
     </div>
-    </div>
-    </div>
+</div>
 {% endblock %}

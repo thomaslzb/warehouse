@@ -4,6 +4,7 @@ from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from menu.models import Role
+from quote.models import Company
 
 STAFF_ROLE_CHOICE = ((0, 'Custom'),
                      (1, 'Staff-OP'),
@@ -40,9 +41,16 @@ class UserProfile(models.Model):
 
     # OPERATOR  WAREHOUSE MANAGER
     staff_role = models.IntegerField('Staff_role', blank=True, default=0, choices=STAFF_ROLE_CHOICE, )
+    favorite_company = models.ForeignKey(Company, to_field='id', default='1', on_delete=models.CASCADE,
+                                         related_name='to_company', verbose_name="Favorite Company")
+    uk_fix_amount = models.DecimalField(default=0, max_digits=8, decimal_places=2, verbose_name='UK Fix Amount')
+    uk_percent = models.DecimalField(default=0, max_digits=8, decimal_places=2, verbose_name='UK Profit Percent')
+    euro_fix_amount = models.DecimalField(default=0, max_digits=8, decimal_places=2, verbose_name='Euro Fix Amount')
+    euro_percent = models.DecimalField(default=0, max_digits=8, decimal_places=2, verbose_name='Euro Profit Percent')
 
     class Meta:
         verbose_name = 'User Profile'
+        ordering = ['user__id']
 
     def __str__(self):
         return self.user.__str__()

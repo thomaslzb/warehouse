@@ -7,6 +7,7 @@ from django.contrib import auth
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
+from django.urls import reverse_lazy
 from django.views.generic.base import View
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView
@@ -19,6 +20,7 @@ from .models import EmailVerifyRecord, UserProfile
 from .forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm, MyProfileForm
 from .forms import email_check
 from django.shortcuts import redirect
+from quote.models import Company
 
 # from utils import send_register_email
 
@@ -211,11 +213,12 @@ class MyProfileUpdateView(UpdateView):
     model = User
     form_class = MyProfileForm
     template_name = 'my_profile_update.html'
-    success_url = '/quote/users/'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        all_company = Company.objects.all()
         context['menu_active'] = MY_MENU_LOCAL
+        context['all_company'] = all_company
         return context
 
     def form_invalid(self, form):  # 定义表对象没有添加失败后跳转到的页面。
@@ -224,6 +227,11 @@ class MyProfileUpdateView(UpdateView):
 
     def form_valid(self, form):
         user_profile = UserProfile.objects.filter(user_id=self.kwargs['pk'])
-        user_profile.update(telephone=form.data['telephone'], profit_percent=form.data['profit_mode'])
+        user_profile.update(telephone=form.data['telephone'], favorite_company=form.data['favorite_company'])
 
         return super(MyProfileUpdateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy("users:my_profile", kwargs={'pk': self.object.pk})
+
+

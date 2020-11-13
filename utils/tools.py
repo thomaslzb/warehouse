@@ -23,3 +23,17 @@ def exchange_string(s):
     s = re.sub(r"\s+", '-', s)
 
     return s
+
+
+def is_float(numstr):
+    """
+     字符串是否是浮点数(整数算小数)
+    """
+    flag = False
+    numStr = str(numstr).strip().lstrip('-').lstrip('+')  # 去除正数(+)、负数(-)符号
+    try:
+        numFloat = float(numstr)
+        flag = True
+    except:
+        flag = False
+    return flag

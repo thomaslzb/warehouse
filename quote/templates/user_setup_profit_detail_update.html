@@ -1,0 +1,120 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row mt">
+            <div class="col-lg-12">
+                <div class="form-panel">
+                      <h4><i class="fa fa-angle-right"></i> Update User Profit Rate - {{ user_info.email }}</h4>
+                    <hr>
+                    <div class=" form">
+                        <form class="cmxform form-horizontal style-form" id="commentForm" method="post"
+                              action="" >
+                            {% csrf_token %}
+                            <div class="form-group ">
+                                <label for="cname" class="control-label col-lg-1">User Name</label>
+                                <div class="col-lg-2">
+                                    <input class=" form-control" id="cname" name="username" minlength="2" value="{{ user_info.username }}" type="text" readonly />
+                                </div>
+                                <label for="cemail" class="control-label col-lg-1">First Name</label>
+                                <div class="col-lg-2">
+                                    <input class="form-control " id="first_name" name="first_name"  value="{{ user_info.first_name }}"  type="text" readonly />
+                                </div>
+                                <label for="cemail" class="control-label col-lg-1">Last Name</label>
+                                <div class="col-lg-2">
+                                    <input class="form-control " id="last_name"  name="last_name"  value="{{ user_info.last_name }}"   type="text" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <label for="cemail" class="control-label col-lg-1">Join Date</label>
+                                <div class="col-lg-2">
+                                    <input class="form-control " id="join_date" name="join_date"  value="{{ user_info.date_joined }}"  type="text" readonly />
+                                </div>
+                                <label for="login" class="control-label col-lg-1">Last Login</label>
+                                <div class="col-lg-2">
+                                    <input class="form-control " id="last_login"  name="last_login"  value="{{ user_info.last_login }}"   type="text" readonly />
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="container-fluid ">
+                                <label for="login" class="control-label col-lg-1">Region</label>
+                                <div class="col-lg-2">
+                                    {% if object.is_uk == 'UK' %}
+                                        <input class="form-control " id="last_login"  name="last_login"
+                                               value="{{ object.uk_area }}"   type="text" readonly />
+                                    {% else %}
+                                        <input class="form-control " id="last_login"  name="last_login"
+                                               value="{{ object.euro_area }}"   type="text" readonly />
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="container-fluid ">
+                                <ul class="list-group ">
+                                    {% if object.is_uk == 'UK' %}
+                                        <label class="list-group-item col-lg-2">European Profit Mode
+                                    {% else %}
+                                        <label class="list-group-item col-lg-2">UK Profit Mode
+                                    {% endif %}
+                                        <select class="form-control col-lg-2" id="profit_mode"  name="profit_mode" type="text" required >
+                                            <option value=0 {% if object.fix_amount != 0 %}selected{% endif %}>By FixAmount</option>
+                                            <option value=1 {% if object.fix_amount == 0 %}selected{% endif %}>By Percent</option>
+                                        </select>
+                                    </label>
+                                    <label class="list-group-item col-lg-2">Value
+                                        <input class="form-control col-lg-2 left" id="value"  name="value"
+                                               {% if object.fix_amount != 0 %}
+                                                   value="{{ object.fix_amount }}"
+                                               {% else %}
+                                                   value="{{ object.percent }}"
+                                               {% endif %}"
+                                        type="text" required  oninput="input_num(this)" />
+                                    </label>
+                                </ul>
+                            </div>
+                            <hr>
+                            {% if error %}
+                                <label class="alert alert-danger">Save Failure,  {{ error }}</label>
+                            {% endif %}
+                            <div class="form-group">
+                                <div class="col-lg-offset-1 col-lg-10">
+                                    <button class="btn btn-theme" type="submit">Save</button>
+                                    <a href="{% url 'profit-detail' user_info.id %}" class="btn btn-theme04" type="button">Cancel</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- /form-panel -->
+            </div>
+        </div>
+    </div>
+    <script>
+        function input_num(obj){
+            // 清除"数字"和"."以外的字符
+            obj.value = obj.value.replace(/[^\d.]/g,"");
+            // 验证第一个字符是数字
+            obj.value = obj.value.replace(/^\./g,"");
+            // 只保留第一个, 清除多余的
+            obj.value = obj.value.replace(/\.{2,}/g,".");
+            obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+            // 只能输入两个小数
+            obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');
+
+            //如果有小数点，不能为类似 1.10的金额
+            if(obj.value.indexOf(".")> 0  && obj.value.indexOf("0")>2){
+                obj.value= parseFloat(obj.value);
+            }
+            //如果有小数点，不能为类似 0.00的金额
+            if(obj.value.indexOf(".")> 0  && obj.value.lastIndexOf("0")>2){
+                obj.value= parseFloat(obj.value);
+            }
+             //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+            if (obj.value.indexOf(".") <= 0 && obj.value != "") {
+                obj.value = parseFloat(obj.value);
+            }
+          }
+
+	</script>
+
+{% endblock %}

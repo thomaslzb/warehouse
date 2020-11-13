@@ -105,5 +105,5 @@ class QuoteEuroForm(forms.Form):
 class UserSetupProfitForm(forms.ModelForm):
     class Meta:
         model = UserSetupProfit
-        fields = ['user', 'is_uk', 'uk_area', 'euro_area', 'fix_amount', 'percent', ]
-
+        # fields = ['user', 'is_uk', 'uk_area', 'euro_area', 'fix_amount', 'percent', ]
+        fields = ['fix_amount', 'percent', ]

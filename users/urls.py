@@ -19,6 +19,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('myprofile/<pk>/', MyProfile.as_view(), name='my_profile'),
     path('myprofile/update/<pk>/', MyProfileUpdateView.as_view(), name='my_profile_update'),
+
     # path('user/<pk>/pwdchange/', pwd_change, name='pwd_change'),
     # re_path(r'^register/$', views.register, name='register'),
     # re_path(r'^user/(?P<pk>\d+)/profile/update/$', views.profile_update, name='profile_update'),
