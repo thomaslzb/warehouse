@@ -1,29 +1,49 @@
 {% extends 'base-menu.html' %}
 {% load static %}
 {% block content %}
-    <div class="container-fluid">
-        <!-- Detail -->
-        <div class="content-panel">
-            <div class="row">
-                <div class="col-md-12 mt">
-                    <div class="container-fluid profile-text ">
-                        <h3>Sku files loading</h3>
-                        <hr>
-                        <div class="form-row">
-                            <form role="form" action="{% url 'sku:sku-file-upload' %}" method="post" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                <div>
-                                <input type="file" class="form-row" name="document" class="text-info">
-                                    </div>
-                                <div>
-                                <button type="submit" class="btn btn-primary" role="button">Upload file</button>
-                                    </div>
-                            </form>
+<div class="row mt container-fluid">
+    <div class="col-md-12">
+        <div class="form-panel">
+            <table class="table table-striped table-advance table-hover">
+                <h4><i class="fa fa-angle-right"></i> Sku files uploading To Database</h4>
+                <hr>
+                <div class="form-row">
+                    <form class="cmxform form-horizontal style-form" id="commentForm" role="form"
+                          action="{% url 'sku:sku-file-upload' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group form-inline">
+                            <div class="col-lg-3">
+                                 <input class="btn-file  form-control col-lg-5" type="file" name="document" >
+                            </div>
                         </div>
-                        <hr>
+                        <div class="form-group form-inline">
+                            <div class="col-lg-2">
+                                <input type="submit" class="btn btn-primary pull-left" value="Start Upload File">
+                                <a href="{% url 'sku:sku-list' %}"  class="btn btn-info pull-right" role="button">Back</a>
+                            </div>
+                        </div>
+                    </form>
+                    <br>
+                    <div class="form-panel">
+                        <div class="panel-heading">
+                            {% if error %}
+                                <h4 for="Error" class="text-danger">Uploading Failure: {{ error }}</h4>
+                            {% endif %}
+                        </div>
+                        <div class="form-row">
+                            <h4>Uploading Files Notes</h4>
+                            <ul>
+                                <li>The maximum file size for uploads in this system is <strong>5 MB</strong>.</li>
+                                <li>Only excel files (<strong>XLS, XLSX</strong>) are allowed in this system. Others file type will be restricted.</li>
+                                <br>
+                                <li>Excel Demo</li>
+                                <li><img src='{% static 'images/upload-sku-demo-file.png' %}' alt='Excel Demo' width='700' height='200'></li>
+                              </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </table>
         </div>
     </div>
+</div>
 {% endblock %}

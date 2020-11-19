@@ -1,0 +1,109 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+    <div class="row mt">
+    <div class="col-lg-12">
+        <div class="form-panel">
+            <h4><i class="fa fa-angle-right"></i>&nbsp;&nbsp;User Profiles Detail</h4>
+            <hr>
+            <div class=" form">
+                <form class="cmxform form-horizontal style-form" id="commentForm" method="post" action="">
+                    <div class="form-group ">
+                        <label for="email" class="control-label col-lg-1">Email: </label>
+                        <div class="col-lg-3">
+                            <input class=" form-control " id="email" name="email" minlength="2" type="email"
+                                   value="{{ user.email }}" readonly />
+                            {% if user_form.errors %}
+                               <label class="control-label text-danger">{{ user_form.errors.email.0 }}</label>
+                            {% endif %}
+                        </div>
+                        <label for="username" class="control-label col-lg-1">User Name</label>
+                        <div class="col-lg-2">
+                          <input class=" form-control" id="username" name="username" minlength="4"  type="text"
+                                 value="{{ user.username }}" readonly />
+                            {% if user_form.errors %}
+                               <label class="control-label text-danger">{{ user_form.errors.username.0 }}</label>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="first_name" class="control-label col-lg-1">First Name</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="first_name" name="first_name" value="{{ user.first_name }}" readonly />
+                        </div>
+                        <label for="last_name" class="control-label col-lg-1">Last Name</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="last_name"  name="last_name" value="{{ user.last_name }}" readonly />
+                        </div>
+                        <label for="telephone" class="control-label col-lg-1">Telephone</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="telephone" name="telephone" value="{{ user.profile.telephone }}" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="role" class="control-label col-lg-1">Role</label>
+                        <div class="col-lg-1">
+                            <input class="form-control col-lg-2" id="role"  name="role" type="text"
+                                    value="{{ user.profile.role }}" readonly >
+                        </div>
+                        {% if request.user.id != user.id %}
+                            <div class="col-lg-1">
+                                    <a href="{% url 'users:reset_password' user.id %} " class="btn btn-theme03" type="button">Reset User Password</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <hr>
+                    <div class="container-fluid ">
+                        <ul class="list-group ">
+                            <li class="list-group-item col-lg-2">Favorite Company
+                            <input class="form-control col-lg-2" id="fav_company"  name="fav_company" type="text"
+                                    value="{{ user.profile.favorite_company }}" readonly >
+                            </li>
+                        </ul>
+                    </div>
+                    <hr>
+                    <div class="container-fluid ">
+                        <ul class="list-group ">
+                            <label class="list-group-item col-lg-2">UK Profit Mode[{{ user_form.data.uk_mode }}]
+                                <input class="form-control col-lg-2" id="uk_mode"  name="uk_mode" type="text"
+                                        value="{% if user.profile.uk_fix_amount == 0  %}By Percent{% else %}By FixAmount{% endif %} " readonly >
+                            </label>
+                            <label class="list-group-item col-lg-2">Value
+                                {% if user.profile.uk_fix_amount == 0  %}
+                                    <input class="form-control col-lg-2 left" id="euro_value"  name="euro_value"  type="text" value=" {{ user.profile.uk_percent }}%" readonly>
+                                {% else %}
+                                    <input class="form-control col-lg-2 left" id="euro_value"  name="euro_value"  type="text" value=" {{ user.profile.uk_fix_amount }}" readonly>
+                                {% endif %}
+                            </label>
+                        </ul>
+                    </div>
+                    <div class="container-fluid ">
+                        <ul class="list-group ">
+                            <label class="list-group-item col-lg-2">European Profit Mode[{{ user.profile.euro_fix_amount }}]
+                                <input class="form-control col-lg-2" id="euro_mode"  name="euro_mode" type="text"
+                                        value="{% if user.profile.euro_fix_amount == 0  %}By Percent{% else %}By FixAmount{% endif %} " readonly >
+                            </label>
+                            <label class="list-group-item col-lg-2">Value
+                                {% if user.profile.euro_fix_amount == 0  %}
+                                    <input class="form-control col-lg-2 left" id="euro_value"  name="euro_value"  type="text" value=" {{ user.profile.euro_percent }}%" readonly>
+                                {% else %}
+                                    <input class="form-control col-lg-2 left" id="euro_value"  name="euro_value"  type="text" value=" {{ user.profile.euro_fix_amount }}" readonly>
+                                {% endif %}
+                            </label>
+                        </ul>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <div class="col-lg-offset-1">
+                            <a href="{% url 'user-list' %}" class="btn btn-primary" type="button">Back User List</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /form-panel -->
+    </div>
+    </div>
+    </div>
+{% endblock %}

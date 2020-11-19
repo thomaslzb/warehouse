@@ -48,9 +48,10 @@
                 <tr>
                     <td>
                         <a href="{% url 'sku:sku-update' sku.id %}">{{ sku.sku_no }}</a>
-{#                        {{ sku.sku_no }}#}
                     </td>
-                    <td>{{ sku.sku_name }}</td>
+                    <td>
+                        <a href="{% url 'sku:sku-update' sku.id %}">{{ sku.sku_name }}</a>
+                    </td>
                     <td>{{ sku.sku_length }}</td>
                     <td>{{ sku.sku_width }}</td>
                     <td>{{ sku.sku_high }}</td>

@@ -360,7 +360,6 @@ class ProfitDetailListView(ListView):
 class ProfitDetailUpdateView(UpdateView):
     model = UserSetupProfit
     template_name = 'user_setup_profit_detail_update.html'
-    # fields = ['fix_amount', 'percent', ]
     form_class = UserSetupProfitForm
 
     def get_context_data(self, **kwargs):

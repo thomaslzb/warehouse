@@ -9,16 +9,21 @@
 ------------      -------    --------    -----------
 14/08/2020 16:41   lzb       1.0         None
 """
-
+from django.contrib.auth.decorators import login_required
 from django.urls import re_path, path
-from .views import LoginView, LogoutView, MyProfile, pwd_change, MyProfileUpdateView
+from .views import LoginView, LogoutView, MyProfile, MyProfileUpdateView, \
+    AddUserView, EditUserView, ResetPwdView, ChangePwdView
 
 app_name = 'users'
 urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('myprofile/<pk>/', MyProfile.as_view(), name='my_profile'),
-    path('myprofile/update/<pk>/', MyProfileUpdateView.as_view(), name='my_profile_update'),
+    path('myprofile/<pk>/', login_required(MyProfile.as_view()), name='my_profile'),
+    path('myprofile/update/<pk>/', login_required(MyProfileUpdateView.as_view()), name='my_profile_update'),
+    path('new_user/', login_required(AddUserView.as_view()), name='add_new_user'),
+    path('edit_user/<pk>', login_required(EditUserView.as_view()), name='edit_quote_user'),
+    path('user/<pk>/reset-pwd/', login_required(ResetPwdView.as_view()), name='reset_password'),
+    path('user/<pk>/change-pwd/', login_required(ChangePwdView.as_view()), name='change_password'),
 
     # path('user/<pk>/pwdchange/', pwd_change, name='pwd_change'),
     # re_path(r'^register/$', views.register, name='register'),

@@ -1,19 +1,63 @@
-import math
 import datetime
+import math
+import xlrd
 
 from django.core.files.storage import FileSystemStorage
-from django.http import request
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, reverse
 from django.views import View
-from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.list import ListView
+from django.db import transaction
+
 from quote.models import EuroCountry
-from .models import Sku, SkuFileUpload
-from .forms import SkuUKForm, SkuEuroForm, SkuForm
 from quote.public_func import parcel
+from .forms import SkuUKForm, SkuEuroForm, SkuForm
+from .models import Sku, SkuFileUpload
 
 MY_MENU_LOCAL = 'MY_SKU'
+
+
+def valid_file(req):
+    error = ''
+    if not len(req.FILES):  # 判断是否有选择文件
+        error = 'Must selected a file to upload.'
+
+    try:
+        uploaded_file = req.FILES['document']
+        # 通过文件的后缀名，判断选择的文件是否是excel文件
+        if not uploaded_file.name.split('.')[-1].upper() in ['XLS', 'XLSX']:
+            error = 'Only excel file can be uploaded.'
+
+        # 判断选择的文件是否大于5M  1M = bytes/1000000
+        if uploaded_file.size / 1000000 > 5:
+            error = 'File size = ' + format(uploaded_file.size / 1000000, "4.2") + 'M. File size can not more than 5M.'
+    except:
+        error = 'Must selected a file to upload.'
+    return error
+
+
+def valid_excel_data(excel_table):
+    error = False
+    n_rows = excel_table.nrows  # 行数
+    for i in range(1, n_rows):
+        rowValues = excel_table.row_values(i)
+        try:
+            if float(rowValues[2]) <= 0:
+                error = True
+            if float(rowValues[3]) <= 0:
+                error = True
+            if float(rowValues[4]) <= 0:
+                error = True
+            if float(rowValues[5]) <= 0:
+                error = True
+        except:
+            error = True
+        if error:
+            break
+
+    return error
 
 
 class SkuCreateView(CreateView):
@@ -139,7 +183,8 @@ class SkuQuoteUK(View):
             company_code = 'UPS'
             l_ups = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk)
 
-            if (not l_hermes[5]) and (not l_pacelforce[5]) and (not l_dhl[5]) and (not l_dpd[5]) and (not l_ups[5]):
+            if (not l_hermes[10]) and (not l_pacelforce[10]) and (not l_dhl[10]) and (not l_dpd[10]) and (
+                    not l_ups[10]):
                 return render(request, 'quote_error.html', {'go': 'UK',
                                                             'length': length,
                                                             'width': width,
@@ -220,8 +265,9 @@ class SkuQuoteEURO(View):
             company_code = 'UPS'
             l_ups = parcel(company_code, length, width, high, weight, postcode, qty, user_id, is_uk, )
 
-            if (not l_hermes[5]) and (not l_pacelforce[5]) and (not l_dhl[5]) and (not l_dpd[5]) and (not l_ups[5]):
-                return render(request, 'quote_error.html', {'go': 'UK',
+            if (not l_hermes[10]) and (not l_pacelforce[10]) \
+                    and (not l_dhl[10]) and (not l_dpd[10]) and (not l_ups[10]):
+                return render(request, 'quote_error.html', {'go': 'EURO',
                                                             'length': length,
                                                             'width': width,
                                                             'high': high,
@@ -284,22 +330,51 @@ class SkuDeleteView(DeleteView):
 class SkuFileView(View):
     def get(self, request):
         return render(request, 'sku_upload.html', {
-                'menu_active': MY_MENU_LOCAL,
-                })
+            'menu_active': MY_MENU_LOCAL,
+        })
 
     def post(self, request):
-        uploaded_file = request.FILES['document']
-        fs = FileSystemStorage()
-        new_file_name = str(request.user.id) + '-' + uploaded_file.name
-        fs.save(new_file_name, uploaded_file)
-        sku_upload = SkuFileUpload()
-        sku_upload.file_name = new_file_name
-        sku_upload.custom_id = request.user.id
-        sku_upload.save()
-
-        return render(request, 'sku_upload.html', {
+        error = valid_file(request)
+        if error:
+            return render(request, 'sku_upload.html', {
                 'menu_active': MY_MENU_LOCAL,
-                })
+                'error': error,
+            })
+
+        uploaded_file = request.FILES['document']
+        excel_data = xlrd.open_workbook(filename=None, file_contents=uploaded_file.read())
+        table = excel_data.sheet_by_index(0)
+        n_rows = table.nrows  # 行数
+
+        if valid_excel_data(table):
+            error = 'Uploading Failure. length/width/high/weight must be more than zero. ' \
+                    'There are some error in the uploading File. '
+            return render(request, 'sku_upload.html', {
+                'menu_active': MY_MENU_LOCAL,
+                'error': error,
+            })
+        try:
+            with transaction.atomic():
+                for i in range(1, n_rows):
+                    rowValues = table.row_values(i)
+                    Sku.objects.create(sku_no=rowValues[0],
+                                       sku_name=rowValues[1],
+                                       sku_length=rowValues[2],
+                                       sku_width=rowValues[3],
+                                       sku_high=rowValues[4],
+                                       sku_weight=rowValues[5],
+                                       is_ok='1',
+                                       custom_id=request.user.id
+                                       )
+
+        except Exception as e:
+            error = 'Sku No can no be duplication. There are some error in the uploading Files. '
+            return render(request, 'sku_upload.html', {
+                'menu_active': MY_MENU_LOCAL,
+                'error': error,
+            })
+
+        return HttpResponseRedirect(reverse('sku:sku-list'))
 
 
 class UserListView(ListView):

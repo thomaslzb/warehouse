@@ -1,0 +1,138 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+    <div class="row mt">
+    <div class="col-lg-12">
+        <div class="form-panel">
+            <h4><i class="fa fa-angle-right"></i>&nbsp;&nbsp;Add New User Profiles</h4>
+            <hr>
+            <div class=" form">
+                <form class="cmxform form-horizontal style-form" id="commentForm" method="post" action="">
+                    {% csrf_token %}
+                    <div class="form-group ">
+                        <label for="email" class="control-label col-lg-1">Email: </label>
+                        <div class="col-lg-3">
+                            <input class=" form-control " id="email" name="email" minlength="2" type="email"
+                                   value="{{ user_form.data.email }}" required />
+                            {% if user_form.errors %}
+                               <label class="control-label text-danger">{{ user_form.errors.email.0 }}</label>
+                            {% endif %}
+                        </div>
+                        <label for="username" class="control-label col-lg-1">User Name</label>
+                        <div class="col-lg-2">
+                          <input class=" form-control" id="username" name="username" minlength="4"  type="text"
+                                 value="{{ user_form.data.username }}" required />
+                            {% if user_form.errors %}
+                               <label class="control-label text-danger">{{ user_form.errors.username.0 }}</label>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="first_name" class="control-label col-lg-1">First Name</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="first_name" name="first_name" value="{{ user_form.data.first_name }}" />
+                        </div>
+                        <label for="last_name" class="control-label col-lg-1">Last Name</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="last_name"  name="last_name" value="{{ user_form.data.last_name }}" />
+                        </div>
+                        <label for="telephone" class="control-label col-lg-1">Telephone</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="telephone" name="telephone" value="{{ user_form.data.telephone }}"/>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="Password" class="control-label col-lg-1">Password</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="password"  name="password" type="password"
+                                   value="{{ user_form.data.password }}" required/>
+                            {% if user_form.errors %}
+                               <label class="control-label text-danger">{{ user_form.errors.password.0 }}</label>
+                            {% endif %}
+                        </div>
+                        <label for="re_password" class="control-label col-lg-1">Repeat Password</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="re_password"  name="re_password" type="password"
+                                   value="{{ user_form.data.re_password }}" required/>
+                            {% if user_form.errors %}
+                               <label class="control-label text-danger">{{ user_form.errors.re_password.0 }}</label>
+                            {% endif %}
+                        </div>
+                        <label for="role" class="control-label col-lg-1">Role</label>
+                        <div class="col-lg-1">
+                            <select class="form-control col-lg-2" id="role"  name="role" type="text"
+                                    value="{{ user_form.data.role }}" required >
+                                <option value=2>User</option>
+                                <option value=1>Admin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="container-fluid ">
+                        <ul class="list-group ">
+                            <li class="list-group-item col-lg-2">Favorite Company
+                            <select class="form-control col-lg-2" id="fav_company"  name="fav_company" type="text"
+                                    value="{{ user_form.data.fav_company }}" required >
+                                {% for this_company in all_company %}
+
+                                    <option
+                                        {% if user_form.data.fav_company == this_company.name %}
+                                            selected
+                                        {% endif %}>
+                                        {{ this_company.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            </li>
+                        </ul>
+                    </div>
+                    <hr>
+                    <div class="container-fluid ">
+                        <ul class="list-group ">
+                            <label class="list-group-item col-lg-2">UK Profit Mode[{{ user_form.data.uk_mode }}]
+                                <select class="form-control col-lg-2" id="uk_mode"  name="uk_mode" type="text"
+                                        value="{{ user_form.data.uk_mode }}" required >
+                                    <option value=0 {% if user_form.data.uk_mode == '0' %}selected{% endif %}>By FixAmount</option>
+                                    <option value=1 {% if user_form.data.uk_mode == '1' %}selected{% endif %}>By Percent</option>
+                                </select>
+                            </label>
+                            <label class="list-group-item col-lg-2">Value
+                                <input class="form-control col-lg-2 left" id="uk_value"  name="uk_value"
+                                    type="text" value="{{ user_form.data.uk_value }}" required oninput="verify_decimal2(this)" />
+                            </label>
+                        </ul>
+                    </div>
+                    <div class="container-fluid ">
+                        <ul class="list-group ">
+                            <label class="list-group-item col-lg-2">European Profit Mode
+                                <select class="form-control col-lg-2" id="euro_mode"  name="euro_mode" type="text"
+                                        value="{{ user_form.data.euro_mode }}" required >
+                                    <option value=0 {% if user_form.data.euro_mode == '0' %}selected{% endif %}>By FixAmount</option>
+                                    <option value=1 {% if user_form.data.euro_mode == '1' %}selected{% endif %}>By Percent</option>
+                                </select>
+                            </label>
+                            <label class="list-group-item col-lg-2">Value
+                                <input class="form-control col-lg-2 left" id="euro_value"  name="euro_value"
+                                    type="text" value="{{ user_form.data.euro_value }}" required oninput="verify_decimal2(this)"/>
+                            </label>
+                        </ul>
+                    </div>
+                    <hr>
+                    {% if error %}
+                        <label class="alert alert-danger">Save Failure,  {{ error }}</label>
+                    {% endif %}
+                    <div class="form-group">
+                        <div class="col-lg-offset-1">
+                            <button class="btn btn-theme" type="submit">Save</button>
+                            <a href="{% url 'user-list' %}" class="btn btn-theme04" type="button">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /form-panel -->
+    </div>
+    </div>
+    </div>
+{% endblock %}

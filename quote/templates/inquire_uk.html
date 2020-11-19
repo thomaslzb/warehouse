@@ -13,7 +13,8 @@
                     <div class="col-lg-1">
                         <input type="text" class="form-control " id="length"
                                name="length"  placeholder="Length"
-                                value="{{ quote_uk_form.data.length }}">
+                                value="{{ quote_uk_form.data.length }}"
+                           oninput="onlyNumber(this)" required>
                         <span class="text-danger">
                             {{ quote_uk_form.errors.length.0 }}
                         </span>
@@ -21,7 +22,8 @@
                     <label for="width" class="control-label col-lg-1">&nbsp;&nbsp;&nbsp;Width(CM)</label>
                     <div class="col-lg-1">
                         <input type="text" class="form-control" id="width" name="width"
-                               placeholder="Width" value="{{ quote_uk_form.data.width }}">
+                               placeholder="Width" value="{{ quote_uk_form.data.width }}"
+                           oninput="onlyNumber(this)" required>
                         <span class="text-danger">
                             {{ quote_uk_form.errors.width.0 }}
                         </span>
@@ -29,7 +31,8 @@
                     <label for="high" class="control-label col-lg-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;High(CM)</label>
                     <div class="col-lg-1">
                         <input type="text" class="form-control" id="high" name="high"
-                               placeholder="High" value="{{ quote_uk_form.data.high }}">
+                               placeholder="High" value="{{ quote_uk_form.data.high }}"
+                           oninput="onlyNumber(this)" required>
                         <span class="text-danger">
                             {{ quote_uk_form.errors.high.0 }}
                         </span>
@@ -39,7 +42,8 @@
                     <label for="weight" class="control-label col-lg-1">&nbsp;&nbsp;Weight(KG)</label>
                     <div class="col-lg-1">
                     <input type="text" class="form-control " id="weight" name="weight"
-                           placeholder="Weight" value="{{ quote_uk_form.data.weight }}">
+                           placeholder="Weight" value="{{ quote_uk_form.data.weight }}"
+                           oninput="verify_decimal2(this)" required>
                     <span class="text-danger">
                         {{ quote_uk_form.errors.weight.0 }}
                     </span>
@@ -48,8 +52,9 @@
                 <div class="form-group">
                     <label for="quantity" class="control-label col-lg-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quantity</label>
                     <div class="col-lg-1">
-                    <input type="text" class="form-control " id="quantity" name="qty" placeholder="Quantify input"
-                           value="{% if quote_uk_form.data.qty == isnull %}1{% else %}{{ quote_uk_form.data.qty }}{% endif %}">
+                    <input type="text" class="form-control " id="quantity" name="qty" placeholder="Quantify"
+                           value="{% if quote_uk_form.data.qty == isnull %}1{% else %}{{ quote_uk_form.data.qty }}{% endif %}"
+                           onkeyup="onlyNumber(this)" onafterpaste="onlyNumber(this)" required>
                     <span class="text-danger">
                         {{ quote_uk_form.errors.qty.0 }}
                     </span>
@@ -82,6 +87,5 @@
             </form>
         </div>
     </div>
-
 </div>
 {% endblock %}

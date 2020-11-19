@@ -16,8 +16,14 @@
                             <input type="text" class="form-control " id="username" name="username"  placeholder="Username">
                             <input type="submit" class="btn btn-primary" value="Search">
                         </div>
+                        <hr>
                     </form>
-                <hr>
+                    <div class="form-group form-inline " class="col-md-3">
+                        <a href="{% url 'users:add_new_user' %}" >
+                            <button type="text" class="right-side btn btn-primary">
+                                <i class="fa fa-user">&nbsp;&nbsp;Add new user</i>
+                            </button></a>
+                    </div>
                 <thead>
                 <tr>
                     <th><i class="fa fa-envelope"></i> Email</th>
@@ -27,6 +33,7 @@
                     <th><i class="fa fa-gbp"></i> Favorite Company</th>
                     <th><i class="fa fa-table"></i> UK-Profit</th>
                     <th><i class="fa fa-table"></i> Euro-Profit</th>
+                    <th><i class="fa fa-table"></i> Role</th>
                     <th><i class="fa fa-table"></i> Last Login</th>
                     <th></th>
                 </tr>
@@ -35,9 +42,9 @@
                 {% for this_user in object_list %}
                 <tr>
                     <td>
-                        <a href="{% url 'profit-detail' this_user.user.id %}">{{ this_user.user.email }}</a>
+                        <a href="{% url 'users:edit_quote_user' this_user.user.id %}">{{ this_user.user.email }}</a>
                     </td>
-                    <td>{{ this_user.user.username }}</td>
+                    <td><a href="{% url 'users:edit_quote_user' this_user.user.id %}">{{ this_user.user.username }}</a></td>
                     <td>{{ this_user.user.first_name }} - {{ this_user.user.last_name }}</td>
                     <td>{{ this_user.telephone }}</td>
                     <td>{{ this_user.favorite_company }}</td>
@@ -55,10 +62,14 @@
                             Percent:{{ this_user.euro_percent }}%
                         {% endif %}
                     </td>
+                    <td>{{ this_user.user.profile.role }}</td>
                     <td>{{ this_user.user.last_login }}</td>
                     <td>
                         <a href="{% url 'profit-rate' this_user.user.id %}">
-                        <button class="btn btn-primary btn-xs"><i class="fa fa-files-o">&nbsp;&nbsp;&nbsp;Setup Profit&nbsp;Rating&nbsp;&nbsp;</i></button>
+                        <button class="btn btn-theme03 btn-xs"><i class="fa fa-files-o">&nbsp;&nbsp;&nbsp;Setup Profit&nbsp;Rating&nbsp;&nbsp;</i></button>
+                        </a>
+                        <a href="{% url 'profit-detail' this_user.user.id %}">
+                        <button class="btn btn-theme03 btn-xs"><i class="fa fa-list">&nbsp;&nbsp;&nbsp;Setup Detail&nbsp;&nbsp;</i></button>
                         </a>
                    </td>
                 </tr>
