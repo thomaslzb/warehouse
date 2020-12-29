@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'quote',
     'menu',
     'sku',
+    'lcl',
+    'air_freight',
 ]
 
 MIDDLEWARE = [

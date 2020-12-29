@@ -49,6 +49,18 @@
                               </a>
                           </li>
                     {% endif %}
+                      <li class="mt">
+                        <a {% if menu_active == 'AIR' %}class="active"{% endif %} href="{% url 'air_freight:air_quote'  %}">
+                          <i class="fa fa-dashboard"></i>
+                          <span>Air Freight</span>
+                          </a>
+                      </li>
+                      <li class="mt">
+                        <a {% if menu_active == 'LCL' %}class="active"{% endif %} href="{% url 'lcl:lcl_quote'%}">
+                          <i class="fa fa-dashboard"></i>
+                          <span>LCL Calculator</span>
+                          </a>
+                      </li>
             </ul>
             <!-- sidebar menu end-->
           </div>
