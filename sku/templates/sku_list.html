@@ -9,7 +9,7 @@
                 <hr>
                     <form role="search" action="" method="get">
                     {% csrf_token %}
-                    <div class="form-group form-inline " class="col-md-3">
+                    <div class="form-group form-inline ">
                         <label for="sku">&nbsp;SKU No.</label>
                         <input type="text" class="form-control " id="sku" name="s_sku"  placeholder="SKU No.">
                         <label for="product">&nbsp;Product Name: </label>
@@ -20,14 +20,14 @@
                             <option value="1" {% if value == '1' %}selected{% endif %}>OK</option>
                             <option value="0" {% if value == '0' %}selected{% endif %}>Suspend</option>
                             </select>
-                        <input type="submit" class="btn btn-primary" value="Search">
+                        <button type="submit" class="btn btn-primary">Search</button>
                     </div>
                 </form>
                 <hr>
                 <thead>
                 <tr>
                    <div class="panel-footer text-left">
-                       <a href="{% url 'sku:sku-create' %}" class="btn btn-info" role="button">Add New SKU</a>
+                       <a href="{% url 'sku:sku-create' %}" class="btn btn-info " role="button">Add New SKU</a>
                        <a href="{% url 'sku:sku-file-upload' %}" class="pull-right btn btn-success" role="button">Uploading SKU File</a>
                    </div>
                 </tr>
@@ -64,10 +64,10 @@
                     <td>{{ sku.last_update }}</td>
                     <td>
                         <a href="{% url 'sku:sku-detail-uk' sku.id %}">
-                        <button class="btn btn-success btn-xs"><i class="fa fa-plane">UK</i></button>
+                        <button class="btn btn-success btn-xs" style="float:left; margin-left: 0px"><i class="fa fa-plane">UK</i></button>
                         </a>
                         <a href="{% url 'sku:sku-detail-euro' sku.id %}">
-                        <button class="btn btn-primary btn-xs"><i class="fa fa-rocket">Euro</i></button>
+                        <button class="btn btn-primary btn-xs" style="float:left; margin-left: 16px"><i class="fa fa-rocket">Euro</i></button>
                         </a>
                    </td>
                 </tr>

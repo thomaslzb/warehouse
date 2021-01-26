@@ -17,5 +17,4 @@ app_name = 'air_freight'
 
 urlpatterns = [
     path('quote/', login_required(AirFreightView.as_view()), name='air_quote'),
-
 ]

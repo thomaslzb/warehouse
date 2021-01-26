@@ -23,6 +23,3 @@ def server_error(request, template_name='errors/page_500.html'):  # 500 - ok
     return render(request, template_name, status=500)
 
 
-def aa(request):
-    return render(request, 'aa.html')
-

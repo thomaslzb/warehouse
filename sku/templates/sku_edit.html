@@ -88,9 +88,9 @@
                 <hr>
                 <div class="panel-footer text-left">
                     <div class="panel-body">
-                    <a href="{% url 'sku:sku-list' %}"  class="btn btn-success" role="button"> Go Back </a>
-                    <input type="submit" class="btn btn-primary" value="Save">
-                    <a href="{% url 'sku:sku-delete' object.id %}" class="pull-right btn btn-danger" role="button">Delete</a>
+                    <a href="{% url 'sku:sku-list' %}"  class="btn btn-success col-lg-1" role="button" style="float:left; margin-left: 0px"> Go Back </a>
+                        <button type="submit" class="btn btn-primary col-lg-1" style="float:left; margin-left: 20px">Save</button>
+                    <a href="{% url 'sku:sku-delete' object.id %}" class="pull-right btn btn-danger col-lg-1" role="button">Delete</a>
                     </div>
                 </div>
             </form>

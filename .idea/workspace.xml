@@ -11,47 +11,48 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c41a3cb-ed83-4987-9df8-3e22d8167175" name="Default Changelist" comment="2020.08.25 EndUpdate">
-      <change afterPath="$PROJECT_DIR$/air_freight/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/air_freight/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/air_freight/apps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/air_freight/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/air_freight/migrations/0002_generalcharge_minimum_charge.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/air_freight/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/air_freight/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/air_freight/templates/air_freight.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/air_freight/tests.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/air_freight/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/air_freight/views.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/apps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/migrations/0002_auto_20201214_1619.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/migrations/0003_auto_20201214_1629.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/migrations/0004_charge24_charge48_generalcharge.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/migrations/0005_auto_20201215_0954.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/migrations/0006_charge48_postcode_description.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/migrations/0007_auto_20201215_1154.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/migrations/0008_lclcompany_lclzone_lclzonedetail_zonecharge.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/migrations/0009_remove_lclcompany_op_last_update.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/migrations/0010_auto_20201217_0847.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/migrations/0011_remove_lclcompany_op_last_update.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/migrations/0012_auto_20201217_0850.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/migrations/0013_lclcompany_op_last_update.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/migrations/0014_remove_lclzone_op_last_update.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/migrations/0015_auto_20201218_1114.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/migrations/0016_auto_20201218_1126.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/templates/lcl_input.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/tests.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lcl/views.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/quote/migrations/0002_auto_20201214_1600.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sku/migrations/0003_auto_20201214_1600.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/users/migrations/0008_auto_20201214_1600.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/air_freight/migrations/0003_const.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/air_freight/migrations/0004_auto_20210119_0947.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/air_freight/migrations/0005_auto_20210119_0949.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/air_freight/migrations/0006_zone48detail_service.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/air_freight/migrations/0007_auto_20210120_1135.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/air_freight/migrations/0008_auto_20210120_1137.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/air_freight/migrations/0009_customprofitrate.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/air_freight/migrations/0010_auto_20210121_0937.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/air_freight/migrations/0011_auto_20210121_1104.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lcl/migrations/0017_areadetail.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lcl/migrations/0018_lclareadetail.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lcl/templates/lcl_calculation.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/air_freight/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/air_freight/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/air_freight/templates/air_freight.html" beforeDir="false" afterPath="$PROJECT_DIR$/air_freight/templates/air_freight_result.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/air_freight/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/air_freight/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/air_freight/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/air_freight/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lcl/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/lcl/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lcl/templates/lcl_input.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lcl/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/lcl/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/quote/templates/base-menu.html" beforeDir="false" afterPath="$PROJECT_DIR$/quote/templates/base-menu.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quote/templates/index1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/quote/templates/index2.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/quote/templates/inquire_euro.html" beforeDir="false" afterPath="$PROJECT_DIR$/quote/templates/inquire_euro.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quote/templates/inquire_uk.html" beforeDir="false" afterPath="$PROJECT_DIR$/quote/templates/inquire_uk.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quote/templates/list_price.html" beforeDir="false" afterPath="$PROJECT_DIR$/quote/templates/list_price.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quote/templates/quote_error.html" beforeDir="false" afterPath="$PROJECT_DIR$/quote/templates/quote_error.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quote/templates/user_setup_profit.html" beforeDir="false" afterPath="$PROJECT_DIR$/quote/templates/user_setup_profit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quote/templates/user_setup_profit_detail_update.html" beforeDir="false" afterPath="$PROJECT_DIR$/quote/templates/user_setup_profit_detail_update.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quote/templates/users_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/quote/templates/users_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sku/templates/sku_confirm_delete.html" beforeDir="false" afterPath="$PROJECT_DIR$/sku/templates/sku_confirm_delete.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sku/templates/sku_create.html" beforeDir="false" afterPath="$PROJECT_DIR$/sku/templates/sku_create.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sku/templates/sku_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/sku/templates/sku_edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sku/templates/sku_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/sku/templates/sku_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/aa.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/templates/add_user_profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/users/templates/add_user_profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/templates/my_profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/users/templates/my_profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/templates/my_profile_update.html" beforeDir="false" afterPath="$PROJECT_DIR$/users/templates/my_profile_update.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/templates/user_change_password.html" beforeDir="false" afterPath="$PROJECT_DIR$/users/templates/user_change_password.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/templates/user_profile_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/users/templates/user_profile_detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/templates/user_profile_detail_reset_password.html" beforeDir="false" afterPath="$PROJECT_DIR$/users/templates/user_profile_detail_reset_password.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/templates/user_profile_detail_reset_password_success.html" beforeDir="false" afterPath="$PROJECT_DIR$/users/templates/user_profile_detail_reset_password_success.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/warehouse/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/warehouse/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/warehouse/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/warehouse/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/warehouse/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/warehouse/views.py" afterDir="false" />
@@ -74,7 +75,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/warehouse" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1faHcPwdKeUtwAsOk5ASPkC7B3y" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -92,7 +93,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../parcel" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
@@ -311,6 +312,21 @@
       <workItem from="1608540628054" duration="7505000" />
       <workItem from="1608641598408" duration="1159000" />
       <workItem from="1608724384921" duration="35000" />
+      <workItem from="1609752491661" duration="1937000" />
+      <workItem from="1609856413681" duration="51000" />
+      <workItem from="1610632076701" duration="1997000" />
+      <workItem from="1610701719920" duration="3924000" />
+      <workItem from="1610958863804" duration="33000" />
+      <workItem from="1610977456750" duration="6610000" />
+      <workItem from="1611045777546" duration="219000" />
+      <workItem from="1611046014904" duration="350000" />
+      <workItem from="1611046495721" duration="10025000" />
+      <workItem from="1611135282287" duration="12654000" />
+      <workItem from="1611218416277" duration="22564000" />
+      <workItem from="1611304970750" duration="17793000" />
+      <workItem from="1611563070320" duration="2473000" />
+      <workItem from="1611650609965" duration="1034000" />
+      <workItem from="1611664026415" duration="5180000" />
     </task>
     <task id="LOCAL-00001" summary="today">
       <created>1597329118319</created>
@@ -437,110 +453,75 @@
     <option name="LAST_COMMIT_MESSAGE" value="2020.08.25 EndUpdate" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="279" y="85" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1601366069743">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="279" y="85" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1601366069743" />
-    <state x="-1230" y="268" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1605188587245">
+    <state x="-1274" y="323" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1610632265742">
       <screen x="-1920" y="1" width="1920" height="1040" />
     </state>
-    <state x="-1230" y="268" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1605188587245" />
-    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1601048575674" />
+    <state x="-1274" y="323" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1610632265742" />
+    <state x="-1230" y="268" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1611329062535">
+      <screen x="-1920" y="1" width="1920" height="1040" />
+    </state>
+    <state x="-1230" y="268" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1611329062535" />
     <state width="682" height="466" key="DebuggerActiveHint" timestamp="1605533165764">
       <screen x="-1920" y="1" width="1920" height="1040" />
     </state>
     <state width="682" height="466" key="DebuggerActiveHint/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1605533165764" />
-    <state width="682" height="466" key="DebuggerActiveHint/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1601396496911" />
-    <state x="1075" y="173" key="FileChooserDialogImpl" timestamp="1608724417322">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="-845" y="174" key="FileChooserDialogImpl" timestamp="1611657657797">
+      <screen x="-1920" y="1" width="1920" height="1040" />
     </state>
-    <state x="-845" y="174" key="FileChooserDialogImpl/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1608109004192" />
+    <state x="-845" y="174" key="FileChooserDialogImpl/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1611657657797" />
     <state x="1075" y="173" key="FileChooserDialogImpl/0.0.1920.1040/-1920.1.1920.1040@0.0.1920.1040" timestamp="1608724417322" />
-    <state x="1075" y="173" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1601365620225" />
-    <state x="2995" y="173" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1601046628258" />
-    <state x="1075" y="173" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1601737738205" />
-    <state width="1877" height="391" key="GridCell.Tab.0.bottom" timestamp="1608573629244">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="350" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1601998849744" />
-    <state width="1877" height="372" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1601546130302" />
-    <state width="1877" height="391" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1608230922506" />
-    <state width="1877" height="391" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.1.1920.1040@0.0.1920.1040" timestamp="1608573629244" />
-    <state width="1877" height="372" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.14.1920.1040@-1920.14.1920.1040" timestamp="1601656178966" />
-    <state width="1877" height="372" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1601483004718" />
-    <state width="1877" height="350" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1601834772910" />
-    <state width="1877" height="372" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1601888506622" />
-    <state width="1877" height="391" key="GridCell.Tab.0.center" timestamp="1608573629244">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="350" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1601998849744" />
-    <state width="1877" height="372" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1601546130302" />
-    <state width="1877" height="391" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1608230922504" />
-    <state width="1877" height="391" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.1.1920.1040@0.0.1920.1040" timestamp="1608573629244" />
-    <state width="1877" height="372" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.14.1920.1040@-1920.14.1920.1040" timestamp="1601656178966" />
-    <state width="1877" height="372" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1601483004717" />
-    <state width="1877" height="350" key="GridCell.Tab.0.center/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1601834772910" />
-    <state width="1877" height="372" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1601888506622" />
-    <state width="1877" height="391" key="GridCell.Tab.0.left" timestamp="1608573629243">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="350" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1601998849744" />
-    <state width="1877" height="372" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1601546130302" />
-    <state width="1877" height="391" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1608230922503" />
-    <state width="1877" height="391" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.1.1920.1040@0.0.1920.1040" timestamp="1608573629243" />
-    <state width="1877" height="372" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.14.1920.1040@-1920.14.1920.1040" timestamp="1601656178966" />
-    <state width="1877" height="372" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1601483004717" />
-    <state width="1877" height="350" key="GridCell.Tab.0.left/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1601834772909" />
-    <state width="1877" height="372" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1601888506622" />
-    <state width="1877" height="391" key="GridCell.Tab.0.right" timestamp="1608573629244">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="350" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1601998849744" />
-    <state width="1877" height="372" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1601546130302" />
-    <state width="1877" height="391" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1608230922505" />
-    <state width="1877" height="391" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.1.1920.1040@0.0.1920.1040" timestamp="1608573629244" />
-    <state width="1877" height="372" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.14.1920.1040@-1920.14.1920.1040" timestamp="1601656178966" />
-    <state width="1877" height="372" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1601483004718" />
-    <state width="1877" height="350" key="GridCell.Tab.0.right/0.0.1920.1040/1920.1.1920.1040@0.0.1920.1040" timestamp="1601834772910" />
-    <state width="1877" height="372" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1601888506622" />
-    <state width="1877" height="437" key="GridCell.Tab.1.bottom" timestamp="1605799726504">
+    <state width="1877" height="303" key="GridCell.Tab.0.bottom" timestamp="1611591019044">
       <screen x="-1920" y="1" width="1920" height="1040" />
     </state>
-    <state width="1877" height="437" key="GridCell.Tab.1.bottom/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1605799726504" />
+    <state width="1877" height="303" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1611591019044" />
+    <state width="1877" height="303" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.1.1920.1040@0.0.1920.1040" timestamp="1610733419451" />
+    <state width="1877" height="303" key="GridCell.Tab.0.center" timestamp="1611591019044">
+      <screen x="-1920" y="1" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="303" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1611591019044" />
+    <state width="1877" height="303" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.1.1920.1040@0.0.1920.1040" timestamp="1610733419451" />
+    <state width="1877" height="303" key="GridCell.Tab.0.left" timestamp="1611591019044">
+      <screen x="-1920" y="1" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="303" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1611591019044" />
+    <state width="1877" height="303" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.1.1920.1040@0.0.1920.1040" timestamp="1610733419451" />
+    <state width="1877" height="303" key="GridCell.Tab.0.right" timestamp="1611591019044">
+      <screen x="-1920" y="1" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="303" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1611591019044" />
+    <state width="1877" height="303" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.1.1920.1040@0.0.1920.1040" timestamp="1610733419451" />
+    <state width="1877" height="437" key="GridCell.Tab.1.bottom" timestamp="1611252653063">
+      <screen x="-1920" y="1" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="437" key="GridCell.Tab.1.bottom/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1611252653063" />
     <state width="1877" height="427" key="GridCell.Tab.1.bottom/0.0.1920.1040/-1920.1.1920.1040@0.0.1920.1040" timestamp="1604659697922" />
-    <state width="1877" height="437" key="GridCell.Tab.1.center" timestamp="1605799726504">
+    <state width="1877" height="437" key="GridCell.Tab.1.center" timestamp="1611252653062">
       <screen x="-1920" y="1" width="1920" height="1040" />
     </state>
-    <state width="1877" height="437" key="GridCell.Tab.1.center/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1605799726504" />
+    <state width="1877" height="437" key="GridCell.Tab.1.center/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1611252653062" />
     <state width="1877" height="427" key="GridCell.Tab.1.center/0.0.1920.1040/-1920.1.1920.1040@0.0.1920.1040" timestamp="1604659697922" />
-    <state width="1877" height="437" key="GridCell.Tab.1.left" timestamp="1605799726504">
+    <state width="1877" height="437" key="GridCell.Tab.1.left" timestamp="1611252653062">
       <screen x="-1920" y="1" width="1920" height="1040" />
     </state>
-    <state width="1877" height="437" key="GridCell.Tab.1.left/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1605799726504" />
+    <state width="1877" height="437" key="GridCell.Tab.1.left/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1611252653062" />
     <state width="1877" height="427" key="GridCell.Tab.1.left/0.0.1920.1040/-1920.1.1920.1040@0.0.1920.1040" timestamp="1604659697922" />
-    <state width="1877" height="437" key="GridCell.Tab.1.right" timestamp="1605799726504">
+    <state width="1877" height="437" key="GridCell.Tab.1.right" timestamp="1611252653062">
       <screen x="-1920" y="1" width="1920" height="1040" />
     </state>
-    <state width="1877" height="437" key="GridCell.Tab.1.right/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1605799726504" />
+    <state width="1877" height="437" key="GridCell.Tab.1.right/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1611252653062" />
     <state width="1877" height="427" key="GridCell.Tab.1.right/0.0.1920.1040/-1920.1.1920.1040@0.0.1920.1040" timestamp="1604659697922" />
     <state x="-1359" y="137" key="SettingsEditor" timestamp="1606220630238">
       <screen x="-1920" y="1" width="1920" height="1040" />
     </state>
     <state x="-1359" y="137" key="SettingsEditor/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1606220630238" />
-    <state x="336" y="72" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1600433166018" />
-    <state width="970" height="530" key="XDebugger.FullValuePopup" timestamp="1605190865167">
+    <state width="970" height="530" key="XDebugger.FullValuePopup" timestamp="1611227124188">
       <screen x="-1920" y="1" width="1920" height="1040" />
     </state>
-    <state width="970" height="530" key="XDebugger.FullValuePopup/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1605190865167" />
-    <state width="970" height="530" key="XDebugger.FullValuePopup/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1601291076749" />
-    <state x="876" y="32" width="750" height="1008" key="find.popup" timestamp="1601301198156">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="970" height="530" key="XDebugger.FullValuePopup/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1611227124188" />
+    <state x="-1297" y="226" width="672" height="678" key="search.everywhere.popup" timestamp="1611139380788">
+      <screen x="-1920" y="1" width="1920" height="1040" />
     </state>
-    <state x="876" y="32" width="750" height="1008" key="find.popup/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1601301198156" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1600782990529">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1600782990529" />
+    <state x="-1297" y="226" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1611139380788" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -554,6 +535,16 @@
           <url>file://$PROJECT_DIR$/quote/views.py</url>
           <line>141</line>
           <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/air_freight/views.py</url>
+          <line>69</line>
+          <option name="timeStamp" value="42" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/air_freight/views.py</url>
+          <line>11</line>
+          <option name="timeStamp" value="50" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

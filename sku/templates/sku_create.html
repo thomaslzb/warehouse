@@ -86,13 +86,10 @@
                     </div>
                 </div>
                 <hr>
-                <div class="panel-footer text-left">
+                <div class="text-left">
                     <div class="panel-body">
-                    <a href="{% url 'sku:sku-list' %}"  class="btn btn-success" role="button"> Go Back </a>
-                        <span class="pull-right">
-{#                            <a href="{% url 'sku:sku-create-add' %}"  class="btn btn-primary" role="button">Save and add another</a>#}
-                            <input type="submit" class="btn btn-primary" value="Save">
-                        </span>
+                    <a href="{% url 'sku:sku-list' %}"  class="btn btn-success col-lg-1" role="button"> Go Back </a>
+                        <button type="submit" class="btn btn-info col-lg-1 pull-right">Save</button>
                     </div>
                 </div>
             </form>

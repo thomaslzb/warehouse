@@ -65,11 +65,11 @@ class GeneralCharge(models.Model):
 class Charge24(models.Model):
     id = models.AutoField(primary_key=True)
     zone = models.ForeignKey('AirZone24', to_field='id', on_delete=models.CASCADE, verbose_name="Zone24 Name")
-    minimum = models.IntegerField(null=False, default=0, verbose_name='Minimum')
-    maximum = models.IntegerField(null=False, default=0, verbose_name='maximum')
+    minimum = models.DecimalField(default=0, blank=True, max_digits=8, decimal_places=2, verbose_name='Minimum')
+    maximum = models.DecimalField(default=0, blank=True, max_digits=8, decimal_places=2, verbose_name='maximum')
     unit_description = models.CharField(max_length=20, null=False, default='KILOS', verbose_name='Unit')
-    basic_price = models.DecimalField(default=0, blank=True, max_digits=6, decimal_places=2, verbose_name='Base Price')
-    plus_price = models.DecimalField(default=0, blank=True, max_digits=6, decimal_places=2, verbose_name='Base Price')
+    basic_price = models.DecimalField(default=0, blank=True, max_digits=8, decimal_places=2, verbose_name='Base Price')
+    plus_price = models.DecimalField(default=0, blank=True, max_digits=8, decimal_places=2, verbose_name='Base Price')
 
     class Meta:
         db_table = "air_charge24"
@@ -79,15 +79,45 @@ class Charge24(models.Model):
 class Charge48(models.Model):
     id = models.AutoField(primary_key=True)
     zone = models.ForeignKey('AirZone48', to_field='id', on_delete=models.CASCADE, verbose_name="Zone48 Name")
-    minimum = models.IntegerField(null=False, default=0, verbose_name='Minimum')
-    maximum = models.IntegerField(null=False, default=0, verbose_name='maximum')
+    minimum = models.DecimalField(default=0, blank=True, max_digits=8, decimal_places=2, verbose_name='Minimum')
+    maximum = models.DecimalField(default=0, blank=True, max_digits=8, decimal_places=2, verbose_name='maximum')
     unit_description = models.CharField(max_length=20, null=False, default='CBB', verbose_name='Unit')
-    basic_price = models.DecimalField(default=0, blank=True, max_digits=6, decimal_places=2, verbose_name='Base Price')
-    plus_price = models.DecimalField(default=0, blank=True, max_digits=6, decimal_places=2, verbose_name='Base Price')
+    basic_price = models.DecimalField(default=0, blank=True, max_digits=8, decimal_places=2, verbose_name='Base Price')
+    plus_price = models.DecimalField(default=0, blank=True, max_digits=8, decimal_places=2, verbose_name='Plus Price')
     postcode_description = models.CharField(max_length=200, null=False, default='',
                                             verbose_name='Postcode description')
+    service = models.CharField(max_length=10, null=False, default='48Hours', verbose_name='Service')
 
     class Meta:
         db_table = "air_charge48"
         verbose_name = "48Hour Charge"
+
+
+# 记录转换单位的常量
+class Const(models.Model):
+    id = models.AutoField(primary_key=True)
+    unit_item = models.CharField(max_length=10, null=False, default='CMB24HR', verbose_name='Unit')
+    unit_change = models.DecimalField(default=0, blank=True, max_digits=6, decimal_places=2, verbose_name='Change')
+    remark = models.CharField(max_length=50, null=False, default=' ', verbose_name='Remark')
+
+    class Meta:
+        db_table = "air_const"
+        verbose_name = "Air Const"
+
+
+class CustomProfitRate(models.Model):
+    id = models.AutoField(primary_key=True)
+    item_name = models.CharField(max_length=10, null=False, default='24Hours', verbose_name='Item_name')
+    volume_minimum = models.DecimalField(default=0, blank=True, max_digits=8, decimal_places=2,
+                                         verbose_name='volume_minimum')
+    volume_maximum = models.DecimalField(default=0, blank=True, max_digits=8, decimal_places=2,
+                                         verbose_name='volume_maximum')
+    fix_profit = models.DecimalField(default=0, blank=True, max_digits=8, decimal_places=2,
+                                     verbose_name='volume_maximum')
+    percent_profit = models.DecimalField(default=0, blank=True, max_digits=8, decimal_places=2,
+                                         verbose_name='fix profit')
+
+    class Meta:
+        db_table = "air_custom_profit_rate"
+        verbose_name = "Air Custom Profit Rate"
 

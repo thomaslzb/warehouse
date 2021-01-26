@@ -18,9 +18,9 @@
                         </div>
                         <hr>
                     </form>
-                    <div class="form-group form-inline " class="col-md-3">
+                    <div class="form-group" >
                         <a href="{% url 'users:add_new_user' %}" >
-                            <button type="text" class="right-side btn btn-primary">
+                            <button type="text" class="right-side btn btn-primary ">
                                 <i class="fa fa-user">&nbsp;&nbsp;Add new user</i>
                             </button></a>
                     </div>
@@ -66,10 +66,10 @@
                     <td>{{ this_user.user.last_login }}</td>
                     <td>
                         <a href="{% url 'profit-rate' this_user.user.id %}">
-                        <button class="btn btn-theme03 btn-xs"><i class="fa fa-files-o">&nbsp;&nbsp;&nbsp;Setup Profit&nbsp;Rating&nbsp;&nbsp;</i></button>
+                        <button class="btn btn-theme03 btn-xs"  style="float:left; margin-left: 0px"><i class="fa fa-files-o">&nbsp;&nbsp;&nbsp;Setup Profit&nbsp;Rating&nbsp;&nbsp;</i></button>
                         </a>
                         <a href="{% url 'profit-detail' this_user.user.id %}">
-                        <button class="btn btn-theme03 btn-xs"><i class="fa fa-list">&nbsp;&nbsp;&nbsp;Setup Detail&nbsp;&nbsp;</i></button>
+                        <button class="btn btn-theme03 btn-xs"  style="float:left; margin-left: 20px"><i class="fa fa-list">&nbsp;&nbsp;&nbsp;Setup Detail&nbsp;&nbsp;</i></button>
                         </a>
                    </td>
                 </tr>

@@ -6,64 +6,59 @@
     {% block aside-menu %}
         <!--sidebar start-->
         <aside>
-          <div id="sidebar" class="nav-collapse ">
-            <!-- sidebar menu start-->
-            <ul class="sidebar-menu" id="nav-accordion">
-              <p class="centered"><a href="profile.html"><img src="{% static 'new/img/friends/fr-02.jpg' %}" class="img-circle" width="80"></a></p>
-              <h5 class="centered">{{ request.user }}</h5>
-                      <li class="mt">
-                        <a {% if menu_active == 'UK' %}class="active"{% endif %} href="{% url 'inquire-uk' %}">
-                          <i class="fa fa-dashboard"></i>
-                          <span>Deliver To UK</span>
-                          </a>
-                      </li>
-                      <li class="mt">
-                        <a {% if menu_active == 'EURO' %}class="active"{% endif %}  href="{% url 'inquire-euro' %}">
-                          <i class="fa fa-dashboard"></i>
-                          <span>Deliver To European</span>
-                          </a>
-                      </li>
-                      <li class="mt">
-                        <a {% if menu_active == 'MY_SKU' %}class="active"{% endif %}  href="{% url 'sku:sku-list' %}">
-                          <i class="fa fa-dashboard"></i>
-                          <span>My SKU</span>
-                          </a>
-                      </li>
-{#                      <li class="mt">#}
-{#                        <a {% if menu_active == 'Price List' %}class="active"{% endif %}  href="">#}
-{#                          <i class="fa fa-dashboard"></i>#}
-{#                          <span>Price List</span>#}
-{#                          </a>#}
-{#                      </li>#}
-                      <li class="mt">
-                        <a {% if menu_active == 'MY_PROFILE' %}class="active"{% endif %}  href="{% url 'users:my_profile_update'  request.user.id %}">
-                          <i class="fa fa-dashboard"></i>
-                          <span>My Profile</span>
-                          </a>
-                      </li>
-                      {% if request.user.profile.role_id == 1 %}
+            <div id="sidebar" class="nav-collapse ">
+                  <!-- sidebar menu start-->
+                  <ul class="sidebar-menu" id="nav-accordion">
+                      <p class="centered"><a href="{% url 'users:my_profile_update'  request.user.id %}">
+                          <img src="{% static 'new/img/friends/fr-02.jpg' %}" class="img-circle" width="80"></a></p>
+                      <h5 class="centered"><a href="{% url 'users:my_profile_update'  request.user.id %}">{{ request.user }}</a></h5>
                           <li class="mt">
-                            <a {% if menu_active == 'USERS' %}class="active"{% endif %}  href="{% url 'user-list' %}">
-                              <i class="fa fa-dashboard"></i>
-                              <span>User Maintenance</span>
+                              <a {% if menu_active == 'UK' %}class="active"{% endif %} href="{% url 'inquire-uk' %}">
+                                  <i class="fa fa-dashboard"></i>
+                                  <span>Deliver To UK</span>
                               </a>
                           </li>
-                    {% endif %}
-                      <li class="mt">
-                        <a {% if menu_active == 'AIR' %}class="active"{% endif %} href="{% url 'air_freight:air_quote'  %}">
-                          <i class="fa fa-dashboard"></i>
-                          <span>Air Freight</span>
-                          </a>
-                      </li>
-                      <li class="mt">
-                        <a {% if menu_active == 'LCL' %}class="active"{% endif %} href="{% url 'lcl:lcl_quote'%}">
-                          <i class="fa fa-dashboard"></i>
-                          <span>LCL Calculator</span>
-                          </a>
-                      </li>
-            </ul>
-            <!-- sidebar menu end-->
-          </div>
+                          <li class="mt">
+                              <a {% if menu_active == 'EURO' %}class="active"{% endif %}  href="{% url 'inquire-euro' %}">
+                                  <i class="fa fa-dashboard"></i>
+                                  <span>Deliver To European</span>
+                              </a>
+                          </li>
+                          <li class="mt">
+                              <a {% if menu_active == 'MY_SKU' %}class="active"{% endif %}  href="{% url 'sku:sku-list' %}">
+                                  <i class="fa fa-dashboard"></i>
+                                  <span>My SKU</span>
+                              </a>
+                          </li>
+                          <li class="mt">
+                              <a {% if menu_active == 'AIR' %}class="active"{% endif %} href="{% url 'air_freight:air_quote'  %}">
+                                  <i class="fa fa-dashboard"></i>
+                                  <span>Air Freight</span>
+                              </a>
+                          </li>
+                          <li class="mt">
+                              <a {% if menu_active == 'LCL' %}class="active"{% endif %} href="{% url 'lcl:lcl_quote'%}">
+                                  <i class="fa fa-dashboard"></i>
+                                  <span>LCL Calculator</span>
+                              </a>
+                          </li>
+                          <li class="mt">
+                              <a {% if menu_active == 'MY_PROFILE' %}class="active"{% endif %}  href="{% url 'users:my_profile_update'  request.user.id %}">
+                                  <i class="fa fa-dashboard"></i>
+                                  <span>My Profile</span>
+                              </a>
+                          </li>
+                          {% if request.user.profile.role_id == 1 %}
+                              <li class="mt">
+                                  <a {% if menu_active == 'USERS' %}class="active"{% endif %}  href="{% url 'user-list' %}">
+                                      <i class="fa fa-dashboard"></i>
+                                      <span>User Maintenance</span>
+                                  </a>
+                              </li>
+                          {% endif %}
+                  </ul>
+                  <!-- sidebar menu end-->
+            </div>
         </aside>
         <!--sidebar end-->
     {% endblock %}

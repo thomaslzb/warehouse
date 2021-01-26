@@ -42,6 +42,30 @@ class LclZoneDetail(models.Model):
         verbose_name = "Lcl Zone Detail"
 
 
+class LclAreaDetail(models.Model):
+    id = models.AutoField(primary_key=True)
+    area_id = models.ForeignKey('AreaDetail', to_field='id', on_delete=models.CASCADE, verbose_name="Area Name")
+    begin = models.CharField(max_length=10, null=False, default='', verbose_name='Begin')
+    end = models.CharField(max_length=10, null=False, default='', verbose_name='End')
+
+    class Meta:
+        db_table = "lcl_area_detail"
+        verbose_name = "Lcl Area Detail"
+
+
+class AreaDetail(models.Model):
+    id = models.AutoField(primary_key=True)
+    zone_id = models.ForeignKey('LclZone', to_field='id', on_delete=models.CASCADE, verbose_name="Zone Name")
+    area_name = models.CharField(max_length=50, null=False, default='', verbose_name='Area Name')
+
+    class Meta:
+        db_table = "lcl_zone_area"
+        verbose_name = "Lcl Zone Area"
+
+    def __str__(self):
+        return '{0}'.format(self.area_name)
+
+
 class ZoneCharge(models.Model):
     id = models.AutoField(primary_key=True)
     zone = models.ForeignKey('LclZone', to_field='id', on_delete=models.CASCADE, verbose_name="Zone Name")
