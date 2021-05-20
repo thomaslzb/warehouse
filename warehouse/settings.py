@@ -100,7 +100,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',  # 数据库引擎
         'NAME': 'ukdcg',  # 数据库名称
         'USER': 'ukdcg',  # 链接数据库的用户名
-        'PASSWORD': 'ukthomas',  # 链接数据库的密码
+        'PASSWORD': '',  # 链接数据库的密码
         'HOST': '127.0.0.1',  # mysql服务器的域名和ip地址
         'PORT': '3306',  # mysql的一个端口号,默认是3306
     }
@@ -167,7 +167,7 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "slot_notify@dcg-uk.co.uk"
 EMAIL_FROM = "slot_notify@dcg-uk.co.uk"
-EMAIL_HOST_PASSWORD = "Yhnedc456789"
+EMAIL_HOST_PASSWORD = ""
 
 # django_simple_captcha 验证码配置其他配置项查看文档
 # 默认格式
