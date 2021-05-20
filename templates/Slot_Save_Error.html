@@ -1,0 +1,42 @@
+{% extends 'warehouse_base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <tr>
+            <td>
+                <h2><span class="text-info"> Save Failure. </span></h2>
+            </td>
+        </tr>
+        <table class="table">
+        <tr>
+            <td>
+                <div class="text-info">
+                    {% if workdate != "" %}Delivery Date: {{ workdate }}{% endif %}
+                    {% if slottime != "" %}Time: {{ slottime }}{% endif %}
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h3>There are some Error: </h3>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <div class="text-danger">
+                {{ ErrorMsg }}
+            </div>
+            </td>
+        <tr>
+            <td>
+            <div class="panel-footer text-left">
+                  <div class="panel-body ">
+                        <a href="{% url 'slot:slot_list' %}?searching_date={{ searching_date }} " class="btn btn-primary" role="button">Back</a>
+                  </div>
+            </div>
+            </td>
+        </tr>
+        </table>
+    </div>
+{% endblock %}
+

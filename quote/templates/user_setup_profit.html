@@ -1,0 +1,107 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row mt">
+            <div class="col-lg-12">
+                <div class="form-panel">
+                    <h4><i class="fa fa-angle-right"></i> Setup User Profit Rate - {{ user.email }}</h4>
+                    <hr>
+                    <div class=" form">
+                        <form class="cmxform form-horizontal style-form" id="commentForm" method="post" action="{% url 'quote:profit-rate' user.id %}">
+                            {% csrf_token %}
+                            <div class="form-group ">
+                                <label for="cname" class="control-label col-lg-1">User Name</label>
+                                <div class="col-lg-2">
+                                    <input class=" form-control" id="cname" name="username" minlength="2" value="{{ user.username }}" type="text" readonly />
+                                </div>
+                                <label for="cemail" class="control-label col-lg-1">First Name</label>
+                                <div class="col-lg-2">
+                                    <input class="form-control " id="first_name" name="first_name"  value="{{ user.first_name }}"  type="text" readonly />
+                                </div>
+                                <label for="cemail" class="control-label col-lg-1">Last Name</label>
+                                <div class="col-lg-2">
+                                    <input class="form-control " id="last_name"  name="last_name"  value="{{ user.last_name }}"   type="text" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <label for="cemail" class="control-label col-lg-1">Join Date</label>
+                                <div class="col-lg-2">
+                                    <input class="form-control " id="join_date" name="join_date"  value="{{ user.date_joined }}"  type="text" readonly />
+                                </div>
+                                <label for="login" class="control-label col-lg-1">Last Login</label>
+                                <div class="col-lg-2">
+                                    <input class="form-control " id="last_login"  name="last_login"  value="{{ user.last_login }}"   type="text" readonly />
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="container-fluid ">
+                                <ul class="list-group ">
+                                    <li class="list-group-item col-lg-2">Favorite Company
+                                    <select class="form-control col-lg-2" id="fav_company"  name="fav_company" type="text" required >
+                                        {% for this_company in all_company %}
+                                            <option value={{ this_company.id }} {% if this_company.id == user.profile.favorite_company_id %}selected{% endif %} >
+                                                {{ this_company.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    </li>
+                                </ul>
+                            </div>
+                            <hr>
+                            <div class="container-fluid ">
+                                <ul class="list-group ">
+                                    <label class="list-group-item col-lg-2">UK Profit Mode
+                                        <select class="form-control col-lg-2" id="uk_mode"  name="uk_mode" type="text" required >
+                                            <option value=0 {% if user.profile.uk_fix_amount != 0 %}selected{% endif %}>By FixAmount</option>
+                                            <option value=1 {% if user.profile.uk_fix_amount == 0 %}selected{% endif %}>By Percent</option>
+                                        </select>
+                                    </label>
+                                    <label class="list-group-item col-lg-2">Value
+                                        <input class="form-control col-lg-2 left" id="uk_value"  name="uk_value"
+                                               {% if user.profile.uk_fix_amount != 0 %}
+                                                   value="{{ user.profile.uk_fix_amount }}"
+                                               {% else %}
+                                                   value="{{ user.profile.uk_percent }}"
+                                               {% endif %}"
+                                        type="text" required oninput="verify_decimal2(this)" />
+                                    </label>
+                                </ul>
+                            </div>
+                            <hr>
+                            <div class="container-fluid ">
+                                <ul class="list-group ">
+                                    <label class="list-group-item col-lg-2">European Profit Mode
+                                        <select class="form-control col-lg-2" id="euro_mode"  name="euro_mode" type="text" required >
+                                            <option value=0 {% if user.profile.euro_fix_amount != 0 %}selected{% endif %}>By FixAmount</option>
+                                            <option value=1 {% if user.profile.euro_fix_amount == 0 %}selected{% endif %}>By Percent</option>
+                                        </select>
+                                    </label>
+                                    <label class="list-group-item col-lg-2">Value
+                                        <input class="form-control col-lg-2 left" id="euro_value"  name="euro_value"
+                                               {% if user.profile.euro_fix_amount != 0 %}
+                                                   value="{{ user.profile.euro_fix_amount }}"
+                                               {% else %}
+                                                   value="{{ user.profile.euro_percent }}"
+                                               {% endif %}"
+                                        type="text" required oninput="verify_decimal2(this)"/>
+                                    </label>
+                                </ul>
+                            </div>
+                            <hr>
+                            {% if error %}
+                                <label class="alert alert-danger">Save Failure,  {{ error }}</label>
+                            {% endif %}
+                            <div class="form-group">
+                                <div class="col-lg-offset-1 col-lg-10">
+                                    <button class="btn btn-info col-lg-1" type="submit" style="float:left; margin-left: 0px">Save</button>
+                                    <a href="{% url 'quote:user-list' %}" class="btn btn-theme04 col-lg-1" type="button" style="float:left; margin-left: 20px">Cancel</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- /form-panel -->
+            </div>
+        </div>
+    </div>
+{% endblock %}

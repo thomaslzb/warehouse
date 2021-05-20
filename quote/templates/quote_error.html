@@ -1,0 +1,74 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+    {% if menu_active != 'MY_SKU' %}
+        <h3>Quote Express Price</h3>
+        <ul class="nav nav-tabs">
+            <li {% if menu_active == 'general-UK' %}class="active"{% endif %}><a href="{% url 'quote:general-quote-uk' %} ">General To UK</a></li>
+            <li {% if menu_active == 'general-EURO' %}class="active"{% endif %}><a href="{% url 'quote:general-quote-euro' %}">General To Euro</a></li>
+            <li {% if menu_active == 'EXPRESS-UK' %}class="active"{% endif %}><a href="{% url 'quote:inquire-uk' %}">Special Quote to UK</a></li>
+            <li {% if menu_active == 'EXPRESS-EURO' %}class="active"{% endif %}><a href="{% url 'quote:inquire-euro' %}">Special Quote to Euro</a></li>
+        </ul>
+        <br>
+    {% else %}
+        <div class="container-fluid">
+    {% endif %}
+        <div class="col-lg-12">
+            <div class="form-panel">
+                    <table class="table">
+                        <thead>
+                            <span class="text-center h4">Accounting Data</span>
+                        </thead>
+                        <tbody>
+                        {% if menu_active == 'MY_SKU' %}
+                            <tr>
+                                <th><h5>SKU :{{ sku_no }}</h5></th>
+                            <th></th>
+                                <th><h5>Product Name:{{ sku_name }}</h5></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            </tr>
+                        {% endif %}
+                        <tr>
+                            <th>Destination:<span class="text-danger"> {{ postcode }}</span></th>
+                            <th>Quantity:<span class="text-danger"> {{ qty }}</span></th>
+                            <th>Address Type:<span class="text-danger"> {{ address_type }}</span></th>
+                            <th>Length:<span class="text-danger"> {{ length }}</span> CM</th>
+                            <th>Width:<span class="text-danger"> {{ width }}</span> CM </th>
+                            <th>High:<span class="text-danger"> {{ high }}</span> CM</th>
+                            <th>Weight:<span class="text-danger"> {{ weight }}</span> KG</th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="form-panel">
+                    <table class="table">
+                        <thead>
+                            <h4 class="text-danger text-left">&nbsp;&nbsp;Sorry, We can't find suitable carrier cause too heavy or oversize or this region. </h4>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 mt">
+                <a href="{% if menu_active == 'EXPRESS-UK' %}
+                    {% url 'quote:inquire-uk' %}?length={{ length }}&width={{ width }}&high={{ high }}&weight={{ weight }}&qty={{ qty }}&postcode={{ postcode }}
+                {% elif menu_active == 'EXPRESS-EURO' %}
+                    {% url 'quote:inquire-euro' %}?length={{ length }}&width={{ width }}&high={{ high }}&weight={{ weight }}&qty={{ qty }}&country={{ postcode }}
+                {% else %}
+                    {% url 'sku:sku-list' %}
+                {% endif %}"
+                class="btn btn-success col-lg-1" role="button">
+                Go Back</a>
+            </div>
+        </div>
+{% endblock %}

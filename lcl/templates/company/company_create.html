@@ -1,0 +1,71 @@
+<div class="form">
+    <form class="form-horizontal js-company-create-form" id="create_company_form"
+          method="post" action="{% url 'lcl:company_create' %}">
+        <div class="modal-header">
+            <button id="add_new_Company" type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add New Company</h4>
+        </div>
+        <br>
+        <div class="container-fluid ">
+            {% csrf_token %}
+            <div class="form-group ">
+                <label for="code" class="control-label col-lg-2">Code</label>
+                <div class="col-lg-3">
+                    <input class=" form-control " id="code" name="code" minlength="1" maxlength="10"
+                           value="{{ form.data.code }}"  placeholder="Code"
+                           style="text-transform:uppercase;" required >
+                </div>
+                <label id="code_fail" class="control-label text-danger"></label>
+            </div>
+            <div class="form-group ">
+                <label for="name" class="control-label col-lg-2">Name</label>
+                <div class="col-lg-9">
+                  <input class=" form-control" id="name" name="name" type="text"
+                         value="{{ form.data.name }}"  placeholder="Name" required />
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="contact" class="control-label col-lg-2">Contact</label>
+                <div class="col-lg-6">
+                    <input class=" form-control" name="contact" type="text"
+                           value="{{ form.data.name }}"  placeholder="Contact" />
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="email" class="control-label col-lg-2">Email: </label>
+                <div class="col-lg-6">
+                    <input class=" form-control " id="email" name="email" type="email"
+                           value="{{ form.data.email }}"  placeholder="Email" />
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="telephone" class="control-label col-lg-2">Tel.</label>
+                <div class="col-lg-6">
+                    <input class="form-control " id="telephone" name="telephone"
+                           value="{{ form.data.telephone }}"  placeholder="Telephone" />
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="is_use" class="control-label col-lg-2">Status</label>
+                <div class="col-lg-3">
+                    <select name = "is_use" class="form-control">
+                        <option value = '1' {% if form.data.is_use == '1' %}selected{% endif %}>OK</option>
+                        <option value = '0' {% if form.data.is_use == '0' %}selected{% endif %}>Suspend</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="remark" class="control-label col-lg-2">Remark</label>
+                <div class="col-lg-8">
+                    <textarea class="form-control" rows="3" id="remark" name="remark"
+                              value="{{ form.data.remark }}"  placeholder="remark"></textarea>
+                </div>
+            </div>
+            <input type="hidden" name="op_user" value="{{ request.user.id }}">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary pull-left js_save_btn" >Save</button>
+            <button type="button" id="btn-cancel" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        </div>
+    </form>
+</div>

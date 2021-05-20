@@ -1,0 +1,91 @@
+
+<!-- https://www.daterangepicker.com/#example1 -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="./css/bootstrap.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="./js/jquery.min.js"></script>
+	<script type="text/javascript" src="./js/moment.min.js"></script>
+	 
+	<!-- Include Date Range Picker -->
+	<script type="text/javascript" src="./js/daterangepicker.js"></script>
+	<link rel="stylesheet" type="text/css" href="./css/daterangepicker.css" />
+</head>
+
+<body>
+<div class="container">
+    <form action="" class="form-horizontal"  role="form">
+		<legend>Test</legend>
+		<div>
+		<label>Simple Date Range Picker With a CallBack</label>
+		</div>
+		<div>
+		<input type="text" name="daterange" value="01/01/2018 - 01/15/2018" />
+		<div>
+
+		<div>
+		<label>Date Range Picker With Times</label>
+		</div>
+		<div>
+		 <input type="text" name="datetimes" />
+		<div>
+		
+		<div>
+		<label>Input Initially Empty</label>
+		</div>
+		<div>
+		 <input type="text" name="datefilter" />
+		<div>
+
+		
+    </form>
+</div>
+
+<script>
+$(function() {
+  $('input[name="daterange"]').daterangepicker({
+    opens: 'left'
+  }, function(start, end, label) {
+    console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+  });
+});
+</script>
+
+<script>
+$(function() {
+  $('input[name="datetimes"]').daterangepicker({
+    timePicker: true,
+    startDate: moment().startOf('hour'),
+    endDate: moment().startOf('hour').add(32, 'hour'),
+    locale: {
+      format: 'M/DD hh:mm A'
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(function() {
+
+  $('input[name="datefilter"]').daterangepicker({
+      autoUpdateInput: false,
+      locale: {
+          cancelLabel: 'Clear'
+      }
+  });
+
+  $('input[name="datefilter"]').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+  });
+
+  $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
+      $(this).val('');
+  });
+
+});
+</script>
+</body>
+</html>

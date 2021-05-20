@@ -1,0 +1,108 @@
+{% for c_code, c_qty, c_volume, c_weight, c_boxes, c_warehouse in cabinet_data %}
+    {% if forloop.counter0 > 0 %}
+        <table id="container{{ forloop.counter0 }}_table" class="table">
+            <tbody>
+            <tr>
+                <td width="35%">
+                    <select id="container{{ forloop.counter0 }}_code" name="container{{ forloop.counter0 }}_code"
+                            value="NO-DATA" class="form-control" style="margin-right: 20px" >
+                        {% for container_type in container_type %}
+                            <option value= {{ container_type.code }}
+                                    {% if container_type.code == c_code %}
+                                        selected
+                                    {% endif %}>
+                                {{ container_type.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td width="5%">
+                    <input class=" form-control" id="container{{ forloop.counter0 }}_qty" name="container{{ forloop.counter0 }}_qty"
+                           value="{{ c_qty }}" placeholder="柜量" type="text"
+                           oninput="onlyNumber(this)" readonly />
+                </td>
+                <td width="20%">
+                    <input class=" form-control" id="container{{ forloop.counter0 }}_volume" name="container{{ forloop.counter0 }}_volume"
+                           value="{{ c_volume }}" placeholder="体积" type="text"
+                           oninput="limit_Decimal_2(this)" required />
+                </td>
+                <td width="20%">
+                    <input class=" form-control" id="container{{ forloop.counter0 }}_weight" name="container{{ forloop.counter0 }}_weight"
+                           value="{{ c_weight }}" placeholder="重量" type="text"
+                           oninput="limit_Decimal_2(this)" required />
+                </td>
+                <td width="10%">
+                    <input class=" form-control" id="container{{ forloop.counter0 }}_boxes" name="container{{ forloop.counter0 }}_boxes"
+                           value="{{ c_boxes }}" placeholder="箱数" type="text"
+                           oninput="onlyNumber(this)" required />
+                </td>
+                <td width="10%">
+                    <button type="button" id="add_container", class="btn btn-danger "
+                            onclick="deleteContainerRow('#container{{ forloop.counter0 }}_table')">
+                        <span class="glyphicon glyphicon-minus-sign"></span>
+                        删除集装箱
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td class="control-label text-center"></td>
+                <td colspan="5">
+                <table id="container{{ forloop.counter0 }}_warehouse_table" class="table">
+                    <tbody>
+                        {% for w_code, w_volume, w_weight in c_warehouse %}
+                            <tr>
+                                <td width="42%">
+                                    <select id="container{{forloop.parentloop.counter0}}_fba_code{{ forloop.counter0 }}"
+                                            name="container{{forloop.parentloop.counter0}}_fba_code{{ forloop.counter0 }}"
+                                            class="form-control" style="margin-right: 20px" searchable>
+                                        <option value= "{% if w_code %}{{ w_code }}{% endif %}">选择仓库代码</option>
+                                        {% for amazon in amazon_warehouse %}
+                                            <option value= {{ amazon.amazon }}
+                                                {% if amazon.amazon.fba_code == w_code %}
+                                                    selected
+                                                {% endif %}>
+                                                {{ amazon.amazon.fba_code }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td width="20%">
+                                    <input class=" form-control" id="container{{forloop.parentloop.counter0}}_volume{{ forloop.counter0 }} "
+                                           name="container{{forloop.parentloop.counter0}}_volume{{ forloop.counter0 }}"
+                                           value="{{ w_volume }}"
+                                           placeholder="Volume" type="text" oninput="limit_Decimal_2(this)" required />
+                                </td>
+                                <td width="20%">
+                                    <input class=" form-control" id="container{{forloop.parentloop.counter0}}_weight{{ forloop.counter0 }} "
+                                           name="container{{forloop.parentloop.counter0}}_weight{{ forloop.counter0 }}"
+                                           value="{{ w_weight }}"
+                                           placeholder="Volume" type="text" oninput="limit_Decimal_2(this)" required />
+                                </td>
+                                {% if forloop.counter0 == 0 %}
+                                    <td width="18%">
+                                        <button type="button" id="add_container{{ forloop.parentloop.counter0 }}_warehouse",
+                                                class="btn btn-warning " onclick="appendWarehouseRow({{ forloop.parentloop.counter0 }})">
+                                            <span class="glyphicon glyphicon-plus-sign"></span>
+                                            新增仓库
+                                        </button>
+                                    </td>
+                                {% else %}
+                                    <td width="18%">
+                                        <button type="button" id="add_container{{forloop.parentloop.counter0}}_warehouse",
+                                                class="btn btn-danger " onclick="deleteCurrentRow(this, {{forloop.parentloop.counter0}})">
+                                            <span class="glyphicon glyphicon-minus-sign"></span>
+                                            删除仓库
+                                        </button>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    {% endif %}
+{% endfor %}

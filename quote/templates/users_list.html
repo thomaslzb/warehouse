@@ -1,0 +1,88 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+<div class="row mt container-fluid">
+    <div class="col-md-12">
+        <div class="form-panel">
+            <table class="table table-striped table-advance table-hover">
+                <h4><i class="fa fa-angle-right"></i>  User List </h4>
+                <hr>
+                    <form role="search" action="" method="get">
+                        {% csrf_token %}
+                        <div class="form-group form-inline " class="col-md-3">
+                            <label for="system_name" style="margin-right: 10px">&nbsp;System Name</label>
+                            <select class="form-control" type="text" id="system_name" name="system_name" style="margin-right: 10px">
+                                <option {% if system_name == 'ALL' or qty_compare == '' %}selected{% endif %}></option>
+                                <option value="BOTH-SYSTEM" {% if query_system_name == 'BOTH-SYSTEM' %}selected{% endif %}>Both System</option>
+                                <option value="BOOKING-SYSTEM" {% if query_system_name == 'BOOKING-SYSTEM' %}selected{% endif %}>Booking System</option>
+                                <option value="QUOTE-SYSTEM" {% if query_system_name == 'QUOTE-SYSTEM' %}selected{% endif %}>Quote System</option>
+                            </select>
+                            <label for="email" style="margin-right: 10px">&nbsp;Email</label>
+                            <input type="text" class="form-control " id="email" name="email" value="{{ query_email }}"
+                                   placeholder="Email" style="margin-right: 20px" size="40">
+                            <label for="username" style="margin-right: 10px">&nbsp;Username</label>
+                            <input type="text" class="form-control " id="username" name="username" value="{{ query_username }}" placeholder="Username" style="margin-right: 20px;">
+
+                            <input type="submit" class="btn btn-primary" value="Search" style="margin-right: 20px">
+                            <a class="btn btn-warning" href="{% url 'quote:user-list'%}" >Reset</a>
+                        </div>
+                        <hr>
+                    </form>
+                    <div class="form-group" >
+                        <a href="{% url 'users:add_quote_user' %}" >
+                            <button type="text" class="right-side btn btn-primary ">
+                                <i class="fa fa-user">&nbsp;&nbsp;Add new user</i>
+                            </button></a>
+                    </div>
+                <thead>
+                <tr>
+                    <th><i class="fa fa-envelope"></i> Email</th>
+                    <th><i class="fa fa-user"></i> Username</th>
+                    <th><i class="fa fa-pencil-square"></i> Name</th>
+                    <th class="hidden-phone"><i class="fa fa-phone"></i>Telephone</th>
+                    <th><i class="fa fa-table"></i> Can Use System </th>
+                    <th><i class="fa fa-table"></i> Last Login</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for this_user in object_list %}
+                <tr>
+                    <td>
+                        <a href="{% url 'users:edit_quote_user' this_user.user.id %}">{{ this_user.user.email }}</a>
+                    </td>
+                    <td><a href="{% url 'users:edit_quote_user' this_user.user.id %}">{{ this_user.user.username }}</a></td>
+                    <td>{{ this_user.user.first_name }} - {{ this_user.user.last_name }}</td>
+                    <td>{{ this_user.telephone }}</td>
+                    <td>{{ this_user.system_menu }}</td>
+                    <td>{{ this_user.user.last_login }}</td>
+                </tr>
+                {% empty %}
+                    <tr>No User Listing</tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- /content-panel -->
+  </div>
+  <!-- /col-md-12 -->
+</div>
+{% endblock %}

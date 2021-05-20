@@ -1,0 +1,125 @@
+{% extends 'warehouse_base.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid">
+    <div class="col-lg-12">
+        <form class="cmxform form-horizontal style-form" id="commentForm" method="post"
+              action="{% url 'users:slot_user_update' object.id %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="h3 control-label text-info  col-sm-offset-1">Update User Profile</label>
+            </div>
+            <div class="form-group ">
+                <label for="cname" class="control-label col-lg-1">Email: </label>
+                <div class="col-lg-3">
+                    <input class=" form-control " id="email" name="email" minlength="2" value="{{ object.email }}" type="text" readonly />
+                </div>
+                <div class="col-lg-1">
+                        <a href="{% url 'users:slot_user_change_password' object.id %} " class="btn btn-warning" type="button">Change Password</a>
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="cname" class="control-label col-lg-1">User Name</label>
+                <div class="col-lg-2">
+                    <input class=" form-control" id="cname" name="username" minlength="4" maxlength="20"
+                           value="{{ object.username }}" type="text" required />
+                </div>
+                <div class="text-danger" id="jsLoginTips">
+                        {%for key, error in form.errors.items %}
+                            <label class="control-label text-danger">{{ error }}</label>
+                        {% endfor %}
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="cemail" class="control-label col-lg-1">First Name</label>
+                <div class="col-lg-2">
+                    <input class="form-control " id="first_name" name="first_name"  value="{{ object.first_name }}">
+                </div>
+                <label for="cemail" class="control-label col-lg-1">Last Name</label>
+                <div class="col-lg-2">
+                    <input class="form-control " id="last_name"  name="last_name"  value="{{ object.last_name }}"/>
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="curl" class="control-label col-lg-1">Telephone</label>
+                <div class="col-lg-2">
+                    <input class="form-control " id="telephone" name="telephone" value="{{ object.profile.telephone }}"/>
+                </div>
+                <label for="status" class="control-label col-lg-1">Status</label>
+                <div class="col-lg-2">
+                    <select name = "status" class="form-control">
+                        <option value = '1' selected>Normal</option>
+                        <option value = '0'>Suspend</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="curl" class="control-label col-lg-1">Email Group</label>
+                <div class="col-lg-2">
+                {% if request.user.profile.staff_role == 3 %}
+                    <select name = "email_group" class="form-control">
+                    {% for email in all_email_group %}
+                        {% if not email.desc == "None" %}
+                            <option value = {{ email.id }} {% if object.profile.email_group_id == email.id %}selected{% endif %}>
+                                {{ email.desc }}
+                            </option>
+                        {% endif %}
+                    {% endfor %}
+                    </select>
+                {% else %}
+                    <input class="form-control " id="email_group" name="email_group"
+                           {% for email_group in all_email_group %}
+                                {% if email_group.id == object.profile.email_group_id %}
+                                    value="{{ email_group.desc }}"
+                                {% endif %}
+                           {% endfor %}
+                           readonly />
+                {% endif %}
+                </div>
+                <label for="curl" class="control-label col-lg-1">Role</label>
+                {% if request.user.profile.staff_role == 3 %}
+                    <div class="col-lg-2">
+                        <select name = "role" class="form-control">
+                            <option value = '1' {% if object.profile.staff_role == 1 %}selected{% endif %}>Operator</option>
+                            <option value = '2' {% if object.profile.staff_role == 2 %}selected{% endif %}>Warehouse-Operator</option>
+                            <option value = '3' {% if object.profile.staff_role == 3 %}selected{% endif %}>Manager</option>
+                        </select>
+                    </div>
+                {% else %}
+                    <div class="col-lg-2">
+                        <input class="form-control " id="role" name="role"
+                               {% if object.profile.staff_role == 1 %}
+                                    value="Operator"
+                               {% endif %}
+                               {% if object.profile.staff_role == 2 %}
+                                    value="Warehouse-Operator"
+                               {% endif %}
+                               {% if object.profile.staff_role == 3 %}
+                                    value="Manager"
+                               {% endif %}
+                               readonly />
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group ">
+                <label for="curl" class="control-label col-lg-1">Join Date</label>
+                <div class="col-lg-2">
+                    <input class="form-control " id="join_date" name="join_date" value="{{ object.date_joined }}" readonly />
+                </div>
+                <label for="curl" class="control-label col-lg-1">Last Login</label>
+                <div class="col-lg-2">
+                    <input class="form-control " id="last_login" name="last_login" value="{{ object.last_login }}" readonly />
+                </div>
+            </div>
+            <input type="hidden" class="form-control " id="favorite_company" name="favorite_company" value=1 />
+            <div class="form-group">
+                <div class="col-lg-offset-1">
+                    <a href="{% url 'users:slot_user_profile' object.id %}" class="btn btn-danger col-lg-1"
+                       type="button" style="float:left; margin-left: 0px">Back</a>
+                    <button class="btn btn-primary col-lg-1" type="submit" style="float:left; margin-left: 20px">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

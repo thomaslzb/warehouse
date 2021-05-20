@@ -1,0 +1,62 @@
+<div class="container-fluid ">
+    {% csrf_token %}
+    <div class="form-group ">
+        <label for="code" class="control-label col-lg-2">Code</label>
+        <div class="col-lg-3">
+            <input class=" form-control" id="code" name="code" minlength="1" maxlength="10"
+                   value="{{ form.instance.code }}"  placeholder="Code"
+                   style="text-transform:uppercase;" required >
+        </div>
+        {% if form.errors.code.data.0.messages.0 %}
+            <label id="code_fail" class="control-label text-danger">{{ form.errors.code.data.0.messages.0 }}</label>
+        {% endif %}
+    </div>
+    <div class="form-group ">
+        <label for="name" class="control-label col-lg-2">Name</label>
+        <div class="col-lg-9">
+          <input class=" form-control" id="name" name="name" type="text"
+                 value="{{ form.instance.name }}"  placeholder="Name" required />
+          {% if form.errors.name.data.0.messages.0 %}
+               <label id="name_fail" class="control-label text-danger">{{ form.errors.name.data.0.messages.0 }}</label>
+          {% endif %}
+        </div>
+    </div>
+    <div class="form-group ">
+        <label for="contact" class="control-label col-lg-2">Contact</label>
+        <div class="col-lg-6">
+            <input class=" form-control" name="contact" type="text"
+                   value="{{ form.instance.contact }}"  placeholder="Contact" />
+        </div>
+    </div>
+    <div class="form-group ">
+        <label for="email" class="control-label col-lg-2">Email: </label>
+        <div class="col-lg-6">
+            <input class=" form-control " id="email" name="email" type="email"
+                   value="{{ form.instance.email }}"  placeholder="Email" />
+        </div>
+    </div>
+    <div class="form-group ">
+        <label for="telephone" class="control-label col-lg-2">Tel.</label>
+        <div class="col-lg-6">
+            <input class="form-control " id="telephone" name="telephone"
+                   value="{{ form.instance.telephone }}"  placeholder="Telephone" />
+        </div>
+    </div>
+    <div class="form-group ">
+        <label for="is_used" class="control-label col-lg-2">Status</label>
+        <div class="col-lg-3">
+            <select name = "is_used" class="form-control">
+                <option value='1' {% if form.instance.is_used == 1 %}selected{% endif %}>OK</option>
+                <option value='0' {% if form.instance.is_used == 0 %}selected{% endif %}>Suspend</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group ">
+        <label for="remark" class="control-label col-lg-2">Remark</label>
+        <div class="col-lg-8">
+            <textarea class="form-control" rows="3" id="remark" name="remark"
+                      placeholder="remark">{{ form.instance.remark }}</textarea>
+        </div>
+    </div>
+    <input type="hidden" name="op_user" value="{{ request.user.id }}">
+</div>

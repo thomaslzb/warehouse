@@ -1,0 +1,99 @@
+{% extends 'warehouse_base.html' %}
+{% load static %}
+{% block content %}
+		<button id="buttonA">A</button>
+		<button id="buttonB">B</button>
+		<button id="buttonC">C</button>
+		<button id="buttonD">D</button>
+		<button id="buttonE">E</button>
+{% endblock %}
+{% block myscript %}
+	<script>
+		document.getElementById('buttonA').addEventListener('click',  async () => {
+
+			const dialog = new DialogBox({
+				trueButtonText: "Yes",
+				falseButtonText: "No",
+				messageText: "Do you want to see message A?"
+			});
+
+			if (await dialog.respond()) {
+				const dialog = new DialogBox({
+					messageText: 'This is message B',
+					titleText: 'Message B'
+				});
+			};
+
+		});
+
+		document.getElementById('buttonB').addEventListener('click',  async () => {
+
+			const dialog = new DialogBox({
+				trueButtonText: "OK",
+				titleText: 'Cant Escape',
+				messageText: "You WILL see message B"
+			});
+
+			if (await dialog.respond()) {
+				const dialog = new DialogBox({
+					messageText: 'This is message B',
+					titleText: 'Message B'
+				});
+			};
+
+		});
+
+		document.getElementById('buttonC').addEventListener('click',  async () => {
+
+			const dialog = new DialogBox({
+				trueButtonText: "True",
+				falseButtonText: "False",
+				messageText: "... I am the best?",
+				titleText: "True or false..."
+			});
+
+			if (await dialog.respond()) {
+				const dialog = new DialogBox({
+					messageText: 'You are correct',
+					titleText: 'Well done'
+				});
+			} else {
+				const dialog = new DialogBox({
+					messageText: 'You are wrong'
+				});
+			};
+
+		});
+
+		document.getElementById('buttonD').addEventListener('click',  async () => {
+
+			const dialog = new DialogBox({
+				trueButtonText: "Yes",
+				falseButtonText: "No",
+				neutralButtonText: 'Cancel',
+				messageText: "This one has another option, the cancel option for when you dont want to do anything",
+				titleText: "More Buttons"
+			});
+
+			if (await dialog.respond()) {
+				const dialog = new DialogBox({
+					messageText: 'You pressed yes',
+					titleText: 'Your answer'
+				});
+			} else {
+				const dialog = new DialogBox({
+					messageText: 'You pressed no',
+					titleText: 'Your answer'
+				});
+			};
+
+		});
+
+		document.getElementById('buttonE').addEventListener('click', function() {
+
+			const dialog = new DialogBox();
+
+		});
+	</script>
+{% endblock %}
+

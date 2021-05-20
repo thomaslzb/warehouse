@@ -1,0 +1,101 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+<div class="row mt container-fluid">
+    <div class="col-lg-12">
+        <div class="form-panel">
+            <h4><i class="fa fa-angle-right"></i>&nbsp;&nbsp;Edit SKU</h4>
+            <hr>
+            <form class="cmxform form-horizontal style-form" id="commentForm" role="form" action="" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="sku_no" class="control-label col-lg-1">&nbsp;SKU NO.:</label>
+                    <div class="col-lg-2">
+                        <input type="text" class="form-control" id="sku_no" name="sku_no"   placeholder="Sku No"
+                                value="{{ object.sku_no }}" required>
+                    </div>
+                    <label class="control-label text-danger">
+                        {{ form.errors.sku_no.0 }}
+                    </label>
+                    <label class="control-label text-danger">
+                        {{ form.non_field_errors }}
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="product" class="control-label col-lg-1">&nbsp;Product Name:</label>
+                    <div class="col-lg-3">
+                    <input type="text" class="form-control" id="sku_name" name="sku_name" value="{{ object.sku_name }}" placeholder="Product Name" required>
+                    </div>
+                    <label class="control-label text-danger">
+                        {{ form.errors.sku_name.0 }}
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="length" class="control-label col-lg-1">&nbsp;Length(CM):</label>
+                    <div class="col-lg-1">
+                    <input type="text" class="form-control"
+                           id="length"  name="sku_length" value="{{ object.sku_length }}" placeholder="Length" oninput="verify_decimal2(this)" required>
+                    <span class="control-label text-danger">
+                        {{ form.errors.sku_length.0 }}
+                    </span>
+                    </div>
+                    <label for="width" class="control-label col-lg-1">&nbsp;Width(CM):</label>
+                    <div class="col-lg-1">
+                    <input type="text" class="form-control"  id="sku_width"  name="sku_width"
+                           value="{{ object.sku_width }}" placeholder="width" oninput="verify_decimal2(this)" required>
+                    <span class="control-label text-danger">
+                        {{ form.errors.sku_width.0 }}
+                    </span>
+                    </div>
+                    <label for="High" class="control-label col-lg-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;High(CM):</label>
+                    <div class="col-lg-1">
+                    <input type="text" class="form-control"  id="high" name="sku_high"
+                           value="{{ object.sku_high }}"  placeholder="High" oninput="verify_decimal2(this)" required>
+                    <span class="text-danger">
+                        {{ form.errors.sku_high.0 }}
+                    </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="weight" class="control-label col-lg-1">&nbsp;&nbsp;Weight(KG):</label>
+                    <div class="col-lg-1">
+                    <input type="text" class="form-control"  id="weight"  name="sku_weight"
+                           value="{{ object.sku_weight}}" placeholder="Weight" oninput="verify_decimal2(this)" required>
+                    </div>
+                    <label class="control-label text-danger">
+                        {{ form.errors.sku_weight.0 }}
+                    </label>
+                    <label class="control-label text-danger">
+                        {{ form.errors.weight.0 }}
+                    </label>
+                    <input type="hidden" id="custom_id"  name="custom"  value="{{ request.user.id }}"></label>
+                </div>
+                <div class="form-group">
+                    <label for="weight" class="control-label col-lg-1">&nbsp;&nbsp;Status:</label>
+                    <div class="col-lg-1">
+                    <select name = "is_ok" class="form-control">
+                    {% if object.is_ok == 0  %}
+                        <option value=1 >OK</option>
+                        <option value=0 selected>Suspend</option>
+                    {% else %}
+                        <option value=1 >OK</option>
+                        <option value=0 >Suspend</option>
+                    {% endif %}
+                    </select>
+                    </div>
+                </div>
+                <hr>
+                <div class="panel-footer text-left">
+                    <div class="panel-body">
+                    <a href="{% url 'sku:sku-list' %}"  class="btn btn-success col-lg-1" role="button" style="float:left; margin-left: 0px"> Go Back </a>
+                        <button type="submit" class="btn btn-primary col-lg-1" style="float:left; margin-left: 20px">Save</button>
+                    <a href="{% url 'sku:sku-delete' object.id %}" class="pull-right btn btn-danger col-lg-1" role="button">Delete</a>
+                    </div>
+                </div>
+            </form>
+            <hr>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

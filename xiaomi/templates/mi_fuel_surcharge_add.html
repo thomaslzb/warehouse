@@ -1,0 +1,86 @@
+{% extends 'mi_base.html' %}
+{% load static %}
+{% block new_content %}
+    <div class="col-lg-6">
+        <div class="form-panel">
+            <h4><i class="fa fa-angle-right"></i>&nbsp;&nbsp;Add New Fuel Surcharge</h4>
+            <hr>
+            <div class=" form">
+                <form class="cmxform form-horizontal style-form" id="commentForm" method="post" action="">
+                    {% csrf_token %}
+                    <div class="form-group ">
+                        <label for="express_company" class="control-label col-lg-2">Express: </label>
+                        <div class="col-lg-2">
+                            <select name = "express_company" class="form-control">
+                                <option {% if express_company == 'UPS' %}selected="selected"{% endif %}>
+                                    UPS
+                                </option>
+                                <option {% if express_company == 'DPD' %}selected="selected"{% endif %}>
+                                    DPD
+                                </option>
+                            </select>
+                        </div>
+                        {% if user_form.errors %}
+                           <label class="control-label text-danger">{{ user_form.errors.email.0 }}</label>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="begin_date" class="control-label col-lg-2">Begin Date</label>
+                        <div class="col-lg-3">
+                            <input type="date" name="begin_date" id="PickingDate" max="2030-12-31" min="2021-02-01"
+                                   class="form-control" value="{{ begin_date }}">
+                        </div>
+                        {% if form.errors.begin_date.data.0.message %}
+                            <label class="control-label text-danger">{{ form.errors.begin_date.data.0.message }}</label>
+                        {% endif %}
+                    </div>
+                    <div class="form-group ">
+                        <label for="fuel_surcharge" class="control-label col-lg-2">Fuel charge(%)</label>
+                        <div class="col-lg-3">
+                        <input type="text" class="form-control " id="fuel_surcharge" name="fuel_surcharge"
+                               placeholder="fuel_surcharge" oninput="verify_decimal2(this)"
+                               value="{{ form.data.fuel_surcharge }}" required>
+                        </div>
+                        <label class="text-danger control-label">
+                            {{ form.errors.fuel_surcharge.data.0.message }}
+                        </label>
+                    </div>
+                    <div class="form-group ">
+                        <label for="range" class="control-label col-lg-2">Range</label>
+                        <div class="col-lg-3">
+                        <input type="text" class="form-control " id="range" name="range"
+                               placeholder="Range" value="UK" readonly>
+                        </div>
+                    </div>
+                    <input type="date" class="form-control " id="end_date" name="end_date"
+                               placeholder="end_date" value="31-12-2030" style="display:none">
+                    <hr>
+                    {% if error %}
+                        <label class="alert alert-danger">Save Failure,  {{ error }}</label>
+                    {% endif %}
+                    <div class="form-group">
+                        <div class="col-lg-offset-1">
+                            <button class="btn btn-theme col-lg-1" type="submit" onclick="return ConfirmSave();"
+                            style="float:left; margin-left: 10px">Save</button>
+                            <a href="{% url 'xiaomi:fuel-surcharge-list' %}" class="btn btn-danger" type="button" style="float:left; margin-left: 20px">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /form-panel -->
+    </div>
+{% endblock %}
+{% block myscript %}
+    <script type="text/javascript">
+		function ConfirmSave()
+		{
+		     if(confirm("Please Confirm Begin Date and Fuel Surcharge is correct, Continue Save ?"))
+		     {
+		         return true;
+		     }else{
+		         return false;
+			 }
+		}
+    </script>
+{% endblock %}

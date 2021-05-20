@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="5737858b-ff22-44a4-b7ab-d6142c92b993" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/templates.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user_setup_profit_detail.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../sku/migrations/0002_auto_20201109_1105.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../users/migrations/0004_auto_20201109_0920.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../users/migrations/0005_auto_20201109_0925.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../users/migrations/0006_userprofile_favorite_company.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../users/migrations/0007_auto_20201109_1536.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../models.py" beforeDir="false" afterPath="$PROJECT_DIR$/../models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/base-menu.html" beforeDir="false" afterPath="$PROJECT_DIR$/base-menu.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user_setup_profit.html" beforeDir="false" afterPath="$PROJECT_DIR$/user_setup_profit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/users_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/../urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../views.py" beforeDir="false" afterPath="$PROJECT_DIR$/../views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../sku/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../sku/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../users/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../users/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../users/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../users/templates/my_profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../users/templates/my_profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../users/templates/my_profile_update.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../users/templates/my_profile_update.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../users/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../users/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../users/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../utils/tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../utils/tools.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="1k6dvOaYShXzwHHQtMLmQxFmKqg" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../parcel" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5737858b-ff22-44a4-b7ab-d6142c92b993" name="Default Changelist" comment="" />
+      <created>1605025204717</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1605025204717</updated>
+      <workItem from="1605025206049" duration="50000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="-1180" y="276" key="FileChooserDialogImpl" timestamp="1605025253998">
+      <screen x="-1920" y="1" width="1920" height="1040" />
+    </state>
+    <state x="-1180" y="276" key="FileChooserDialogImpl/0.0.1920.1040/-1920.1.1920.1040@-1920.1.1920.1040" timestamp="1605025253998" />
+  </component>
+</project>

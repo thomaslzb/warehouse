@@ -1,0 +1,393 @@
+{% extends 'warehouse_base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container table-bordered">
+        <div>
+          <table class="table">
+            <thead>
+                <label class="text-center h3">Delivery Reference Detail</label>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="control-label col-lg-2"><label>Delivery Ref.</label></td>
+                <td class="col-lg-7">{{ object.deliveryref }} - {{ object.status }}</td>
+                <td class="col-sm-2">
+                    {% if object.progress != 4 %}
+                            <!-- 上传文件事件 的按钮-->
+                        {% if request.user.profile.staff_role == 1 %} <!-- 是操作员 -->
+                            {% if object.status == 'INBOUND' %}
+                                <button class="btn btn-info" role="button" onclick="showModal()">Upload Inbound File</button>
+                            {% endif %}
+                            {% if object.status == 'OUTBOUND' %}
+                                <button class="btn btn-info" role="button" onclick="showModal()">Upload Delivery Note</button>
+                                <input type="hidden" id="send_type" name="send_type"  value="Delivery Note" readonly>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                    {% if request.user.profile.staff_role == 2 %} <!-- 是仓库管理员 则将文件类型隐藏输入-->
+                        {% if object.status == 'INBOUND' %}
+                            <button class="btn btn-info" role="button" onclick="showModal()">Upload Inbound File</button>
+                       {% endif %}
+                        {% if object.status == 'OUTBOUND' %}
+                            <button class="btn btn-info" role="button" onclick="showModal()">Upload Paperwork</button>
+                            <input type="hidden" id="send_type" name="send_type"  value="Paperwork" readonly>
+                        {% endif %}
+                    {% endif %}
+                    {% if request.user.profile.staff_role == 3 %} <!-- 是经理级别-->
+                        <button class="btn btn-info" role="button" onclick="showModal()">Manager Upload File</button>
+                    {% endif %}
+
+                    <!--遮罩-->
+                    <div class="overlay"></div>
+                    <!--模态框-->
+                    <div id="modal" class="dropbox">
+                        <div class="items-container">
+                            <div id="close" style="cursor:pointer;float: right;width:20px">
+                                <span class="css-close"></span>
+                            </div>
+                            <div>
+                                <form action="{% url 'slot:uploads_files' %}" enctype="multipart/form-data" method="POST" >
+                                    {% csrf_token %}
+                                    <p class="head"><b>Drop files</b></p>
+                                    <input type="hidden" id="ref" name="ref"  value="{{ object.deliveryref }}" readonly>
+                                    <div class="content" id="content">
+                                        <table class="table">
+                                            <tbody class="tbody"></tbody>
+                                        </table>
+                                    </div>
+                                    <div class="footer">
+                                        <button class="btn btn-primary" type="button" onclick="upload()">Begin Upload</button>
+                                    </div>
+                                    <a href='#' onclick='clearAll()' style='position:absolute;bottom:10px;right:30px;'>Clear All</a>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 上传文件事件 结束 -->
+                </td>
+              <tr>
+                  <td class="control-label col-lg-2"><label>Vehicle Reg.</label></td>
+                <td>{{ object.vehiclereg }} </td>
+                <td class="col-sm-2">
+                    {% if request.user.profile.staff_role == 2 %} <!-- 是仓库管理 -->
+                        {% if object.status == 'INBOUND' %}
+                            <select  id="send_type" name = "send_type" class="form-control">
+                                <option value="Breakdown" selected>Breakdown [XLS, XLSX, PDF]</option>
+                                <option value="Parcel List">Parcel List [PDF]</option>
+                                <option value="Delivery POD">Delivery POD [PDF]</option>
+                            </select>
+                        {% endif %}
+                    {% endif %}
+                    {% if request.user.profile.staff_role == 3 %} <!-- 是经理级别 -->
+                            {% if object.status == 'INBOUND' %}
+                                <select  id="send_type" name = "send_type" class="form-control">
+                                    <option value="Delivery Manifest" selected>Delivery Manifest</option>
+                                    <option value="OP Form">OP Form</option>
+                                    <option value="Breakdown">Breakdown</option>
+                                    <option value="Parcel List">Parcel List</option>
+                                    <option value="Delivery POD">Delivery POD</option>
+                                </select>
+                            {% else %}
+                                <select  id="send_type" name = "send_type" class="form-control">
+                                    <option value="Delivery Note">Delivery Note</option>
+                                    <option value="Paperwork">Paperwork</option>
+                                </select>
+                            {% endif %}
+                        {% endif %}
+                    {% if object.progress != 4 %}
+                        {% if request.user.profile.staff_role == 1 %} <!-- 是操作员 -->
+                            {% if object.status == 'INBOUND' %}
+                                <select  id="send_type" name = "send_type" class="form-control">
+                                    <option value="Delivery Manifest" selected>Delivery Manifest</option>
+                                    <option value="OP Form">OP Form</option>
+                                </select>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                </td>
+              </tr>
+              <tr>
+                  <td class="control-label col-lg-2"><label>Haulier</label></td>
+                  <td>{{ object.hailerid.code }}
+                      &nbsp;-&nbsp;{{ object.hailerid.name }}
+                      &nbsp;-&nbsp;<span class="glyphicon glyphicon-user"></span>&nbsp;Contact:&nbsp;{{ object.hailerid.contact }}
+                      &nbsp;-&nbsp;<span class="glyphicon glyphicon-envelope"></span>&nbsp;Email:&nbsp;{{ object.hailerid.email }}
+                      &nbsp;-&nbsp;<span class="glyphicon glyphicon-phone"></span>&nbsp;Tel:&nbsp;{{ object.hailerid.telephone }}
+                  </td>
+                  <td></td>
+              </tr>
+              <tr>
+                  <td class="control-label col-lg-2"><label>Operator</label></td>
+                <td>{{ object.op_user.username }}
+                    &nbsp;&nbsp;{{ object.op_datetime|date:"j-m-Y H:i" }}
+                      <span class="glyphicon glyphicon-envelope"></span>&nbsp;Email:&nbsp;{{ object.op_user.email }}
+                    &nbsp;&nbsp;<span class="glyphicon glyphicon-phone"></span>&nbsp;Tel:&nbsp;{{ request.op_user.telephone }}
+                </td>
+                  <td></td>
+              </tr>
+              <tr>
+                  <td class="control-label col-lg-2"><label>Delivery DateTime</label></td>
+                  <td class="control-label col-lg-2">
+                      {% if object.havetime == 1 %}
+                          {{ object.workdate|date:"j-m-Y" }}&nbsp;
+                          {{ object.slottime|time:"H:i"}}
+                      {% else %}
+                          <span class="alert-danger well-sm"> Haven't slot time</span>
+                      {% endif %}
+                  </td>
+                  <td class="control-label col-lg-4">
+                      <label>Status:</label>
+                      {% if object.progress == 1 %}
+                         <span  class="alert-info well-sm">Booked:{{ object.last_update }}</span>
+                      {% endif %}
+                      {% if object.progress == 2 %}
+                         <span class="alert-warning well-sm">Arrived:{{ object.last_update }}</span>
+                      {% endif %}
+                      {% if object.progress == 3 %}
+                         <span class="alert-warning well-sm">Loading:{{ object.last_update }}</span>
+                      {% endif %}
+                      {% if object.progress == 4 %}
+                         <span class="alert-success well-sm">Finished:{{ object.last_update }}</span>
+                      {% endif %}
+                      {% if object.progress == 5 %}
+                         <span class="alert-danger well-sm">Abnormal:{{ object.last_update }}</span>
+                      {% endif %}
+                  </td>
+              </tr>
+              <tr>
+                <td class="control-label col-lg-2"><label>Remark</label></td>
+                <td>{{ object.remark }}</td>
+                <td></td>
+              </tr>
+              <tr>
+                  <td class="control-label col-lg-2"><label>File List</label></td>
+                  <td>
+                      <div class="explore"><h5 onclick="toggle(this.parentNode)">Click here to hide or display files list</h5>
+                     {% for file in files %}
+                          <a href="{% url 'slot:download_file' %}?filename=slot_files/{{ file.file_name }}">
+                              {% if file.is_void %}
+                                  <div  class="col-sm-3 gray">
+                                      {{ file.files_profile }}
+                                  </div>
+                                  <div  class="col-sm-6 gray">
+                                      <del>{{ file.file_name }}</del>
+                                  </div>
+                                  <div class="col-sm-3 gray">
+                                      {{ file.uploaded_at }}
+                                  </div>
+                              {% else %}
+                                  <div  class="col-sm-3 green">
+                                      {{ file.files_profile }}
+                                  </div>
+                                  <div  class="col-sm-6 green">
+                                      {{ file.file_name }}
+                                  </div>
+                                  <div class="col-sm-3 green">
+                                      {{ file.uploaded_at }}
+                                  </div>
+                            {% endif %}
+                          </a>
+                 {% endfor %}
+                </td>
+                  <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+    </div>
+
+    <br>
+    <div class="container table-bordered">
+    <br>
+    <!-- 如何是状态还是Booked, 则可以更改时间或做删除操作 -->
+    {% if object.progress != 4 %} {#  如果是订单已经是完成状态，则不能再做修改 #}
+            <form action="{% url 'slot:slot_update' %}" method="post" >
+                {% csrf_token %}
+                <div class="form-group form-inline col-lg-12" >
+                    <input type="hidden" id="page_tab" name="page_tab"  value="{{ page_tab }}" readonly>
+                    <input type="hidden" name="delivery_ref" value="{{ object.deliveryref }}">
+                    {% if request.user.profile.staff_role == 2 or request.user.profile.staff_role == 3 %}  {#  如果是 仓库人员或经理，则允许更新状态 #}
+                        <div class="col-lg-3">
+                            <label>Progress </label>
+                            <select name = "new_progress" class="form-control">
+                                {% if object.progress == 1 %}
+                                    <option value="1" selected>Booked</option>
+                                {% else %}
+                                    <option value="1">Booked</option>
+                                {% endif %}
+
+                                {% if object.progress == 2 %}
+                                    <option value="2" selected>Arrived</option>
+                                {% else %}
+                                    <option value="2">Arrived</option>
+                                {% endif %}
+
+                                {% if object.progress == 3 %}
+                                    <option value="3" selected>Loading</option>
+                                {% else %}
+                                    <option value="3">Loading</option>
+                                {% endif %}
+
+                                {% if object.progress == 4 %}
+                                    <option value="4" selected>Finished</option>
+                                {% else %}
+                                    <option value="4">Finished</option>
+                                {% endif %}
+
+                                {% if object.progress == 5 %}
+                                    <option value="5" selected>Abnormal</option>
+                                {% else %}
+                                    <option value="5">Abnormal</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                   {% endif %}
+                    {% if request.user.id == object.op_user_id or request.user.profile.staff_role == 3 %} {#  如果是或者操作员本人或经理，则允许更新时间, 并且不是仓库 #}
+                        {% if object.progress == 1 %} {# 状态是 1=Booked 才能修改时间#}
+                            <div>
+                                <input type="checkbox" class="checkbox" name="new_haveTime" value="0">
+                                <label class="form-check-label" for="NotHaveSlotTime">Haven't Slot Time</label>
+                                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DateTime</label>
+                                <input type="date" class="form-control " name="new_work_date" id="PickingDate"
+                                       max="2025-12-31"  min="2020-08-01" value="{{ object.workdate|date:"Y-m-d" }}">
+                                {% if request.user.profile.op_position == 'UK' %}
+                                    <div class="form-group">
+                                            <input type="text" class="form-control"  id="timePicker" name="new_slot_time"
+                                                   value="{{ object.slottime|time:"H:i"}}" readonly>
+                                            {% if ErrorMsg.0 == 'slot_time' %}
+                                                <label class="text-danger">{{ ErrorMsg.1 }}</label>
+                                            {% endif %}
+                                        </label>
+                                    </div>
+                                {% else %}
+                                    <div class="form-group">
+                                            <input type="text" class="form-control"  id="timePicker40" name="new_slot_time"
+                                                   value="{{ object.slottime|time:"H:i"}}" readonly>
+                                            {% if ErrorMsg.0 == 'slot_time' %}
+                                                <label class="text-danger">{{ ErrorMsg.1 }}</label>
+                                            {% endif %}
+                                        </label>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+               </div>
+
+                <div class="form-group">
+                    <input type="text" class="form-control" id="remark" name="new_remark" value="{{ object.remark }}" placeholder="Remark">
+                </div>
+
+                <div class="panel-footer text-left">
+                      <div class="panel-body">
+                            {% if page_tab == 1 %}
+                                <a href="{% url 'slot:slot_list' %}?searching_date={{ object.workdate }}"  class="btn btn-primary" role="button">Back</a>
+                            {% else %}
+                                <a href="{% url 'slot:slot_list_search' %}"  class="btn btn-primary" role="button">Back</a>
+                            {% endif %}
+                            {% if object.progress != 4 %} {# 状态是 4=Finished 不能再做变更 #}
+                                 {#  如果是或者操作员本人并且状态是 1=Booked ，则允许更新时间 #}
+                                {% if request.user.id == object.op_user_id and object.progress == 1 and request.user.profile.staff_role == 1 %}
+                                    <input class="form-inline btn btn-info" type="submit" value="Update">
+                                {% endif %}
+                                {% if request.user.profile.staff_role == 3 %} {# 状态是允许经理更新状态修改时间#}
+                                    <input class="form-inline btn btn-info" type="submit" value="Update">
+                                {% endif %}
+
+                                {% if request.user.profile.staff_role == 2  %}  {#  如果是 仓库人员，则允许更新状态 #}
+                                    <input class="form-inline btn btn-info" type="submit" value="Update">
+                                {% endif %}
+                            {% endif %}
+                            {% if request.user.id == object.op_user_id or request.user.profile.staff_role == 3 %} {#  如果是或者操作员本人或经理，则允许删除操作 #}
+                                {% if object.progress == 1 %} {# 状态是 1=Booked 才能删除操作 #}
+                                    <a href="{% url 'slot:slot_delete' object.id %}?searching_date={{ object.workdate }} " class="pull-right btn btn-danger" role="button">Delete</a>
+                                {% endif %}
+                            {% endif %}
+                      </div>
+                </div>
+            </form>
+    {% else %}
+            <!-- 是完成的状态下，仅仅显示返回按钮 -->
+        <div class="panel-footer text-left">
+            <div class="panel-body">
+                {% if page_tab == 1 %}
+                    <a href="{% url 'slot:slot_list' %}?searching_date={{ object.workdate }}"  class="btn btn-primary" role="button">Back</a>
+                {% else %}
+                    <a href="{% url 'slot:slot_list_search' %}"  class="btn btn-primary" role="button">Back</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+    <br>
+    </div>
+
+{% endblock %}
+{% block  myscript %}
+   <script>
+    $(document).ready(function () {
+        var time = new Date("{{ object.workdate|date:"Y/m/d" }}");
+        var day = ("0" + time.getDate()).slice(-2);
+        var month = ("0" + (time.getMonth() + 1)).slice(-2);
+        var today = time.getFullYear() + "-" + (month) + "-" + (day);
+        $('#PickingDate').val(today);
+    })
+    </script>
+
+    <script src="{% static 'drop-file/demo.js' %}"></script>
+    <link href= "{% static 'drop-file/demo.css' %}" rel="stylesheet">
+
+    <!-- 此段代码为文件展开或收回的js -->
+    <script type="text/javascript">
+    var mh = 20;//高度
+    var step = 1;//每次变化的量
+    var ms = 0.1;//循环时间
+    function toggle(o){
+     if (!o.tid)o.tid = "_" + Math.random() * 100;
+     if (!window.toggler)window.toggler = {};
+     if (!window.toggler[o.tid]){
+      window.toggler[o.tid]={
+       obj:o,
+       maxHeight:o.offsetHeight,
+       minHeight:mh,
+       timer:null,
+       action:1
+      };
+     }
+     o.style.height = o.offsetHeight + "px";
+     if (window.toggler[o.tid].timer)clearTimeout(window.toggler[o.tid].timer);
+     window.toggler[o.tid].action *= -1;
+     window.toggler[o.tid].timer = setTimeout("anim('"+o.tid+"')",ms );
+    }
+    function anim(id){
+     var t = window.toggler[id];
+     var o = window.toggler[id].obj;
+     if (t.action < 0){
+      if (o.offsetHeight <= t.minHeight){
+       clearTimeout(t.timer);
+       return;
+      }
+     }
+     else{
+      if (o.offsetHeight >= t.maxHeight){
+       clearTimeout(t.timer);
+       return;
+      }
+     }
+     o.style.height = (parseInt(o.style.height, 10) + t.action * step) + "px";
+     window.toggler[id].timer = setTimeout("anim('"+id+"')",ms );
+    }
+    </script>
+    <style type="text/css">
+    div.explore{
+     border:solid 1px;overflow:hidden;
+    }
+    div.explore h5{
+     border:solid 1px;border-width:0 0 1px;
+     padding:0;margin:0;height:28px;
+     line-height:32px;cursor:pointer;
+     background:#eee;
+    }
+    </style>
+{% endblock %}
+

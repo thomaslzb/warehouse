@@ -1,0 +1,25 @@
+{% for record in object_list %}
+    <tr>
+        <td>{{ record.code }}</td>
+        <td>{{ record.name }}</td>
+        <td>{{ record.telephone }}</td>
+        <td>{{ record.email }}</td>
+        <td>{{ record.contact }}</td>
+        <td>{{ record.remark }}</td>
+        <td>{% if record.is_used %}OK{% else %}Suspend{% endif %}</td>
+        <td>{{ record.op_last_update }}</td>
+        <td>{{ record.op_user }}</td>
+        <td>
+            <button type="button"
+                    class="btn btn-warning btn-sm js-update-company"
+                    data-url="{% url 'lcl:company_update' record.id %}">
+                    <span class="glyphicon glyphicon-pencil"></span>Edit
+            </button>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan = "10" class="text-center bg-warning">No Data List</td>
+    </tr>
+{% endfor %}
+

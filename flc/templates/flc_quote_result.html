@@ -1,0 +1,61 @@
+<!-- Result Table -->
+
+<table class="table table-bordered table-striped " >
+<thead>
+    <tr>
+        <th colspan="5" class="text-center list-group-item-info " style="font-size:18px;">FLC Quote Result</th>
+    </tr>
+    <tr>
+        <th class="text-left list-group-item-success " style="font-size:16px;">
+            From:
+            {% for port in all_port %}
+                {% if forms.data.port_code == port.port_code %}
+                    {{ port.port_code }} - {{ port.port_name }}
+                {% endif %}
+            {% endfor %}
+        </th>
+        <th colspan="4" class="text-left list-group-item-success " style="font-size:16px;">
+            Container：
+            {% for container in all_container %}
+                {% if forms.data.container|add:"0" == container.id %}
+                    {{ container.name }}
+                {% endif %}
+            {% endfor %}
+        </th>
+    </tr>
+    <tr>
+        <th class="text-left list-group-item-success " style="font-size:16px;">
+            To： {{ postcode }} - {{ city }} - {{ district }}
+        </th>
+        <th colspan="4" class="text-left list-group-item-success " style="font-size:16px;">
+            Pickup Date： {{ forms.data.pickup_date }}
+        </th>
+    </tr>
+    <tr class="list-group-item-info">
+        <td class="text-center list-group-item-warning">Company</td>
+        <td class="text-center list-group-item-warning">Fuel Surcharge Rate</td>
+        <td class="text-center list-group-item-warning">Price</td>
+        <td class="text-center list-group-item-warning">Begin Date</td>
+        <td class="text-center list-group-item-warning">Expire Date</td>
+    </tr>
+</thead>
+<tbody >
+    {% for price in price_list %}
+        <tr>
+            <td class="">{{ price.company_code_id }} - {{ price.company_code.name }}</td>
+            {% for fuel in fuel_list %}
+                {% if price.company_code_id == fuel.0  %}
+                    <td class="text-center">{{ fuel.1 }}</td>
+                {% endif %}
+            {% endfor %}
+            <td class="text-center">{{ price.price }}</td>
+            <td class="text-center">{{ price.begin_date }}</td>
+            <td class="text-center">{{ price.expire_date }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="text-center text-info bg-warning" style="font-size:14px;"><strong>Not Price can be found.</strong></td>
+        </tr>
+    {% endfor %}
+</tbody>
+</table>

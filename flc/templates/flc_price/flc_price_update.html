@@ -1,0 +1,18 @@
+<div class="form">
+    <form class="form-horizontal js-flc_price-update-form" id="update_flc_price_form"
+          method="post"
+          action="{% url 'flc:flc_price_update' form.instance.company_code_id form.instance.port_code_id form.instance.destination_type form.instance.destination form.instance.container_id form.instance.begin_date %}">
+        <div class="modal-header">
+            <button id="add_new_Company" type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Update FLC price</h4>
+        </div>
+        <br>
+        <div class="modal-body">
+            {% include 'flc_price/flc_price_form.html' %}
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary pull-left" >Update Price</button>
+            <button type="button" id="btn-cancel" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        </div>
+    </form>
+</div>

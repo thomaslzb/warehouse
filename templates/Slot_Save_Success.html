@@ -1,0 +1,120 @@
+{% extends 'warehouse_base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container">
+    <table class="table table-condensed">
+        <td>
+        <h2><span class="text-success" >Congratulations! Save Success. </span> </h2>
+        <div class="container">
+            <div>
+              <table class="table table-condensed">
+                <thead>
+                    <h2 class="text-center">Delivery Reference Detail</h2>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="col-lg-2">Delivery Ref.</td>
+                    <td>{{ object.deliveryref }}</td>
+                  <tr>
+                    <td>IN/OUTBOUND</td>
+                    <td>{{ object.status }}</td>
+                  </tr>
+                  <tr>
+                    <td>Vehicle Reg.</td>
+                    <td>{{ object.vehiclereg }} </td>
+                  </tr>
+                  <tr>
+                    <td>Haulier</td>
+                    <td>{{ object.hailerid.code }}
+                        &nbsp;-&nbsp;{{ object.hailerid.name }}
+                        &nbsp;-&nbsp;<span class="glyphicon glyphicon-user"></span>&nbsp;Contact:&nbsp;{{ object.hailerid.contact }}
+                        &nbsp;-&nbsp;<span class="glyphicon glyphicon-envelope"></span>&nbsp;Email:&nbsp;{{ object.hailerid.email }}
+                        &nbsp;-&nbsp;<span class="glyphicon glyphicon-phone"></span>&nbsp;Tel:&nbsp;{{ object.hailerid.telephone }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Operator</td>
+                    <td>{{ object.op_user.username }}
+                        &nbsp;&nbsp;{{ object.op_datetime|date:"j-m-Y H:i" }}
+                          <span class="glyphicon glyphicon-envelope"></span>&nbsp;Email:&nbsp;{{ object.op_user.email }}
+                        &nbsp;&nbsp;<span class="glyphicon glyphicon-phone"></span>&nbsp;Tel:&nbsp;{{ request.op_user.telephone }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Delivery DateTime</td>
+                    <td>
+                        {% if object.havetime == 1 %}
+                            {{ object.workdate|date:"j-m-Y" }}&nbsp;
+                            {{ object.slottime|time:"H:i"}}
+                        {% else %}
+                            <span class="alert-danger well-sm"> Haven't slot time</span>
+                        {% endif %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Status</td>
+                    <td>
+                     {% if object.progress == 1 %}
+                        <span>Booked</span>
+                     {% endif %}
+                     {% if object.progress == 2 %}
+                        <span class="alert-info well-sm">Arrived:{{ object.last_update }}</span>
+                     {% endif %}
+                     {% if object.progress == 3 %}
+                        <span class="alert-warning well-sm">Loading:{{ object.last_update }}</span>
+                     {% endif %}
+                     {% if object.progress == 4 %}
+                        <span class="alert-success well-sm">Finished:{{ object.last_update }}</span>
+                        {% endif %}
+                     {% if object.progress == 5 %}
+                        <span class="alert-danger well-sm">Abnormal:{{ object.last_update }}</span>
+                     {% endif %}
+                    <td>
+                  </tr>
+                  <tr>
+                    <td>Remark</td>
+                     <td>{{ object.remark }}</td>
+                  </tr>
+                  <tr>
+                      <td></td>
+                      <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+        </div>
+
+        <div class="panel-footer text-left">
+          <div class="panel-body">
+              <button class="btn" role="button" onclick="showModal()">Upload Files</button>
+            <a href="{% url 'slot:slot_list' %}?searching_date={{ searching_date }} " class="btn btn-primary" role="button">Back</a>
+          </div>
+        </div>
+        </td>
+    </table>
+    </div>
+
+    <!--遮罩-->
+    <div class="overlay"></div>
+    <!--模态框-->
+    <div id="modal" class="dropbox">
+        <div class="items-container">
+            <div id="close" style="cursor:pointer;float: right;width:20px">
+                <span class="css-close"></span>
+            </div>
+            <div>
+                <p class="head"><b>Drop files</b></p>
+                <div class="content" id="content">
+                    <table class="table">
+                        <tbody class="tbody"></tbody>
+                    </table>
+                </div>
+                <div class="demo-footer">
+                    <button class="btn" onclick="upload()">Begin Upload</button>
+                </div>
+				<a href='#' onclick='clearAll()' style='position:absolute;bottom:10px;right:30px;'>Clear All</a>
+            </div>
+        </div>
+    </div>
+    <br>
+{% endblock %}

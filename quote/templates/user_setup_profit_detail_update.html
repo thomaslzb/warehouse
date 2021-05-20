@@ -1,0 +1,92 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row mt">
+            <div class="col-lg-12">
+                <div class="form-panel">
+                      <h4><i class="fa fa-angle-right"></i> Update User Profit Rate - {{ user_info.email }}</h4>
+                    <hr>
+                    <div class=" form">
+                        <form class="cmxform form-horizontal style-form" id="commentForm" method="post"
+                              action="" >
+                            {% csrf_token %}
+                            <div class="form-group ">
+                                <label for="cname" class="control-label col-lg-1">User Name</label>
+                                <div class="col-lg-2">
+                                    <input class=" form-control" id="cname" name="username" minlength="2" value="{{ user_info.username }}" type="text" readonly />
+                                </div>
+                                <label for="cemail" class="control-label col-lg-1">First Name</label>
+                                <div class="col-lg-2">
+                                    <input class="form-control " id="first_name" name="first_name"  value="{{ user_info.first_name }}"  type="text" readonly />
+                                </div>
+                                <label for="cemail" class="control-label col-lg-1">Last Name</label>
+                                <div class="col-lg-2">
+                                    <input class="form-control " id="last_name"  name="last_name"  value="{{ user_info.last_name }}"   type="text" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <label for="cemail" class="control-label col-lg-1">Join Date</label>
+                                <div class="col-lg-2">
+                                    <input class="form-control " id="join_date" name="join_date"  value="{{ user_info.date_joined }}"  type="text" readonly />
+                                </div>
+                                <label for="login" class="control-label col-lg-1">Last Login</label>
+                                <div class="col-lg-2">
+                                    <input class="form-control " id="last_login"  name="last_login"  value="{{ user_info.last_login }}"   type="text" readonly />
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="container-fluid ">
+                                <label for="login" class="control-label col-lg-1">Region</label>
+                                <div class="col-lg-2">
+                                    {% if object.is_uk == 'UK' %}
+                                        <input class="form-control " id="last_login"  name="last_login"
+                                               value="{{ object.uk_area }}"   type="text" readonly />
+                                    {% else %}
+                                        <input class="form-control " id="last_login"  name="last_login"
+                                               value="{{ object.euro_area }}"   type="text" readonly />
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="container-fluid ">
+                                <ul class="list-group ">
+                                    {% if object.is_uk == 'UK' %}
+                                        <label class="list-group-item col-lg-2">European Profit Mode
+                                    {% else %}
+                                        <label class="list-group-item col-lg-2">UK Profit Mode
+                                    {% endif %}
+                                        <select class="form-control col-lg-2" id="profit_mode"  name="profit_mode" type="text" required >
+                                            <option value=0 {% if object.fix_amount != 0 %}selected{% endif %}>By FixAmount</option>
+                                            <option value=1 {% if object.fix_amount == 0 %}selected{% endif %}>By Percent</option>
+                                        </select>
+                                    </label>
+                                    <label class="list-group-item col-lg-2">Value
+                                        <input class="form-control col-lg-2 left" id="value"  name="value"
+                                               {% if object.fix_amount != 0 %}
+                                                   value="{{ object.fix_amount }}"
+                                               {% else %}
+                                                   value="{{ object.percent }}"
+                                               {% endif %}"
+                                        type="text" required  oninput="verify_decimal2(this)" />
+                                    </label>
+                                </ul>
+                            </div>
+                            <hr>
+                            {% if error %}
+                                <label class="alert alert-danger">Save Failure,  {{ error }}</label>
+                            {% endif %}
+                            <div class="form-group">
+                                <div class="col-lg-offset-1 col-lg-10">
+                                    <button class="btn btn-info col-lg-1" type="submit" style="float:left; margin-left: 0px">Save</button>
+                                    <a href="{% url 'quote:profit-detail' user_info.id %}" class="btn btn-theme04 col-lg-1" type="button" style="float:left; margin-left: 20px">Cancel</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- /form-panel -->
+            </div>
+        </div>
+    </div>
+{% endblock %}

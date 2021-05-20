@@ -1,0 +1,75 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+<div class="row mt container-fluid">
+    <div class="col-lg-12">
+        <div class="form-panel">
+            <h4><i class="fa fa-angle-right"></i> Update User Information</h4>
+            <hr>
+            <div class=" form">
+                <form class="cmxform form-horizontal style-form" id="commentForm" method="post" action="{% url 'users:my_profile_update' object.id %}">
+                    {% csrf_token %}
+                    <div class="form-group ">
+                        <label for="email" class="control-label col-lg-1">Email: </label>
+                        <div class="col-lg-3">
+                            <input class=" form-control " id="email" name="email" minlength="2" value="{{ object.email }}" type="text" readonly />
+                        </div>
+                        <div class="col-lg-1">
+                            <a href="{% url 'users:change_password' object.id %} " class="btn btn-warning" type="button">Change Password</a>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="cname" class="control-label col-lg-1">User Name</label>
+                        <div class="col-lg-2">
+                            <input class=" form-control" id="username" name="username" minlength="4" maxlength="20"  value="{{ object.username }}" type="text" required />
+                        </div>
+                        <div class="text-danger" id="jsLoginTips">
+                                {%for key, error in form.errors.items %}
+                                    <label class="control-label text-danger">{{ error }}</label>
+                                {% endfor %}
+                            {{ msg }}
+                        </div>
+                        {% if Error_string %}
+                            <label class="control-label text-danger">This username already exist. Please check it.</label>
+                        {% endif %}
+                    </div>
+                    <div class="form-group ">
+                        <label for="cemail" class="control-label col-lg-1">First Name</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="first_name" name="first_name"  value="{{ object.first_name }}">
+                        </div>
+                        <label for="cemail" class="control-label col-lg-1">Last Name</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="last_name"  name="last_name"  value="{{ object.last_name }}"/>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="curl" class="control-label col-lg-1">Telephone</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="telephone" name="telephone" value="{{ object.profile.telephone }}"/>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="curl" class="control-label col-lg-1">Favorite Company</label>
+                            <div class="col-lg-2">
+                                <select name = "favorite_company" class="form-control">
+                                {% for company in all_company %}
+                                    <option value={{ company.id }} {% if object.profile.favorite_company_id == company.id %}selected{% endif %}>
+                                        {{ company.name }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-offset-1">
+                            <button class="btn btn-primary col-lg-1" type="submit" style="float:left; margin-left: 0px">Save</button>
+                            <a href="{% url 'users:my_profile' object.id %}" class="btn btn-danger col-lg-1" type="button" style="float:left; margin-left: 20px">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /form-panel -->
+    </div>
+</div>
+{% endblock %}

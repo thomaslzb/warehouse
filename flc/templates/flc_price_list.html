@@ -1,0 +1,90 @@
+{% extends 'flc_data_base.html' %}
+{% load static %}
+{% block new_content %}
+  <div class="container-fluid panel">
+       <table class="table table-striped table-hover" id="flc-price-table">
+         <br>
+            <form role="search" action="" method="get">
+                {% csrf_token %}
+                <div class="form-group form-inline ">
+                    <label for="company_code" class="control-label " style="margin-right: 10px">Company Code</label>
+                    <input type="text" class="form-control" id="company_code" name="company_code"
+                           value="{{ company_code }}" placeholder="code"
+                           style="margin-right: 10px; text-transform:uppercase;" size=8>
+
+                    <label for="port" class="control-label " style="margin-right: 10px">Via Port Name</label>
+                    <input type="text" class="form-control" id="port" name="port"
+                           value="{{ port }}" placeholder="Port" style="margin-right: 20px" size=15>
+
+                    <label for="destination" class="control-label " style="margin-right: 10px">Destination</label>
+                    <input type="text" class="form-control" id="destination" name="destination"
+                           value="{{ destination }}" placeholder="Destination" style="margin-right: 20px" size=30>
+
+                    <label for="destination_type" class="control-label " style="margin-right: 10px">Destination-Type</label>
+                        <select name = "destination_type" class="form-control" style="margin-right: 20px">
+                        <option value=-1 selected>All</option>
+                        <option value='POSTCODE' {% if destination_type == 'POSTCODE' %}selected{% endif %}>POSTCODE</option>
+                        <option value='CITY' {% if destination_type == 'CITY' %}selected{% endif %}>CITY</option>
+                        </select>
+
+                    <input type="submit" id="btn_search" class="btn btn-primary" value="Search" style="margin-right: 10px">
+                    <a id="btn_reset" class="btn btn-warning" href="{% url 'flc:flc_price_list' %}">Reset</a>
+
+                    <button type="button" class="pull-right btn btn-primary js-flc-price-create-form"
+                            data-url="{% url 'flc:flc_price_create' %}">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Add New Price
+                    </button>
+                </div>
+            </form>
+        <thead>
+        <tr>
+            <th class="text-left">Company Code</th>
+            <th class="text-left">Via Port</th>
+            <th class="text-left">Destination</th>
+            <th class="text-left">Container</th>
+            <th class="text-left">Begin Date</th>
+            <th class="text-left">Expire Date</th>
+            <th class="text-left">Date-Type</th>
+            <th class="text-right">Price</th>
+            <th class="text-left">Update Datetime</th>
+            <th class="text-left">Operator</th>
+            <th class="text-left"></th>
+        </tr>
+        </thead>
+        <tbody>
+            {% include 'flc_price/partial_price_list.html' %}
+        </tbody>
+    </table>
+    <div class="pagination pagination-lg">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1"><span class="page-first">&laquo; first</span></a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    <!-- Modal Begin Add fuel-surcharge -->
+    <div class="modal fade" id="myModal-flc-price" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block myscript %}
+    <script src="{% static 'js/warehouse/flc/flc_price.js' %} " defer></script>
+{% endblock %}

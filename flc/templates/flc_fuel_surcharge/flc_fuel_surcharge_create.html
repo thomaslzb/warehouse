@@ -1,0 +1,17 @@
+<div class="form">
+    <form class="form-horizontal js-fuel-create-form" id="create_company_form"
+          method="post" action="{% url 'flc:flc_fuel_surcharge_create' %}">
+        <div class="modal-header">
+            <button id="add_new_Company" type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add New Fuel Surcharge Rate</h4>
+        </div>
+        <br>
+        <div class="modal-body">
+            {% include 'flc_fuel_surcharge/flc_fuel_surcharge_form.html' %}
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary pull-left" >Create</button>
+            <button type="button" id="btn-cancel" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        </div>
+    </form>
+</div>

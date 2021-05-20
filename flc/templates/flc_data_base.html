@@ -1,0 +1,21 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+<h3>FLC Basic Data Maintenance</h3>
+    <ul class="nav nav-tabs">
+        <li {% if page_tab == 1 %}class="active"{% endif %}><a href="{% url 'flc:flc_company_list' %}">
+            Transport Company</a></li>
+        <li {% if page_tab == 2 %}class="active"{% endif %}><a href="{% url 'flc:flc_price_list' %}"><span>FCL Price</span></a></li>
+        <li {% if page_tab == 3 %}class="active"{% endif %}><a href="{% url 'flc:flc_fuel_surcharge_list' %}">
+            FCL Fuel Surcharge Rate</a></li>
+        <li {% if page_tab == 4 %}class="active"{% endif %}><a href="{% url 'flc:flc_port_list' %}">
+            GB Port </a></li>
+        <li {% if page_tab == 5 %}class="active"{% endif %}><a href="{% url 'flc:flc_container_list' %}">
+            Container Type </a></li>
+        <li {% if page_tab == 6 %}class="active"{% endif %}><a href="{% url 'flc:flc_postcode_list' %}">
+            UK Postcode </a></li>
+    </ul>
+    <br>
+    {% block new_content %}
+    {% endblock %}
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+<h3>Quote Express Price</h3>
+    <ul class="nav nav-tabs">
+        <li><a href="{% url 'quote:inquire-uk' %}"><i class="fa fa-bell"></i><span>&nbsp&nbspSpecial Quote to UK</span></a></li>
+        <li class="active"><a href="{% url 'quote:inquire-euro' %}"><i class="fa fa-bell-o"></i><span>&nbsp&nbspSpecial Quote to Euro</span></a></li>
+        <li><a href="{% url 'quote:general-quote-uk' %}"><i class="fa fa-gbp"></i><span>&nbsp&nbspGeneral To UK</span></a></li>
+        <li><a href="{% url 'quote:general-quote-euro' %}"><i class="fa fa-euro"></i><span>&nbsp&nbspGeneral To Euro</span></a></li>
+    </ul>
+    <br>
+    <div class="col-lg-12">
+        <div class="form-panel">
+            <h4><i class="fa fa-angle-right"></i>&nbsp;&nbsp;Express To <span class="text-info">European</span></h4>
+            <hr>
+            <form class="cmxform form-horizontal style-form" id="commentForm" role="form" action="{% url 'quote:inquire-euro' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="length" class="control-label col-lg-1">&nbsp;Length(CM)</label>
+                    <div class="col-lg-1">
+                        <input type="text" class="form-control " id="length"
+                               name="length"  placeholder="Length"
+                               value="{{ length }}"
+                           oninput="onlyNumber(this)" required>
+                        <span class="text-danger">
+                            {{ quote_euro_form.errors.length.0 }}
+                        </span>
+                    </div>
+                    <label for="width" class="control-label col-lg-1">&nbsp;&nbsp;&nbsp;Width(CM)</label>
+                    <div class="col-lg-1">
+                    <input type="text" class="form-control" id="width" name="width"
+                           placeholder="Width" value="{{ width }}"
+                           oninput="onlyNumber(this)" required>
+                    <span class="text-danger">
+                        {{ quote_euro_form.errors.width.0 }}
+                    </span>
+                    </div>
+                    <label for="high" class="control-label col-lg-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;High(CM)</label>
+                    <div class="col-lg-1">
+                    <input type="text" class="form-control" id="high" name="high"
+                           placeholder="High" value="{{ high }}"
+                           oninput="onlyNumber(this)" required>
+                    <span class="text-danger">
+                        {{ quote_euro_form.errors.high.0 }}
+                    </span>
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label for="weight" class="control-label col-lg-1">&nbsp;&nbsp;Weight(KG)</label>
+                    <div class="col-lg-1">
+                    <input type="text" class="form-control " id="weight" name="weight"
+                           placeholder="Weight" value="{{ weight }}"
+                           oninput="verify_decimal2(this)" required>
+                    </div>
+                    <label class="text-danger control-label">
+                        {{ quote_euro_form.errors.weight.0 }}
+                    </label>
+                </div>
+                <div class="form-group ">
+                    <label for="quantity" class="control-label col-lg-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quantity</label>
+                    <div class="col-lg-1">
+                    <input type="text" class="form-control " id="quantity" name="qty" placeholder="Quantify"
+                           value="{{ qty }}"
+                           oninput="onlyNumber(this)" required>
+                    </div>
+                    <label class="text-danger control-label">
+                        {{ quote_euro_form.errors.qty.0 }}
+                    </label>
+                </div>
+                <div class="form-group ">
+                    <label for="postcode" class="control-label col-lg-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Country</label>
+                    <div class="col-lg-2">
+                        <select name = "euro" class="form-control">
+                            {% for item in all_euro %}
+                                <option {% if item.country == postcode %}selected{% endif %}>{{ item.country }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label for="postcode" class="control-label col-lg-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Address Type&nbsp;&nbsp;</label>
+                    <input type="radio" class="form-check-input" id="radio_business" name="addresstype" value="business" checked>
+                    <label class="form-check-label" for="InboundRadios">&nbsp;Business&nbsp;&nbsp;</label>
+                    <input type="radio" class="form-check-input" id="radio_resident" name="addresstype" VALUE="resident" >
+                    <label class="form-check-label" for="OutboundRadios">&nbsp;Resident</label>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-offset-1">
+                        <input type="submit" class="btn btn-info col-lg-1" value="Quote">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

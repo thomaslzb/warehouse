@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+    {% load static %}
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>DCG Warehouse Sign-In</title>
+        <!-- Bootstrap core CSS -->
+        <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet" >
+        <!-- Custom styles for this template -->
+        <link href="{% static 'css/sign-in.css' %}" rel="stylesheet" >
+    </head>
+    <body class="text-center">
+        <form class="form-signin" action="{% url 'users:login' %}" method="post">
+            {% csrf_token %}
+            <div>
+                <img class="mb-4" src="{% static 'images/uklogo.png' %}" alt="DCG Logo" width="135" height="90">
+                <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+                <div class="text-danger" id="jsLoginTips">{% for key, error in login_form.errors.items %}{{ error }} {% endfor %}{{ msg }}</div>
+                <label for="inputEmail" class="sr-only">Email address</label>
+                <input type="text" name="username" id="inputusername" class="form-control" placeholder="Username or Email address" required autofocus>
+                <label class="sr-only" for="inputPassword" >Password</label>
+                <input type="password"  name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                <div class="form-group">
+                    <button  id='js-captcha-refresh'><img src="{{ image_url }}" alt="captcha" class="captcha"  width="100" height="40"></button>
+                    <input  type="text"  style="width:180px"  autocomplete="off" id="id_captcha_1" name="captcha_1" class="form-control col-sm-6" placeholder="Input Captcha" >
+                    <input id="id_reg_captcha_0" name="captcha_0" type="hidden" value="{{ hashkey }}">
+                </div>
+            </div>
+            <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" value="remember-me"> Remember me
+                </label>
+            </div>
+            <input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign in">
+            <p class="mt-5 mb-3 text-muted">&copy; DCG 2020-2021</p>
+        </form>
+
+        <!-- Bootstrap core JavaScript
+    ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="{% static 'assets/js/jquery.min.js' %}"></script>
+        <script src="{% static 'assets/js/popper.js' %}"></script>
+        <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+        <script>
+          $('#js-captcha-refresh').click(function() {
+              console.log("I am in. =========================")
+              console.log('click');
+              $.getJSON("/captcha/refresh/",
+                  function (result) {
+                      $('.captcha').attr('src', result['image_url']);
+                      $('#id_captcha_0').val(result['key'])
+                  });
+          });
+          </script>
+    </body>
+</html>

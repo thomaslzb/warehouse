@@ -1,0 +1,69 @@
+{% extends 'mi_base.html' %}
+{% load static %}
+{% block new_content %}
+    <div class="panel">
+        <table class="table table-striped table-hover">
+            <h4>&nbsp;<i class="fa fa-angle-right"></i> Xiaomi Bill List</h4>
+            <hr>
+                <form role="search" action="" method="get">
+                    {% csrf_token %}
+                    <div class="form-group form-inline ">
+                        <label for="bill_year">&nbsp;Year </label>
+                        <select class="form-control" type="text" id="bill_year" name="bill_year" style="margin-right: 20px">
+                            <option {% if bill_year == 2021 %}selected{% endif %}>2021</option>
+                            <option {% if bill_year == 2022 %}selected{% endif %}>2022</option>
+                        </select>
+                        <input type="submit" class="btn btn-primary" value="Search" style="margin-right: 20px">
+                        <a href="{% url 'xiaomi:mi-file-upload' %}" class="pull-right btn btn-success"
+                           role="button" style="margin-right: 30px">Uploading Mi-Bill File
+                        </a>
+                    </div>
+                </form>
+            <thead>
+            <tr>
+                <th class="text-left">Bill Date</th>
+                <th class="text-left">Record Number</th>
+                <th class="text-left">Operator</th>
+                <th class="text-left">Operator Datetime</th>
+                <th class="text-left">Is Used</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for this_bill in object_list %}
+            <tr>
+                <td><a href="{% url 'xiaomi:mi_bill_list_detail' this_bill.bill_year this_bill.bill_month %}">
+                    {% if this_bill.bill_month < 10 %}
+                        {{ this_bill.bill_year }}-0{{ this_bill.bill_month }}
+                    {% else %}
+                        {{ this_bill.bill_year }}-{{ this_bill.bill_month }}
+                    {% endif %}
+                    </a>
+                </td>
+                <td><a href="{% url 'xiaomi:mi_bill_list_detail' this_bill.bill_year this_bill.bill_month %}">{{ this_bill.record_num }}</a></td>
+                <td>{{ this_bill.op_user.username }}</td>
+                <td>{{ this_bill.op_datetime }}</td>
+                <td>{{ this_bill.is_used }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+            <tr></tr>
+        </table>
+        <div class="pagination pagination-lg">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1"><span class="page-first">&laquo; first</span></a>
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+{% endblock %}

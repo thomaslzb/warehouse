@@ -1,0 +1,201 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+    {% if menu_active != 'MY_SKU' %}
+        <h3>Quote Express Price</h3>
+        <ul class="nav nav-tabs">
+            <li {% if menu_active == 'general-UK' %}class="active"{% endif %}><a href="{% url 'quote:general-quote-uk' %} ">General To UK</a></li>
+            <li {% if menu_active == 'general-EURO' %}class="active"{% endif %}><a href="{% url 'quote:general-quote-euro' %}">General To Euro</a></li>
+            <li {% if menu_active == 'EXPRESS-UK' %}class="active"{% endif %}><a href="{% url 'quote:inquire-uk' %}">Special Quote to UK</a></li>
+            <li {% if menu_active == 'EXPRESS-EURO' %}class="active"{% endif %}><a href="{% url 'quote:inquire-euro' %}">Special Quote to Euro</a></li>
+        </ul>
+        <br>
+    {% else %}
+        <div class="container-fluid">
+    {% endif %}
+        <!-- Detail -->
+        <div class="col-lg-12">
+            <div class="form-panel">
+                <table class="table  table-hover">
+                    <thead>
+                        <h3 class="text-center">DGC Express Price Detail</h3>
+                        <p class="text-center">Inquire Datetime: {{ now }}</p>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th class="col-sm-2">Service Name</th>
+                        <th class="col-sm-2">Service Type</th>
+                        <th class="col-sm-2">Destination</th>
+                        <th class="col-sm-1">Qty.</th>
+                        <th class="col-sm-1">Basic Price</th>
+                        <th class="col-sm-1">Oversize</th>
+                        <th class="col-sm-1">OverWeight</th>
+                        <th class="col-sm-1">SubCharge</th>
+                        <th class="col-sm-1">Fuel Charge</th>
+                        <th class="col-sm-1">Amount</th>
+                    </tr>
+                    <!-- HERMES -->
+                    {% if hermes.4 != 0 %}
+                        <tr>
+                        {% for item in hermes %}
+                            {% if forloop.counter0 == 0 %}
+                                <td>
+                                    <a href="https://www.myhermes.co.uk/" target="_blank">
+                                    <img src='{% static 'images/hermes-sm.png' %}' alt='Hermes Logo' width='80' height='30' >
+                                    {{ item }}
+                                    </a>
+                                </td>
+                            {% else %}
+                                <td>{{ item }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        </tr>
+                    {% endif %}
+                    <!-- PARCEL FORCE -->
+                    {% if parcelforce.4 != 0  %}
+                        <tr>
+                        {% for item in parcelforce %}
+                            {% if forloop.counter0 == 0 %}
+                                <td>
+                                    <a href="https://www.parcelforce.com" target="_blank">
+                                    <img src='{% static 'images/parcelforce-sm.jpg' %}' alt='ParcelForce Logo' width='80' height='30' >
+                                    {{ item }}
+                                    </a>
+                                </td>
+                            {% else %}
+                                <td>{{ item }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        </tr>
+                    {% endif %}
+                    <!-- DHL -->
+                    {% if dhl.4 != 0  %}
+                        <tr>
+                        {% for item in dhl %}
+                            {% if forloop.counter0 == 0 %}
+                                <td>
+                                    <a href="https://www.dhl.com" target="_blank">
+                                    <img src='{% static 'images/dhl-sm.png' %}' alt='DHL Logo' width='80' height='30' >
+                                    {{ item }}
+                                    </a>
+                                </td>
+                            {% else %}
+                                <td>{{ item }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        </tr>
+                    {% endif %}
+                    </tr>
+                    <!-- DPD -->
+                    {% if dpd.4 != 0  %}
+                        <tr>
+                        {% for item in dpd %}
+                            {% if forloop.counter0 == 0 %}
+                                <td>
+                                    <a href="https://www.dpd.com" target="_blank">
+                                    <img src='{% static 'images/dpd-sm.jpg' %}' alt='DPD Logo' width='80' height='30' >
+                                    {{ item }}
+                                    </a>
+                                </td>
+                            {% else %}
+                                <td>{{ item }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        </tr>
+                    {% endif %}
+                    <!-- UPS -->
+                    {% if ups.4 != 0  %}
+                        <tr>
+                        {% for item in ups %}
+                            {% if forloop.counter0 == 0 %}
+                                <td>
+                                    <a href="https://www.ups.com" target="_blank">
+                                    <img src='{% static 'images/ups-sm.png' %}' alt='UPS Logo' width='80' height='30' >
+                                    {{ item }}</a>
+                                </td>
+                            {% else %}
+                                <td>{{ item }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        </tr>
+                    {% endif %}
+                    <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="text-right">
+                        Amount = ((Basic Price + Oversize + OverWeight) * Qty + SubCharge) * (1 + Fuel Charge )&nbsp;&nbsp;
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accounting Data  -->
+        <div class="col-lg-12">
+            <div class="form-panel">
+                    <table class="table">
+                        <thead>
+                            <h4 class="text-center">Accounting Data</h4>
+                        </thead>
+                        <tbody>
+                        {% if menu_active == 'MY_SKU' %}
+                            <tr>
+                                <th><h5>SKU :<span class="text-info"> {{ sku_no }}</span></h5></th>
+                                <th><h5>Product Name:<span class="text-info"> {{ sku_name }}</span></h5></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                </tr>
+                        {% endif %}
+                        <tr>
+                            <th>Destination:<span class="text-info">
+                                {% if is_uk %} UK - {{ postcode }}
+                                {% else %}{{ postcode }}
+                                {% endif %}
+                            </span></th>
+                            <th>Address Type:<span class="text-info"> {{ address_type }}</span></th>
+                            <th>Quantity:<span class="text-info"> {{ qty }}</span></th>
+                            <th>Length:<span class="text-info"> {{ length }}</span> CM</th>
+                            <th>Width:<span class="text-info"> {{ width }}</span> CM </th>
+                            <th>High:<span class="text-info"> {{ high }}</span> CM</th>
+                            <th>Weight:<span class="text-info"> {{ weight }}</span> KG</th>
+                        </tr>
+                            <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        <div class="row">
+            <div class="col-md-12 mt">
+                <a href="{% if menu_active == 'EXPRESS-UK' %}
+                    {% url 'quote:inquire-uk' %}?length={{ length }}&width={{ width }}&high={{ high }}&weight={{ weight }}&qty={{ qty }}&postcode={{ postcode }}
+                {% elif menu_active == 'EXPRESS-EURO' %}
+                    {% url 'quote:inquire-euro' %}?length={{ length }}&width={{ width }}&high={{ high }}&weight={{ weight }}&qty={{ qty }}&country={{ postcode }}
+                {% else %}
+                    {% url 'sku:sku-list' %}
+                {% endif %}"
+                class="btn btn-success col-lg-1" role="button">
+                Go Back</a>
+            </div>
+        </div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+<div class="row mt container-fluid">
+    <div class="col-md-12">
+        <div class="form-panel">
+            <h4><i class="fa fa-angle-right"></i> Sku files uploading To Database</h4>
+            <hr>
+            <div class="form-group">
+                <form class="cmxform form-horizontal style-form" id="commentForm" role="form"
+                      action="{% url 'sku:sku-file-upload' %}" method="post" enctype="multipart/form-data">
+                      {% csrf_token %}
+                    <div class="form-group">
+                        <div class="col-lg-5">
+                             <input class="btn-file  form-control" type="file" name="document">
+                        </div>
+                        {% if error %}
+                            <label for="Error" class="control-label text-danger">Uploading Failure: {{ error }}{{ uploaded_file }}</label>
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="submit" class="btn btn-primary pull-left" value="Start Upload File">
+                        <a href="{% url 'sku:sku-list' %}"  class="btn btn-info pull-right" role="button">Back</a>
+                    </div>
+                </form>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+            <div class="form-group">
+                <ul>
+                    <label class="h4 text-warning"><strong>Uploading Files Notes</strong></label>
+                    <li>The maximum file size for uploads in this system is <strong class="text-danger">5 MB</strong>.</li>
+                    <li>Only excel files (<strong class="text-danger">XLS, XLSX</strong>) are allowed in this system. Others file type will be restricted.</li>
+                    <br>
+                    <li>Excel Demo</li>
+                    <li><img src='{% static 'images/upload-sku-demo-file.png' %}' alt='Excel Demo' width='700' height='200'></li>
+                </ul>
+           </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

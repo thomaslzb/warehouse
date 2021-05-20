@@ -1,0 +1,98 @@
+{% extends 'mi_base.html' %}
+{% load static %}
+{% block new_content %}
+    <div class="panel">
+            <table class="table table-striped table-advance table-hover">
+                <h4>&nbsp;<i class="fa fa-angle-right"></i> DPD Bill List</h4>
+                <hr>
+                    <form role="search" action="" method="get">
+                        {% csrf_token %}
+                        <div class="form-group form-inline ">
+                            <label for="bill_year">&nbsp;Year </label>
+                            <select class="form-control" type="text" id="bill_year" name="bill_year" style="margin-right: 10px">
+                                <option {% if bill_year == 2021 %}selected{% endif %}>2021</option>
+                                <option {% if bill_year == 2022 %}selected{% endif %}>2022</option>
+                            </select>
+                            <label for="bill_month">&nbsp;Month </label>
+                            <select class="form-control" type="text" id="bill_month" name="bill_month" style="margin-right: 10px">
+                                <option value=0 {% if bill_month == 0 %}selected{% endif %}>All</option>
+                                <option value=1 {% if bill_month == 1 %}selected{% endif %}>01</option>
+                                <option value=2 {% if bill_month == 2 %}selected{% endif %}>02</option>
+                                <option value=3 {% if bill_month == 3 %}selected{% endif %}>03</option>
+                                <option value=4 {% if bill_month == 4 %}selected{% endif %}>04</option>
+                                <option value=5 {% if bill_month == 5 %}selected{% endif %}>05</option>
+                                <option value=6 {% if bill_month == 6 %}selected{% endif %}>06</option>
+                                <option value=7 {% if bill_month == 7 %}selected{% endif %}>07</option>
+                                <option value=8 {% if bill_month == 8 %}selected{% endif %}>08</option>
+                                <option value=9 {% if bill_month == 9 %}selected{% endif %}>09</option>
+                                <option value=10 {% if bill_month == 10 %}selected{% endif %}>10</option>
+                                <option value=11 {% if bill_month == 11 %}selected{% endif %}>11</option>
+                                <option value=12 {% if bill_month == 12 %}selected{% endif %}>12</option>
+                            </select>
+                            <label for="dpd_invoice_no">&nbsp;DPD Invoice No </label>
+                            <input type="text" class="form-control " id="dpd_invoice_no" name="dpd_invoice_no"
+                                   value="{{ dpd_invoice_no }}" placeholder="DPD Invoice No" style="margin-right: 20px">
+                            <input type="submit" class="btn btn-primary" value="Search"  style="margin-right: 20px">
+                            <a class="btn btn-warning" href="{% url 'xiaomi:dpd_bill_list_main' %}">Reset </a>
+                            <a href="{% url 'xiaomi:dpd-file-upload' %}" class="pull-right btn btn-success"
+                               role="button"  style="margin-right: 30px">Uploading DPD File</a>
+                        </div>
+                    </form>
+                <thead>
+                <tr>
+                    <th class="text-left">Bill Date</th>
+                    <th class="text-left">DPD Account No.</th>
+                    <th class="text-left">DPD Invoice No.</th>
+                    <th class="text-right">Record Number</th>
+                    <th class="text-right">Net Invoice Value</th>
+                    <th class="text-right">VAT</th>
+                    <th class="text-right">Gross Invoice Value</th>
+                    <th class="text-left">Operator</th>
+                    <th class="text-left">Op datetime</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for this_bill in object_list %}
+                <tr>
+                    <td>{{ this_bill.bill_date }}</td>
+                    <td>
+                        <a href="{% url 'xiaomi:dpd_bill_list_detail'  %}">
+                            {{ this_bill.dpd_account_no }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'xiaomi:dpd_bill_list_detail' %}">
+                            {{ this_bill.dpd_invoice_no }}
+                        </a>
+                    </td>
+                    <td class="text-right">{{ this_bill.record_num }}</td>
+                    <td class="text-right">{{ this_bill.invoice_value }}</td>
+                    <td class="text-right">{{ this_bill.vat }}</td>
+                    <td class="text-right">{{ this_bill.gross_invoice_value }}</td>
+                    <td>{{ this_bill.op_user.username }}</td>
+                    <td>{{ this_bill.op_datetime }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+                <tr></tr>
+            </table>
+            <div class="pagination pagination-lg">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1"><span class="page-first">&laquo; first</span></a>
+                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+{% endblock %}

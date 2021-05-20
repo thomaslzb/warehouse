@@ -1,0 +1,35 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <h4 class="modal-title">海运整柜其它费用说明</h4>
+</div>
+<div class="modal-body">
+    <!-- Surcharges Table -->
+    <table class="table table-bordered table-striped " >
+        <thead>
+            <th class="text-center">费用详细</th>
+            <th class="text-center">英文名</th>
+            <th class="text-center">单位</th>
+            <th class="text-center">价格</th>
+            <th class="text-center">备注</th>
+        </thead>
+        <tbody>
+            {% for surcharge in all_surcharge %}
+                <tr>
+                    <td class="">{{ surcharge.cn_name }}</td>
+                    <td class="">{{ surcharge.en_name }}</td>
+                    <td class="">{{ surcharge.unit }}</td>
+                    {% if surcharge.fee_code != 'WASTE' %}
+                        <td class="text-right">£{{ surcharge.rate }}</td>
+                    {% else %}
+                        <td class="text-right">{{ surcharge.rate }}%</td>
+                    {% endif %}
+                    <td class="text-left">{{ surcharge.remark }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+</div>
+

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DCG Warehouse Booking System </title>
+    <meta name="author" content="Thomas Li">
+    <link href= "{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+{#    <link href= "{% static 'drop-file/demo.css' %}" rel="stylesheet">#}
+{#    <link href= "{% static 'drop-file/dropzone.css' %}" rel="stylesheet">#}
+    <link href= "{% static 'css/style.css' %}" rel="stylesheet">
+    <div class="panel-heading">
+        <!-- 头部 -->
+        <div class="panel-heading">
+            <div class="inline-group col-sm-1">
+                <img class="form-inline" src="{% static 'images/uklogo.png' %}" >
+            </div>
+            <div class="col-sm-6">
+                <h2>&nbsp;&nbsp;Slot Time Booking System</h2>
+                &nbsp;&nbsp;&nbsp;&nbsp;<label>Current User:</label> &nbsp-&nbsp
+                    <a href ="" class="text-right">{{ request.user }}</a>
+                    <a href="{% url 'users:logout' %}">Logout</a>
+            </div>
+        </div>
+    </div>
+</head>
+<body>
+    <!--  搜索框 -->
+    {% block search %}{% endblock %}
+    <!--  主页面 -->
+    {% block content %}{% endblock %}
+</body>
+<footer>
+    <div class="panel-footer">
+        <span class="fl">© DCG 2020 - 2021 All Rights Reserved</span>
+    </div>
+</footer>
+
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'bootstrap/js/scripts.js' %}"></script>
+<script src="{% static 'drop-file/jquery-1.10.2.js' %}"></script>
+{#<script src="{% static 'drop-file/demo.js' %}"></script>#}
+{#<script src="{% static 'drop-file/dropzone.js' %}"></script>#}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
+    
+{% block  myscript %}{% endblock %}
+
+</html>

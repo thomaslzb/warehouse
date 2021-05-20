@@ -1,0 +1,111 @@
+<div class="container-fluid ">
+    {% csrf_token %}
+    <div class="form-group ">
+        <label for="company_code" class="control-label col-lg-2">Company</label>
+        <div class="col-lg-10">
+            <select name = "company_code" class="form-control"
+                value = "{{ form.instance.company_code_id }}">
+                {% for company in all_company %}
+                    <option value="{{ company.code }}"
+                        {% if company.code == form.instance.company_code_id %}
+                            selected
+                        {% endif %}>
+                        {{ company.code }} - {{ company.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group ">
+        <label for="port_code" class="control-label col-lg-2">Via Port</label>
+        <div class="col-lg-6">
+            <select name = "port_code" class="form-control" value = "{{ form.instance.port_code }}">
+                {% for port in all_port %}
+                    <option value="{{ port.port_code }}"
+                        {% if port.port_code == form.instance.port_code_id %}
+                            selected
+                        {% endif %}>
+                        {{ port.port_code }} - {{ port.port_name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group ">
+        <label for="destination" class="control-label col-lg-2">Destination</label>
+        <div class="col-lg-6">
+            <input type="text" class="form-control " id="destination" name="destination" minlength=4
+                   value="{{ form.instance.destination }}" placeholder="Destination" />
+        </div>
+        <div class="col-lg-4">
+            <select name = "destination_type" class="form-control">
+                <option value="POSTCODE" {% if form.instance.destination_type == 'POSTCODE' %} selected{% endif %}>POSTCODE</option>
+                <option value="CITY" {% if form.instance.destination_type == 'CITY' %} selected{% endif %}>CITY</option>
+            </select>
+        </div>
+        {% if form.errors.destination.data.0.message %}
+            <div>
+                <label id="destination_fail" class="control-label  col-lg-8 text-danger">{{ form.errors.destination.data.0.message }}</label>
+            </div>
+        {% endif %}
+    </div>
+    <div class="form-group ">
+        <label for="container" class="control-label col-lg-2">Container</label>
+        <div class="col-lg-5">
+            <select name = "container" class="form-control" value = "{{ form.instance.container_id }}">
+                {% for container_name in all_container %}
+                    <option value="{{ container_name.id }}"
+                        {% if container_name.id == form.instance.container_id %}
+                            selected
+                        {% endif %}>
+                        {{ container_name.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group ">
+        <label for="price" class="control-label col-lg-2">Price</label>
+        <div class="col-lg-3">
+            <input class="form-control " id="price" name="price" value="{{ form.instance.price }}"
+                   oninput="verify_decimal2(this)"  placeholder="price" />
+        </div>
+        {% if form.errors.price.data.0.message %}
+            <label id="price_fail" class="control-label text-danger">{{ form.errors.price.data.0.message }}</label>
+        {% endif %}
+    </div>
+    <div class="form-group ">
+        <label for="contact" class="control-label col-lg-2">Begin Date</label>
+        <div class="col-lg-4">
+            <input type="date" name="begin_date" id="begin_date" min="2021-01-01" max="2030-12-31"
+                   class="form-control" value = "{{ form.instance.begin_date }}">
+        </div>
+        {% if form.errors.begin_date.data.0.message %}
+            <label id="begin_date_fail" class="control-label text-danger">{{ form.errors.begin_date.data.0.message }}</label>
+        {% endif %}
+    </div>
+    <div class="form-group ">
+        <label for="contact" class="control-label col-lg-2">Expire</label>
+        <div class="col-lg-4">
+            <input type="date" name="expire_date" id="expire_date" min="2021-01-01" max="2030-12-31"
+                   class="form-control" value = "{{ form.instance.expire_date }}">
+        </div>
+        {% if form.errors.expire_date.data.0.message %}
+            <label id="expire_date_fail" class="control-label text-danger">{{ form.errors.expire_date.data.0.message }}</label>
+        {% endif %}
+    </div>
+    <div class="form-group ">
+        <label for="date_type" class="control-label col-lg-2">Date Type</label>
+        <div class="col-lg-4">
+            <select name = "date_type" class="form-control">
+                <option value="Pickup Date" {% if form.instance.date_type == 'Pickup Date' %} selected{% endif %}>Pickup Date</option>
+                <option value="ETA Date" {% if form.instance.date_type == 'ETA Date' %} selected{% endif %}>ETA Date</option>
+            </select>
+        </div>
+    </div>
+    {% if form.errors %}
+        <label id="save_fail" class="control-label text-danger">{{ form.non_field_errors.data.0.messages.0 }}</label>
+    {% endif %}
+    <input type="hidden" name="op_user" value="{{ request.user.id }}">
+    <input type="hidden" name="insert_id" value="{{ form.instance.id }}">
+</div>

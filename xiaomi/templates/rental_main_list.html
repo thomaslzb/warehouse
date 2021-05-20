@@ -1,0 +1,77 @@
+{% extends 'mi_base.html' %}
+{% load static %}
+{% block new_content %}
+    <div class="panel">
+        <table class="table table-striped table-hover">
+            <h4>&nbsp;<i class="fa fa-angle-right"></i> Rental Bill List</h4>
+            <hr>
+                <form role="search" action="" method="get">
+                    {% csrf_token %}
+                    <div class="form-group form-inline ">
+                        <label for="username">&nbsp;Year </label>
+                        <select class="form-control" type="text" id="bill_year" name="bill_year" style="margin-right: 20px">
+                            <option {% if bill_year == 2021 %}selected{% endif %}>2021</option>
+                            <option {% if bill_year == 2022 %}selected{% endif %}>2022</option>
+                        </select>
+                        <input type="submit" class="btn btn-primary" value="Search" style="margin-right: 20px">
+                        <a href="{% url 'xiaomi:rental-file-upload' %}" class="pull-right btn btn-success"
+                           role="button" style="margin-right: 30px">Uploading Rental-Bill File
+                        </a>
+                    </div>
+                </form>
+            <thead>
+            <tr>
+                <th class="text-left">Bill Date</th>
+                <th class="text-left">Record Number</th>
+                <th class="text-right">Rental Price( Per Cubic Meter) </th>
+                <th class="text-right">Rental Amount</th>
+                <th class="text-left">Operator</th>
+                <th class="text-left">Operator Datetime</th>
+{#                <th class="text-left"></th>#}
+            </tr>
+            </thead>
+            <tbody>
+            {% for this_bill in object_list %}
+            <tr>
+                <td><a href="{% url 'xiaomi:rental_list_detail' %}">
+                    {% if this_bill.bill_month < 10 %}
+                        {{ this_bill.bill_year }}-0{{ this_bill.bill_month }}
+                    {% else %}
+                        {{ this_bill.bill_year }}-{{ this_bill.bill_month }}
+                    {% endif %}
+                    </a>
+                </td>
+                <td><a href="{% url 'xiaomi:rental_list_detail' %}">{{ this_bill.record_num }}</a></td>
+                <td class="text-right">{{ this_bill.fee_unit }}</td>
+                <td class="text-right">{{ this_bill.fee_total }}</td>
+                <td>{{ this_bill.op_user.username }}</td>
+                <td>{{ this_bill.op_datetime }}</td>
+{#                <td>#}
+{#                    <a href="{% url 'xiaomi:rental-chart' %}?year={{ this_bill.bill_year }}&month={{ this_bill.bill_month }}">#}
+{#                        Daily Rental Fee Chart#}
+{#                    </a>#}
+{#                </td>#}
+            </tr>
+            {% endfor %}
+            </tbody>
+            <tr></tr>
+        </table>
+        <div class="pagination pagination-lg">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1"><span class="page-first">&laquo; first</span></a>
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,70 @@
+<table id="container0_warehouse_table" class="table">
+    <tbody>
+        <tr>
+            <td width="42%">
+                <select id="container0_fba_code0" name="container0_fba_code0" class="form-control" style="margin-right: 20px" searchable>
+                    <option value= "{% if cabinet_data.4.0 %}{{ cabinet_data.0.5.0.0 }}{% endif %}">选择仓库代码{{ cabinet_data.4.0 }}</option>
+                    {% for amazon in amazon_warehouse %}
+                        <option value= {{ amazon.amazon }}
+                                {% if amazon.amazon.fba_code == cabinet_data.0.5.0.0 %}
+                                    selected
+                                {% endif %}>
+                            {{ amazon.amazon.fba_code }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td width="20%">
+                <input class=" form-control" id="container0_volume0" name="container0_volume0"
+                       value="{{ cabinet_data.0.5.0.1 }}" placeholder="体积" type="text"
+                       oninput="limit_Decimal_2(this)" required />
+            </td>
+            <td width="20%">
+                <input class=" form-control" id="container0_weight0" name="container0_weight0"
+                       value="{{ cabinet_data.0.5.0.2 }}" placeholder="重量" type="text"
+                       oninput="limit_Decimal_2(this)" required />
+            </td>
+            <td width="18%">
+                <button type="button" id="add_container0_warehouse", class="btn btn-warning " onclick="appendWarehouseRow(0)">
+                    <span class="glyphicon glyphicon-plus-sign"></span>
+                    新增仓库
+                </button>
+            </td>
+        </tr>
+        {% for w_code, w_volume, w_weight in cabinet_data.0.5 %}
+            {% if forloop.counter0 > 0 %}
+                <tr>
+                    <td>
+                        <select id="container0_fba_code{{ forloop.counter0 }}" name="container0_fba_code{{ forloop.counter0 }}" class="form-control" style="margin-right: 20px" searchable>
+                            <option value= "{% if w_code %}{{ w_code }}{% endif %}">选择仓库代码</option>
+                            {% for amazon in amazon_warehouse %}
+                                <option value= {{ amazon.amazon }}
+                                    {% if amazon.amazon.fba_code == w_code %}
+                                        selected
+                                    {% endif %}>
+                                    {{ amazon.amazon.fba_code }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <input class=" form-control" id="container0_volume{{ forloop.counter0 }} " name="container0_volume{{ forloop.counter0 }}"
+                               value="{{ w_volume }}"
+                               placeholder="体积" type="text" oninput="limit_Decimal_2(this)" required />
+                    </td>
+                    <td>
+                        <input class=" form-control" id="container0_weight{{ forloop.counter0 }} " name="container0_weight{{ forloop.counter0 }}"
+                               value="{{ w_weight }}"
+                               placeholder="重量" type="text" oninput="limit_Decimal_2(this)" required />
+                    </td>
+                    <td>
+                        <button type="button" id="add_container0_warehouse", class="btn btn-danger " onclick="deleteCurrentRow(this)">
+                            <span class="glyphicon glyphicon-minus-sign"></span>
+                            删除仓库
+                        </button>
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>

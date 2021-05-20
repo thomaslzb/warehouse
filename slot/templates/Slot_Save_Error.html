@@ -1,0 +1,72 @@
+{% extends 'warehouse_base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container table-bordered">
+        <table class="table">
+            <thead>
+                <label class="text-center h4">Delivery Reference Detail</label>
+            </thead>
+        <tr>
+            <td class="control-label col-sm-2"><label>Delivery Ref.:</label>
+            <td>{{ delivery_ref }} - {{ status }}</td>
+
+        </tr>
+        <tr>
+            <td class="control-label">
+                    <label>Delivery Date: </label>
+            </td>
+            <td>
+                {{ work_date }}&nbsp;&nbsp;{{ slot_time }}
+            </td>
+        </tr>
+        <tr>
+            <td class="control-label"><label>Status:</label></td>
+            <td>
+              {% if progress == "1" %}
+                 <span  class="alert-info well-sm">Booked:{{ operator_date }}</span>
+              {% endif %}
+              {% if progress == "2" %}
+                 <span class="alert-warning well-sm">Arrived:{{ operator_date }}</span>
+              {% endif %}
+              {% if progress == "3" %}
+                 <span class="alert-warning well-sm">Loading:{{ operator_date }}</span>
+              {% endif %}
+              {% if progress == "4" %}
+                 <span class="alert-success well-sm">Finished:{{ operator_date }}</span>
+              {% endif %}
+              {% if progress == "5" %}
+                 <span class="alert-danger well-sm">Abnormal:{{ object.last_update }}</span>
+              {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td class="control-label">
+                <label>haulier: </label>
+            </td>
+            <td>
+                {{ haulier }}
+            </td>
+        </tr>
+        </table>
+    </div>
+    <br>
+    <div class="container table-bordered">
+        <h3><span class="text-danger"> Save Failure.</span></h3>
+        <tr>
+            <td>
+                <label class="text-info">Error:  {{ ErrorMsg }}</label>
+            </td>
+        <tr>
+            <td>
+            <div class="panel-footer text-left">
+                  <div class="panel-body ">
+                        <a href="{% url 'slot:slot_detail' pk %}" class="btn btn-primary" role="button">Back</a>
+                  </div>
+            </div>
+            </td>
+        </tr>
+        <br>
+    </div>
+    <br>
+{% endblock %}
+

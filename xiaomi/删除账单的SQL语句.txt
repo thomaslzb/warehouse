@@ -1,0 +1,17 @@
+-- 删除原来的账单
+DELETE from x_detail_dpd WHERE update_month = 1;
+DELETE from x_detail_ups WHERE update_month = 1;
+DELETE from x_detail_handle WHERE bill_month = 1;
+DELETE from x_dcg_bill_main WHERE bill_month = 1;
+DELETE from x_dcg_bill_detail_total WHERE bill_month = 1;
+
+-- 更新小米账单的标志位
+UPDATE `ukdcg`.`x_mi_bill_main` SET `is_used`='0' WHERE  bill_month = 1;
+UPDATE `ukdcg`.`x_mi_bill_detail` SET `delivery_fee_checked`='0' WHERE  update_bill_month = 1;
+
+-- 更新DPD账单的标志位
+UPDATE `ukdcg`.`x_dpd_bill_detail` SET `is_use`='0' WHERE  used_bill_month = 1;
+
+-- 更新UPS账单的标志位
+UPDATE `ukdcg`.`x_ups_bill_detail` SET `is_use`='0' WHERE  used_bill_month = 1;
+

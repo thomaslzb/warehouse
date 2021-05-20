@@ -1,0 +1,17 @@
+<div class="form">
+    <form class="form-horizontal js-port-update-form" id="update_port_form"
+          method="post" action="{% url 'flc:flc_port_update' form.instance.pk %}">
+        <div class="modal-header">
+            <button id="add_new_port" type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Update UK Port</h4>
+        </div>
+        <br>
+        <div class="modal-body">
+            {% include 'flc_port/flc_port_form.html' %}
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary pull-left" >Update Port</button>
+            <button type="button" id="btn-cancel" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        </div>
+    </form>
+</div>

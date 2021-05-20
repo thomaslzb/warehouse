@@ -1,0 +1,95 @@
+{% extends 'warehouse_base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <div>
+        <h3>Delivery Reference Detail</h3>
+        </div>
+        <div>
+            <table class="table table-condensed">
+                <tbody>
+                  <tr>
+                    <td class="col-lg-2">Delivery Ref.</td>
+                    <td>{{ object.deliveryref }}</td>
+                  <tr>
+                    <td>IN/OUTBOUND</td>
+                    <td>{{ object.status }}</td>
+                  </tr>
+                  <tr>
+                    <td>Vehicle Reg.</td>
+                    <td>{{ object.vehiclereg }} </td>
+                  </tr>
+                  <tr>
+                    <td>Haulier</td>
+                    <td>{{ object.hailerid.code }}
+                        &nbsp;-&nbsp;{{ object.hailerid.name }}
+                        &nbsp;-&nbsp;Contact: {{ object.hailerid.contact }}
+                        &nbsp;-&nbsp;Email:{{ object.hailerid.email }}
+                        &nbsp;-&nbsp;Tel:{{ object.hailerid.telephone }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Operator</td>
+                    <td>{{ object.op_user.username }}
+                        &nbsp;&nbsp;{{ object.op_datetime|date:"j-m-Y H:i" }}
+                          Email: {{ object.op_user.email }}
+                        &nbsp;&nbsp;Tel: {{ request.op_user.telephone }}
+                    </td>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Delivery DateTime</td>
+                    <td>
+                        {% if object.havetime == 1 %}
+                            {{ object.workdate|date:"j-m-Y" }}&nbsp;
+                            {{ object.slottime|time:"H:i"}}
+                        {% else %}
+                            <span class="alert-danger well-sm"> Haven't slot time</span>
+                        {% endif %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Status</td>
+                    <td>
+                     {% if object.progress == 1 %}
+                        <span>Booked</span>
+                     {% endif %}
+                     {% if object.progress == 2 %}
+                        <span class="alert-info well-sm">Arrived</span>
+                     {% endif %}
+                     {% if object.progress == 3 %}
+                        <span class="alert-warning well-sm">Loading</span>
+                     {% endif %}
+                     {% if object.progress == 4 %}
+                        <span class="alert-success well-sm">Finished</span>
+                        {% endif %}
+                     {% if object.progress == 5 %}
+                        <span class="alert-danger well-sm">Abnormal</span>
+                     {% endif %}
+                    <td>
+                  </tr>
+                  <tr>
+                    <td>Remark</td>
+                     <td>{{ object.remark }}</td>
+                  </tr>
+                  <tr>
+                      <td></td>
+                      <td></td>
+                  </tr>
+                </tbody>
+            </table>
+            <div>
+                <form action="{% url 'slot:slot_delete' object.id %} "  method="post">{% csrf_token %}
+                    <H2 class="text-danger">&nbsp;&nbsp;Are you sure you want to delete "? </H2>
+                    <div class="panel-body">
+                        <div class="panel-footer text-left">
+                        <input class="pull-right btn btn-danger"  type="submit" value="Confirm">
+                        <a href="{% url 'slot:slot_detail' object.id %}" class="btn btn-primary" role="button"> Back </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br>
+{% endblock %}

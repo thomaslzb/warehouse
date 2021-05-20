@@ -1,0 +1,23 @@
+{% for record in object_list %}
+    <tr>
+        <td>{{ record.company_code_id }}</td>
+        <td>{{ record.company_code.name }}</td>
+        <td class="text-right">{{ record.fuel_charge }}</td>
+        <td>{{ record.begin_date }}</td>
+        <td>{{ record.expire_date }}</td>
+        <td>{{ record.op_last_update }}</td>
+        <td>{{ record.op_user }}</td>
+        <td>
+            <button type="button"
+                    class="btn btn-warning btn-sm js-update-fuel-surcharge"
+                    data-url="{% url 'flc:flc_fuel_surcharge_update' record.company_code_id record.begin_date %}">
+                    <span class="glyphicon glyphicon-pencil"></span>Edit
+            </button>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan = "8" class="text-center bg-warning">No Fuel Surcharge Data List</td>
+    </tr>
+{% endfor %}
+

@@ -1,0 +1,11 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+<h3>LCL Data Maintenance</h3>
+<ul class="nav nav-tabs">
+    <li {% if page_tab == 1 %}class="active"{% endif %}><a href="{% url 'lcl:lcl_fuel_surcharge_list' %}"><span>Fuel Surcharge</span></a></li>
+    <li {% if page_tab == 2 %}class="active"{% endif %}><a href="{% url 'lcl:lcl_company_list' %}"><span>Company</span></a></li>
+</ul>
+<br>
+{% block new_content %}{% endblock %}
+{% endblock %}

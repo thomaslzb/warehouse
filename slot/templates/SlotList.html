@@ -1,0 +1,910 @@
+{% extends 'warehouse_base.html' %}
+{% load static %}
+{% block search %}
+{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="col-sm-12" >
+            <!-- 左侧的输入框 -->
+            <div class="col-sm-2 ">
+                <br>
+                <form role="form" action="{% url 'slot:slot_list' %}" method="post" >
+                    {% csrf_token %}
+                    <div class="form-group" >
+                        <label class="form-inline">
+                            Haulier :
+                            <select name = "haulier" class="form-control">
+                                {% for haulier in all_hauliers %}
+                                    <option {% if haulier.id == haulier_id %}selected="selected"{% endif %}>
+                                        {{ haulier.code }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Delivery Reference
+                            <input type="text" class="form-control" value="{{ delivery_ref }}"
+                                                      name="delivery_ref"  placeholder="Delivery Reference" required>
+                        </label>
+                        {% if ErrorMsg.0 == 'delivery_ref' %}
+                            <label class="text-danger">{{ ErrorMsg.1 }}</label>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Vehicle Reg.
+                            <input type="text" class="form-control" name="vehicle_reg" id="Vehicle_Reg" placeholder="Vehicle Reg.">
+                        </label>
+                    </div>
+                    <div class="form-group">
+                          <input type="radio" class="form-check-input" id="radio_Inbound" name="status" value="INBOUND" checked>
+                          <label class="form-check-label" for="InboundRadios">&nbspINBOUND</label>
+                          <input type="radio" class="form-check-input" id="radio_Outbound" name="status" VALUE="OUTBOUND" >
+                          <label class="form-check-label" for="OutboundRadios">&nbspOUTBOUND</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" class="form-check-input" name="given_time" value="0" id="NotHaveSlotTime">
+                        <label class="form-check-label" for="NotHaveSlotTime">&nbspHaven't Slot Time</label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Date
+                            <input type="date" name="work_date" id="PickingDate" max="2030-12-31" min="2020-08-01"
+                                   class="form-control" value="{{ searching_date }}">
+                        {% if ErrorMsg.0 == 'work_date' %}
+                            <label class="text-danger">{{ ErrorMsg.1 }}</label>
+                        {% endif %}
+                        </label>
+                    </div>
+                    {% if request.user.profile.op_position == 'UK' %}
+                        <div class="form-group">
+                            <label class="control-label">Slot Time
+                                <input type="text" class="form-control"  id="timePicker" name="slot_time"
+                                       value="{{ slot_time }}" readonly>
+                                {% if ErrorMsg.0 == 'slot_time' %}
+                                    <label class="text-danger">{{ ErrorMsg.1 }}</label>
+                                {% endif %}
+                            </label>
+                        </div>
+                    {% else %}
+                        <div class="form-group">
+                            <label class="control-label">Slot Time
+                                <input type="text" class="form-control"  id="timePicker40" name="slot_time"
+                                       value="{{ slot_time }}" readonly>
+                                {% if ErrorMsg.0 == 'slot_time' %}
+                                    <label class="text-danger">{{ ErrorMsg.1 }}</label>
+                                {% endif %}
+                            </label>
+                        </div>
+                    {% endif %}
+                    <br>
+                    <div class="form-group" >
+                        <button type="submit" class="btn btn-primary" name="btn_Save">Save Data</button>
+                    </div>
+                </form>
+            </div>
+            <!-- 搜索框 -->
+            <form role="form" action="{% url 'slot:slot_list' %}" method="get" >
+                    <div class="form-group">
+                        <div class="controls input-append date form_date" data-date-format="dd MM yyyy"
+                             data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                            <label class="form-inline">&nbsp;&nbsp;&nbsp;
+                            <input type="date" name="searching_date" value="{{ searching_date }}"
+                                   id="SearchingDate" max="3000-12-31" min="2020-08-01" class="form-control">
+                            </label>
+                            <button type="submit" class="btn btn-success">Searching Date </button>
+                        </div>
+                    </div>
+                </form>
+            <!-- 列出所有有时间的 slot -->
+            <div class="col-sm-5 ">
+                <table class="table">
+                    <!-- 列出当前时间的所有 slot -->
+                    <thead>
+                    </thead>
+                    <tbody class="table-bordered">
+                        {% for slot_time_list in all_slots %}
+                            {% if forloop.counter0 <= 14 %}
+                                {% if slot_time_list.1.count > 0 %}
+                                    {% for slottime in slot_time_list.1 %}
+                                        {% if forloop.counter|divisibleby:"2"%}
+                                            <td class="col-sm-3">
+                                               {% if slottime.progress != 4 %}
+                                                {% if slottime.status == 'INBOUND' %}
+                                                    <span class="alert-info well-sm">
+                                                    <a href ="{% url 'slot:slot_detail' slottime.id page_tab %}">
+                                                        {% if slottime.progress == 1 %}
+                                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                                        {% endif %}
+                                                        {% if slottime.progress == 2 %}
+                                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                                        {% endif %}
+                                                        {% if slottime.progress == 3 %}
+                                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                                        {% endif %}
+                                                        {% if slottime.progress == 4 %}
+                                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                                        {% endif %}
+                                                        {% if slottime.progress == 5 %}
+                                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                                        {% endif %}
+                                                    </a>
+                                                    </span>
+                                                {% else %}
+                                                    <span class="alert-success well-sm">
+                                                    <a href ="{% url 'slot:slot_detail' slottime.id page_tab %}">
+                                                {% if slottime.progress == 1 %}
+                                                    <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                                {% endif %}
+                                                {% if slottime.progress == 2 %}
+                                                    <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                                {% endif %}
+                                                {% if slottime.progress == 3 %}
+                                                    <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                                {% endif %}
+                                                {% if slottime.progress == 4 %}
+                                                    <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                                {% endif %}
+                                                {% if slottime.progress == 5 %}
+                                                    <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                                {% endif %}
+                                            </a>
+                                                    </span>
+                                                {% endif %}
+                                            {% else %}
+                                                <span class="alert-dismissable">
+                                                <a href ="{% url 'slot:slot_detail' slottime.id  page_tab %}">
+                                                {% if slottime.progress == 1 %}
+                                                    <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                                {% endif %}
+                                                {% if slottime.progress == 2 %}
+                                                    <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                                {% endif %}
+                                                {% if slottime.progress == 3 %}
+                                                    <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                                {% endif %}
+                                                {% if slottime.progress == 4 %}
+                                                    <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                                {% endif %}
+                                                {% if slottime.progress == 5 %}
+                                                    <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                                {% endif %}
+                                            </a>
+                                                </span>
+                                            {% endif %}
+                                            </td>
+                                        {% else %}
+                                            <tr>
+                                            {% if forloop.first %}
+                                                <td class="col-sm-1">{{ slot_time_list.0 }}</td>
+                                            {% else %}
+                                                <td class="col-sm-1"></td>
+                                            {% endif %}
+                                            <td class="col-sm-3">
+                                                {% if slottime.progress != 4 %}
+                                                {% if slottime.status == 'INBOUND' %}
+                                                    <span class="alert-info well-sm">
+                                                    <a href ="{% url 'slot:slot_detail' slottime.id  page_tab %}">
+                                                        {% if slottime.progress == 1 %}
+                                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                                        {% endif %}
+                                                        {% if slottime.progress == 2 %}
+                                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                                        {% endif %}
+                                                        {% if slottime.progress == 3 %}
+                                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                                        {% endif %}
+                                                        {% if slottime.progress == 4 %}
+                                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                                        {% endif %}
+                                                        {% if slottime.progress == 5 %}
+                                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                                        {% endif %}
+                                                    </a>
+                                                    </span>
+                                                {% else %}
+                                                    <span class="alert-success well-sm">
+                                                    <a href ="{% url 'slot:slot_detail' slottime.id  page_tab %}">
+                                                        {% if slottime.progress == 1 %}
+                                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                                        {% endif %}
+                                                        {% if slottime.progress == 2 %}
+                                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                                        {% endif %}
+                                                        {% if slottime.progress == 3 %}
+                                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                                        {% endif %}
+                                                        {% if slottime.progress == 4 %}
+                                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                                        {% endif %}
+                                                        {% if slottime.progress == 5 %}
+                                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                                        {% endif %}
+                                                    </a>
+                                                    </span>
+                                                {% endif %}
+                                            {% else %}
+                                                <span class="alert-dismissable">
+                                                <a href ="{% url 'slot:slot_detail' slottime.id  page_tab %}">
+                                                {% if slottime.progress == 1 %}
+                                                    <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                                {% endif %}
+                                                {% if slottime.progress == 2 %}
+                                                    <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                                {% endif %}
+                                                {% if slottime.progress == 3 %}
+                                                    <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                                {% endif %}
+                                                {% if slottime.progress == 4 %}
+                                                    <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                                {% endif %}
+                                                {% if slottime.progress == 5 %}
+                                                    <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                                {% endif %}
+                                            </a>
+                                                </span>
+                                            {% endif %}
+                                            </td>
+
+                                        {% endif %}
+                                        {% if forloop.counter|divisibleby:"2" %}
+                                            {% if forloop.counter == 2 %}
+                                                <td>
+                                                    {% if slot_time_list.1.count >= max_slot_number %}
+                                                        <span class="text-danger">Full</span>
+                                                    {% else %}
+                                                        <span class="text-success">Available</span>
+                                                    {% endif %}
+                                                </td>
+                                            {% else %}
+                                                <td class="col-sm-1"></td>
+                                            {% endif %}
+                                            </tr>
+                                        {% else %}
+                                            {% if forloop.last %}
+                                                <td class="col-sm-3"></td>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if slot_time_list.1.count == 1 and slot_time_list.1.count < max_slot_number %}
+                                        <td class="col-sm-1"><span class="text-success">Available</span></td>
+                                    {% elif slot_time_list.1.count >= max_slot_number and max_slot_number == 1 %} <!-- 这个判断是临时写死的 -->
+                                        <td class="col-sm-1"><span class="text-danger">Full</span></td>
+                                    {% else %}
+                                        {% if not slot_time_list.1.count|divisibleby:"2" %}
+                                            <td class="col-sm-1"></td>
+                                        {% endif %}
+                                    {% endif %}
+                                {% else %}
+                                    <tr>
+                                    <td class="col-sm-1">{{ slot_time_list.0 }}</td>
+                                    <td class="col-sm-3"></td>
+                                    <td class="col-sm-3"></td>
+                                    <td class="col-sm-1"><span class="text-success">Available</span></td>
+                                    </tr>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-5 ">
+                <table class="table">
+                    <!-- 列出当前时间的所有 slot -->
+                    <thead>
+                    </thead>
+                    <tbody class="table-bordered">
+                        {% for slot_time_list in all_slots %}
+                             {% if forloop.counter0 > 14 %}
+                                <tr>
+                                    <td class="col-sm-1">{{ slot_time_list.0 }}</td>
+                                    {% if slot_time_list.1.count > 0 %}
+                                        {% for slottime in slot_time_list.1 %}
+                                            <td class="col-sm-3">
+                                            {% if slottime.progress != 4 %}
+                                                {% if slottime.status == 'INBOUND' %}
+                                                    <span class="alert-info well-sm">
+                                                    <a href ="{% url 'slot:slot_detail' slottime.id  page_tab %}">
+                                                        {% if slottime.progress == 1 %}
+                                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                                        {% endif %}
+                                                        {% if slottime.progress == 2 %}
+                                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                                        {% endif %}
+                                                        {% if slottime.progress == 3 %}
+                                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                                        {% endif %}
+                                                        {% if slottime.progress == 4 %}
+                                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                                        {% endif %}
+                                                        {% if slottime.progress == 5 %}
+                                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                                        {% endif %}
+                                                    </a>
+                                                    </span>
+                                                {% else %}
+                                                    <span class="alert-success well-sm">
+                                                        <a href ="{% url 'slot:slot_detail' slottime.id page_tab %}">
+                                                            {% if slottime.progress == 1 %}
+                                                                <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                                            {% endif %}
+                                                            {% if slottime.progress == 2 %}
+                                                                <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                                            {% endif %}
+                                                            {% if slottime.progress == 3 %}
+                                                                <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                                            {% endif %}
+                                                            {% if slottime.progress == 4 %}
+                                                                <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                                            {% endif %}
+                                                            {% if slottime.progress == 5 %}
+                                                                <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                                            {% endif %}
+                                                        </a>
+                                                    </span>
+                                                {% endif %}
+                                            {% else %}
+                                                <span class="alert-dismissable">
+                                                <a href ="{% url 'slot:slot_detail' slottime.id  page_tab %}">
+                                                    {% if slottime.progress == 1 %}
+                                                        <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                                    {% endif %}
+                                                    {% if slottime.progress == 2 %}
+                                                        <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                                    {% endif %}
+                                                    {% if slottime.progress == 3 %}
+                                                        <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                                    {% endif %}
+                                                    {% if slottime.progress == 4 %}
+                                                        <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                                    {% endif %}
+                                                    {% if slottime.progress == 5 %}
+                                                        <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                                    {% endif %}
+                                                </a>
+                                                </span>
+                                            {% endif %}
+                                            </td>
+                                            {% if forloop.last  %}
+                                                {% if not forloop.counter|divisibleby:"2"%}
+                                                    <td class="col-sm-3"></td>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        <td class="col-sm-3"></td>
+                                        <td class="col-sm-3"></td>
+                                    {% endif %}
+                                    <td class="col-sm-1">
+                                        {% if slot_time_list.1.count >= max_slot_number %}
+                                            <span class="text-danger">Full</span>
+                                        {% else %}
+                                            <span class="text-success">Available</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-sm-12" >
+            <div class="col-sm-2 ">
+            </div>
+            <div class="col-md-10">
+               <table class="row">
+                {% if all_NoSlotsTimes != 0 %}
+                    <td>
+                        <!-- 列出所有没有时间的 slot time -->
+                            <botton type="button" class="btn-lg btn-warning"  data-toggle="modal" data-target="#myModal-noSlotTime"
+                                    style="cursor:pointer; margin-right:20px">
+                                    Not have slot Time
+                                <span class="badge">
+                                {{ all_NoSlotsTimes }}</span>
+                            </botton>
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal-noSlotTime" role="dialog">
+                            <div class="modal-dialog">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title text-warning">Not have slot time Information</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <span class="modal-title">Not have slot time - INBOUND({{ all_NoInSlotsTimes.count }})</span>
+                                            </thead>
+                                            {% if all_NoInSlotsTimes.count > 0 %}
+                                                <tbody>
+                                                {% for NoSlotTime in all_NoInSlotsTimes %}
+                                                    {% if forloop.counter|divisibleby:"2"%}
+                                                        <td class="col-sm-2" >
+                                                            <a href ="{% url 'slot:slot_detail' NoSlotTime.id  page_tab %}">
+                                                                {% if NoSlotTime.progress == 1 %}
+                                                                    <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Booked</span>
+                                                                {% endif %}
+                                                                {% if NoSlotTime.progress == 2 %}
+                                                                    <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Arrived</span>
+                                                                {% endif %}
+                                                                {% if NoSlotTime.progress == 3 %}
+                                                                    <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Loading</span>
+                                                                {% endif %}
+                                                                {% if NoSlotTime.progress == 4 %}
+                                                                    <span data-toggle="popover" title="{{ NoSlotTime.status }} - {{ NoSlotTime.last_update }}">{{ NoSlotTime.deliveryref }}-Finished</span>
+                                                                {% endif %}
+                                                                {% if NoSlotTime.progress == 5 %}
+                                                                    <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Abnormal</span>
+                                                                {% endif %}
+                                                            </a>
+                                                        </td>
+                                                    {% else %}
+                                                        <tr>
+                                                        <td class="col-sm-2" >
+                                                            <a href ="{% url 'slot:slot_detail' NoSlotTime.id  page_tab %}">
+                                                                {% if NoSlotTime.progress == 1 %}
+                                                                    <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Booked</span>
+                                                                {% endif %}
+                                                                {% if NoSlotTime.progress == 2 %}
+                                                                    <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Arrived</span>
+                                                                {% endif %}
+                                                                {% if NoSlotTime.progress == 3 %}
+                                                                    <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Loading</span>
+                                                                {% endif %}
+                                                                {% if NoSlotTime.progress == 4 %}
+                                                                    <span data-toggle="popover" title="{{ NoSlotTime.status }} - {{ NoSlotTime.last_update }}">{{ NoSlotTime.deliveryref }}-Finished</span>
+                                                                {% endif %}
+                                                                {% if NoSlotTime.progress == 5 %}
+                                                                    <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Abnormal</span>
+                                                                {% endif %}
+                                                            </a>
+                                                        </td>
+                                                    {% endif %}
+                                                    {% if forloop.counter|divisibleby:"2" %}
+                                                        </tr>
+                                                    {% else %}
+                                                        {% if forloop.revcounter == 1 %}
+                                                            <td class="col-sm-2" >
+                                                            </td>
+                                                            </tr>
+                                                        {% endif %}
+                                                    {% endif %}
+
+                                                {% endfor %}
+                                            </tbody>
+                                            {% endif %}
+                                        </table>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <span class="modal-title">Not have slot time - OUTBOUND({{ all_NoOutSlotsTimes.count }})</span>
+                                            </thead>
+                                            {% if all_NoOutSlotsTimes.count > 0 %}
+                                                <tbody>
+                                                {% for NoSlotTime in all_NoOutSlotsTimes %}
+                                                    {% if forloop.counter|divisibleby:"2"%}
+                                                        <td class="col-sm-2" >
+                                                            <a href ="{% url 'slot:slot_detail' NoSlotTime.id  page_tab %}">
+                                                                {% if NoSlotTime.progress == 1 %}
+                                                                    <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Booked</span>
+                                                                {% endif %}
+                                                                {% if NoSlotTime.progress == 2 %}
+                                                                    <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Arrived</span>
+                                                                {% endif %}
+                                                                {% if NoSlotTime.progress == 3 %}
+                                                                    <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Loading</span>
+                                                                {% endif %}
+                                                                {% if NoSlotTime.progress == 4 %}
+                                                                    <span data-toggle="popover" title="{{ NoSlotTime.status }} - {{ NoSlotTime.last_update }}">{{ NoSlotTime.deliveryref }}-Finished</span>
+                                                                {% endif %}
+                                                                {% if NoSlotTime.progress == 5 %}
+                                                                    <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Abnormal</span>
+                                                                {% endif %}
+                                                            </a>
+                                                        </td>
+                                                    {% else %}
+                                                        <tr>
+                                                        <td class="col-sm-2" >
+                                                            <a href ="{% url 'slot:slot_detail' NoSlotTime.id  page_tab %}">
+                                                                {% if NoSlotTime.progress == 1 %}
+                                                                    <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Booked</span>
+                                                                {% endif %}
+                                                                {% if NoSlotTime.progress == 2 %}
+                                                                    <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Arrived</span>
+                                                                {% endif %}
+                                                                {% if NoSlotTime.progress == 3 %}
+                                                                    <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Loading</span>
+                                                                {% endif %}
+                                                                {% if NoSlotTime.progress == 4 %}
+                                                                    <span data-toggle="popover" title="{{ NoSlotTime.status }} - {{ NoSlotTime.last_update }}">{{ NoSlotTime.deliveryref }}-Finished</span>
+                                                                {% endif %}
+                                                                {% if NoSlotTime.progress == 5 %}
+                                                                    <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Abnormal</span>
+                                                                {% endif %}
+                                                            </a>
+                                                        </td>
+                                                    {% endif %}
+                                                    {% if forloop.counter|divisibleby:"2"%}
+                                                        </tr>
+                                                    {% else %}
+                                                        {% if forloop.revcounter == 1 %}
+                                                            <td class="col-sm-2" >
+                                                            </td>
+                                                            </tr>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </tbody>
+                                            {% endif %}
+                                        </table>
+                                        <br>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                {% endif %}
+                {% if all_progress_booked.count != 0 %}
+                <td >
+                    <!-- Booked 情况 -->
+                    <botton type="button" class="btn-lg btn-info"  data-toggle="modal" data-target="#myModal-Booked"
+                            style="cursor:pointer; margin-right:20px">
+                        Booked
+                        <span class="badge">
+                        {{ all_progress_booked.count }}</span>
+                    </botton>
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal-Booked" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Booked Information</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <span class="modal-title">Booked({{ all_progress_booked.count }})</span>
+                                        </thead>
+                                        {% if all_progress_booked.count > 0 %}
+                                            <tbody>
+                                                {% for progress in all_progress_booked %}
+                                                    {% if forloop.counter|divisibleby:"2"%}
+                                                        <td class="col-sm-2" >
+                                                            <a href ="{% url 'slot:slot_detail' progress.id  page_tab %}">
+                                                                <span data-toggle="popover" title="{{ progress.status }} - {{ progress.last_update }}">
+                                                                    {{ progress.deliveryref }}</span>
+                                                            </a>
+                                                        </td>
+                                                    {% else %}
+                                                        <tr>
+                                                        <td class="col-sm-2" >
+                                                            <a href ="{% url 'slot:slot_detail' progress.id  page_tab %}">
+                                                                <span data-toggle="popover" title="{{ progress.status }} - {{ progress.last_update }}">
+                                                                    {{ progress.deliveryref }}</span>
+                                                            </a>
+                                                        </td>
+                                                    {% endif %}
+                                                    {% if forloop.counter|divisibleby:"2" %}
+                                                        </tr>
+                                                    {% else %}
+                                                        {% if forloop.revcounter == 1 %}
+                                                            <td class="col-sm-2" >
+                                                            </td>
+                                                            </tr>
+                                                        {% endif %}
+                                                    {% endif %}
+
+                                                {% endfor %}
+                                            </tbody>
+                                        {% endif %}
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+               {% endif %}
+                {% if all_progress_arrived.count != 0 %}
+                <td>
+                     <!-- Arrived 情况 -->
+                    <botton type="button" class="btn-lg btn-primary"  data-toggle="modal" data-target="#myModal-Arrived"
+                            style="cursor:pointer; margin-right:20px">
+                        Arrived
+                        <span class="badge">
+                        {{ all_progress_arrived.count }}</span>
+                    </botton>
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal-Arrived" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title text-primary">Arrived Information</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <span class="modal-title">Arrived({{ all_progress_arrived.count }})</span>
+                                        </thead>
+                                        {% if all_progress_arrived.count > 0 %}
+                                            <tbody>
+                                                {% for progress in all_progress_arrived %}
+                                                    {% if forloop.counter|divisibleby:"2"%}
+                                                        <td class="col-sm-2" >
+                                                            <a href ="{% url 'slot:slot_detail' progress.id  page_tab %}">
+                                                                <span data-toggle="popover" title="{{ progress.status }} - {{ progress.last_update }}">
+                                                                    {{ progress.deliveryref }}</span>
+                                                            </a>
+                                                        </td>
+                                                    {% else %}
+                                                        <tr>
+                                                        <td class="col-sm-2" >
+                                                            <a href ="{% url 'slot:slot_detail' progress.id  page_tab %}">
+                                                                <span data-toggle="popover" title="{{ progress.status }} - {{ progress.last_update }}">
+                                                                    {{ progress.deliveryref }}</span>
+                                                            </a>
+                                                        </td>
+                                                    {% endif %}
+                                                    {% if forloop.counter|divisibleby:"2" %}
+                                                        </tr>
+                                                    {% else %}
+                                                        {% if forloop.revcounter == 1 %}
+                                                            <td class="col-sm-2" >
+                                                            </td>
+                                                            </tr>
+                                                        {% endif %}
+                                                    {% endif %}
+
+                                                {% endfor %}
+                                            </tbody>
+                                        {% endif %}
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                {% endif %}
+                {% if all_progress_loading.count != 0 %}
+                <td>
+                     <!-- Loading 情况 -->
+                    <botton type="button" class="btn-lg btn-primary"  data-toggle="modal" data-target="#myModal-Loading"
+                            style="cursor:pointer; margin-right:20px">
+                        Loading
+                        <span class="badge">
+                        {{ all_progress_loading.count }}</span>
+                    </botton>
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal-Loading" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title text-primary">Loading Information</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <span class="modal-title">Booked({{ all_progress_loading.count }})</span>
+                                        </thead>
+                                        {% if all_progress_loading.count > 0 %}
+                                            <tbody>
+                                                {% for progress in all_progress_loading %}
+                                                    {% if forloop.counter|divisibleby:"2"%}
+                                                        <td class="col-sm-2" >
+                                                            <a href ="{% url 'slot:slot_detail' progress.id  page_tab %}">
+                                                                <span data-toggle="popover" title="{{ progress.status }} - {{ progress.last_update }}">
+                                                                    {{ progress.deliveryref }}</span>
+                                                            </a>
+                                                        </td>
+                                                    {% else %}
+                                                        <tr>
+                                                        <td class="col-sm-2" >
+                                                            <a href ="{% url 'slot:slot_detail' progress.id  page_tab %}">
+                                                                <span data-toggle="popover" title="{{ progress.status }} - {{ progress.last_update }}">
+                                                                    {{ progress.deliveryref }}</span>
+                                                            </a>
+                                                        </td>
+                                                    {% endif %}
+                                                    {% if forloop.counter|divisibleby:"2" %}
+                                                        </tr>
+                                                    {% else %}
+                                                        {% if forloop.revcounter == 1 %}
+                                                            <td class="col-sm-2" >
+                                                            </td>
+                                                            </tr>
+                                                        {% endif %}
+                                                    {% endif %}
+
+                                                {% endfor %}
+                                            </tbody>
+                                        {% endif %}
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+               {% endif %}
+                {% if all_progress_abnormal.count != 0 %}
+                <td>
+                     <!-- Abnormal 情况 -->
+                    <botton type="button" class="btn-lg btn-danger"  data-toggle="modal" data-target="#myModal-Abnormal"
+                            style="cursor:pointer; margin-right:20px">
+                        Abnormal
+                        <span class="badge">
+                        {{ all_progress_abnormal.count }}</span>
+                    </botton>
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal-Abnormal" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title text-danger">Abnormal Information</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <span class="modal-title">Abnormal({{ all_progress_abnormal.count }})</span>
+                                        </thead>
+                                        {% if all_progress_abnormal.count > 0 %}
+                                            <tbody>
+                                                {% for progress in all_progress_abnormal %}
+                                                    {% if forloop.counter|divisibleby:"2"%}
+                                                        <td class="col-sm-2" >
+                                                            <a href ="{% url 'slot:slot_detail' progress.id  page_tab %}">
+                                                                <span data-toggle="popover" title="{{ progress.status }} - {{ progress.last_update }}">
+                                                                    {{ progress.deliveryref }}</span>
+                                                            </a>
+                                                        </td>
+                                                    {% else %}
+                                                        <tr>
+                                                        <td class="col-sm-2" >
+                                                            <a href ="{% url 'slot:slot_detail' progress.id  page_tab %}">
+                                                                <span data-toggle="popover" title="{{ progress.status }} - {{ progress.last_update }}">
+                                                                    {{ progress.deliveryref }}</span>
+                                                            </a>
+                                                        </td>
+                                                    {% endif %}
+                                                    {% if forloop.counter|divisibleby:"2" %}
+                                                        </tr>
+                                                    {% else %}
+                                                        {% if forloop.revcounter == 1 %}
+                                                            <td class="col-sm-2" >
+                                                            </td>
+                                                            </tr>
+                                                        {% endif %}
+                                                    {% endif %}
+
+                                                {% endfor %}
+                                            </tbody>
+                                        {% endif %}
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                {% endif %}
+                {% if all_progress_finished.count != 0 %}
+                <td>
+                     <!-- Finished 情况 -->
+                    <botton type="button" class="btn-lg btn-success"  data-toggle="modal" data-target="#myModal-Finished"
+                            style="cursor:pointer; margin-right:20px">
+                        Finished
+                        <span class="badge">
+                        {{ all_progress_finished.count }}</span>
+                    </botton>
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal-Finished" role="dialog">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title text-success">Finished Information</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <span class="modal-title">Finished({{ all_progress_finished.count }})</span>
+                                        </thead>
+                                        {% if all_progress_finished.count > 0 %}
+                                            <tbody>
+                                                {% for progress in all_progress_finished %}
+                                                    {% if forloop.counter|divisibleby:"2"%}
+                                                        <td class="col-sm-2" >
+                                                            <a href ="{% url 'slot:slot_detail' progress.id  page_tab %}">
+                                                                <span data-toggle="popover" title="{{ progress.status }} - {{ progress.last_update }}">
+                                                                    {{ progress.deliveryref }}</span>
+                                                            </a>
+                                                        </td>
+                                                    {% else %}
+                                                        <tr>
+                                                        <td class="col-sm-2" >
+                                                            <a href ="{% url 'slot:slot_detail' progress.id  page_tab %}">
+                                                                <span data-toggle="popover" title="{{ progress.status }} - {{ progress.last_update }}">
+                                                                    {{ progress.deliveryref }}</span>
+                                                            </a>
+                                                        </td>
+                                                    {% endif %}
+                                                    {% if forloop.counter|divisibleby:"2" %}
+                                                        </tr>
+                                                    {% else %}
+                                                        {% if forloop.revcounter == 1 %}
+                                                            <td class="col-sm-2" >
+                                                            </td>
+                                                            </tr>
+                                                        {% endif %}
+                                                    {% endif %}
+
+                                                {% endfor %}
+                                            </tbody>
+                                        {% endif %}
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                {% endif %}
+            </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block  myscript %}
+    <script>
+
+    $(document).ready(function () {
+
+        var time = new Date("{{ searching_date }}");
+        if (isNaN(time)){
+            time = new Date();
+        }
+        var day = ("0" + time.getDate()).slice(-2);
+        var month = ("0" + (time.getMonth() + 1)).slice(-2);
+        var today = time.getFullYear() + "-" + (month) + "-" + (day);
+        $('#PickingDate').val(today);
+    })
+
+    $(document).ready(function () {
+        var strdate = new Date("{{ searching_date }}");
+        if (isNaN(strdate)){
+            strdate = new Date();
+        }
+        var searchtime = new Date(strdate);
+        var day = ("0" + searchtime.getDate()).slice(-2);
+        var month = ("0" + (searchtime.getMonth() + 1)).slice(-2);
+        var today = searchtime.getFullYear() + "-" + (month) + "-" + (day);
+        $('#SearchingDate').val(today);
+    })
+    </script>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'mi_base.html' %}
+{% load static %}
+{% block new_content %}
+    <div class="panel">
+            <table class="table table-striped table-advance table-hover">
+                <h4>&nbsp;<i class="fa fa-angle-right"></i> UPS Bill Detail List </h4>
+                <hr>
+                    <form role="search" action="" method="get">
+                        {% csrf_token %}
+                        <div class="form-group form-inline ">
+                            <label for="mi_code" class="control-label ">&nbsp;Mi-Code : </label>
+                            <input type="text" class="form-control" id="mi_code" name="mi_code"
+                                   value="{{ mi_code }}" placeholder="Mi code" style="margin-right: 10px">
+                            <label for="ups_code">&nbsp;UPS-Code </label>
+                            <input type="text" class="form-control " id="ups_code" name="ups_code"
+                                   value="{{ ups_code }}" placeholder="UPS Code" style="margin-right: 10px">
+                            <label for="fee_desc">&nbsp;Fee Desc. </label>
+                            <input type="text" class="form-control " id="fee_desc" name="fee_desc"
+                                   value="{{ fee_desc }}" placeholder="Fee desc" style="margin-right: 10px">
+                            <input type="submit" class="btn btn-primary" value="Search" style="margin-right: 20px">
+                            <a class="btn btn-warning" href="{% url 'xiaomi:ups_bill_list_detail' ups_bill_no %}">Reset</a>
+                            <a href="{% url 'xiaomi:ups_bill_list_main' %}" class="pull-right btn btn-danger"
+                               role="button" style="margin-right: 40px">Back</a>
+                        </div>
+                    </form>
+                <thead>
+                <tr>
+                    <th class="text-left">Bill Date</th>
+                    <th class="text-left">UPS-Code</th>
+                    <th class="text-left">Mi-Code</th>
+                    <th class="text-left">Delivery-Date</th>
+                    <th class="text-left">Fee Code</th>
+                    <th class="text-left">Fee Description</th>
+                    <th class="text-right">Fee Amount</th>
+                    <th class="text-left">UPS Bill No</th>
+                    <th class="text-left">Operator</th>
+                    <th class="text-left">Op datetime</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for this_bill in object_list %}
+                <tr>
+                    <td>{{ this_bill.bill_date }}</td>
+                    <td>{{ this_bill.parcel_id }}</td>
+                    <td>{{ this_bill.mi_code }}</td>
+                    <td>{{ this_bill.delivery_date }}</td>
+                    <td>{{ this_bill.fee_code }}</td>
+                    <td>{{ this_bill.fee_desc }}</td>
+                    <td class="text-right">£{{ this_bill.fee_amount }}</td>
+                    <td>{{ this_bill.ups_bill_no }}</td>
+                    <td>{{ this_bill.op_user.username }}</td>
+                    <td>{{ this_bill.op_datetime }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+                <tr></tr>
+            </table>
+            <div class="pagination pagination-lg">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1"><span class="page-first">&laquo; first</span></a>
+                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+{% endblock %}

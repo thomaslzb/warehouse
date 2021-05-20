@@ -1,0 +1,29 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+<h3>Xiaomi Bill Calculations</h3>
+<ul class="nav nav-tabs">
+    <li {% if page_tab == 1 %}class="active"{% endif %}><a href="{% url 'xiaomi:mi_bill_list_main' %}"><span>Mi Bill</span></a></li>
+    <li {% if page_tab == 2 %}class="active"{% endif %}><a href="{% url 'xiaomi:ups_bill_list_main' %}"><span>UPS Bill</span></a></li>
+    <li {% if page_tab == 3 %}class="active"{% endif %}><a href="{% url 'xiaomi:dpd_bill_list_main' %}"><span>DPD Bill</span></a></li>
+    <li {% if page_tab == 7 %}class="active"{% endif %}><a href="{% url 'xiaomi:rental_list_main' %}"><span>Rental Bill</span></a></li>
+    <li {% if page_tab == 4 %}class="active"{% endif %}><a href="{% url 'xiaomi:dcg_bill_list' %}"><span>DCG-UK Bill</span></a></li>
+    <li {% if page_tab == 5 %}class="active"{% endif %} class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Reference data<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'xiaomi:item_delivery' 'UPS' %}">Delivery Price List - UPS</a></li>
+              <li><a href="{% url 'xiaomi:item_delivery' 'DPD' %}">Delivery Price List - DPD</a></li>
+              <li><a href="{% url 'xiaomi:item_postcode' 'UPS' %}">UK Zone 2 List - UPS </a></li>
+              <li><a href="{% url 'xiaomi:item_postcode' 'DPD' %}">UK Zone 2 List - DPD </a></li>
+              <li><a href="{% url 'xiaomi:congestion_zone' 'DPD' %}">Congestion Zone - DPD </a></li>
+              <li><a href="{% url 'xiaomi:item_handle' %}">Handle Price List</a></li>
+              <li><a href="{% url 'xiaomi:item_special' %}">Special Item List</a></li>
+            </ul>
+    </li>
+    <li {% if page_tab == 6 %}class="active"{% endif %}><a href="{% url 'xiaomi:fuel-surcharge-list' %}">
+        <span>Fuel Surcharge</span></a></li>
+</ul>
+<br>
+{% block new_content %}
+{% endblock %}
+{% endblock %}

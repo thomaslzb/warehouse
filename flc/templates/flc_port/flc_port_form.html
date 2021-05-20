@@ -1,0 +1,32 @@
+<div class="container-fluid ">
+    {% csrf_token %}
+    <div class="form-group ">
+        <label for="country" class="control-label col-lg-2">Country</label>
+        <div class="col-lg-2">
+            <input class=" form-control" name="country" type="text"
+                   value="GB"  placeholder="country" readonly />
+        </div>
+    </div>
+    <div class="form-group ">
+        <label for="port_code" class="control-label col-lg-2">Port Code</label>
+        <div class="col-lg-3">
+            <input class=" form-control" id="port_code" name="port_code" minlength="3" maxlength="3"
+                   value="{{ form.instance.port_code }}"  placeholder="Port Code"
+                   style="text-transform:uppercase;" required >
+        </div>
+        {% if form.errors.port_code.data.0.messages.0 %}
+            <label id="code_fail" class="control-label text-danger">{{ form.errors.port_code.data.0.messages.0 }}</label>
+        {% endif %}
+    </div>
+    <div class="form-group ">
+        <label for="port_name" class="control-label col-lg-2">Port Name</label>
+        <div class="col-lg-9">
+          <input class=" form-control" id="port_name" name="port_name" type="text"
+                 value="{{ form.instance.port_name }}"  placeholder="Port Name" required />
+          {% if form.errors.port_name.data.0.messages.0 %}
+               <label id="name_fail" class="control-label text-danger">{{ form.errors.port_name.data.0.messages.0 }}</label>
+          {% endif %}
+        </div>
+    </div>
+    <input type="hidden" name="op_user" value="{{ request.user.id }}">
+</div>

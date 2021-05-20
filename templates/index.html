@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>DCG Warehouse Slot Time Booking System </title>
+
+    <meta name="description" content="Source code generated using layoutit.com">
+    <meta name="author" content="LayoutIt!">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+  </head>
+  <body>
+
+    <div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="page-header">
+				<h2>
+					DCG <small> Slot Time Booking System </small>
+				</h2>
+				<!-- <HR style="border:3 double #987cb9" width="100%" color=#987cb9 SIZE=3> -->
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-2">
+			<H5>  Operator: Username</H5>
+			<HR style="border:3 double #987cb9" width="100%" color=#987cb9 SIZE=3>
+			<form role="form">
+				<div class="form-group">
+					 
+					<label>
+						Delivery Reference <input type="text" class="form-control" id="DeliveryRef">
+					</label>
+					
+				</div>
+				<div class="form-group">
+					<label>
+						Vehcle Reg.<input type="text" class="form-control" id="VehcleReg">
+					</label>
+				</div>
+				<div class="form-group">
+					<label class="control-label">Date</label>
+					<div class="controls input-append date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+						<input type="date" id="PickingDate" max="3000-12-31" min="2020-08-01" class="form-control">
+					</div>
+					<div>
+						<button type="submit" class="btn btn-primary"  name="btn_CheckSlotTime" >
+							Check Slot Time
+						</button>						
+					</div>
+				 </div>
+				 <div class="form-group">
+					<label class="control-label">Picking Time</label>
+					<div class="controls input-append date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+						<input type="Time" id="PickingTime" max="20:30" min="06:00" step="7200"  class="form-control" required>					
+					</div>
+				 </div>
+				<!-- Material unchecked -->
+				<div class="form-group">
+				  <input type="radio" class="form-check-input" id="radio_Inbound" name="materialExampleRadios" checked>
+				  <label class="form-check-label" for="materialChecked">&nbspINBOUND</label>
+				  <input type="radio" class="form-check-input" id="radio_Outbound" name="materialExampleRadios" >
+				  <label class="form-check-label" for="materialUnchecked">&nbspOUTBOUND</label>
+				</div>
+				<button type="submit" class="btn btn-primary" name="btn_Save">
+					Save
+				</button>
+			</form>
+			<HR style="border:3 double #987cb9" width="100%" color=#987cb9 SIZE=3>
+
+			<div class="row">
+				<div class="col-md-12">
+					<form role="form">
+						<div class="form-group">
+							<br></br>
+							<label for="exampleInputEmail1">
+								Input Delivery Ref. you want to delete
+							</label>
+							<input type="text" class="form-control" id="DelDeliveryRef">
+						</div>
+						<button type="buttom" class="btn btn-primary" name="btn_Delete">
+							Confirm Delete
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-5">
+
+			<table class="table">
+				<thead>
+					<tr>
+						<th>
+							<p class="text-muted">10/08/2020</P>
+						</th>
+							<div>
+							<td class="text-primary"> <font color="Blown">Inbound / </font>
+							<font color="green">Outbound</font></td>
+							</div>
+						<th>
+							<p class="text-muted">Status</p>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr >
+						<td >
+							06:00
+						</td>
+						<td>
+							<a href ="login/" color="Green">Login</a>
+							<a href ="" color="Blown">CN-ABC123</a>
+							<a href ="" color="Blown">CN-ABC123</a>
+						</td>
+						<td >
+							<font color="Red">Full</font>
+						</td>
+					</tr>
+					<tr >
+						<td>
+							06:30
+						</td>
+						<td>
+							<a href =""><font color="Green">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td>
+							<font color="Red">Full</font>
+						</td>
+					</tr>
+					<tr class="table-success">
+						<td>
+							07:00
+						</td>
+						<td>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td>
+							<font color="Green">Avaiable</font>
+						</td>
+					</tr>
+					<tr >
+						<td>
+							07:30
+						</td>
+						<td>
+							<a href =""><font color="Green">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td>
+							<font color="Red">Full</font>
+						</td>
+					</tr>
+					<tr class="table-success">
+						<td class="table-active">
+							08:00
+						</td>
+						<td class="table-active">
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td class="table-active">
+							<font color="Green">Avaiable</font>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							08:30
+						</td>
+						<td>
+							<a href =""><font color="Green">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td >
+							<font color="Red">Full</font>
+						</td>
+					</tr>
+					<tr >
+						<td>
+							09:00
+						</td>
+						<td>
+							<a href =""><font color="Green">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td>
+							<font color="Red">Full</font>
+						</td>
+					</tr>
+					<tr class="table-success">
+						<td>
+							09:30
+						</td>
+						<td>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td>
+							<font color="Green">Avaiable</font>
+						</td>
+					</tr>
+					<tr >
+						<td>
+							10:00
+						</td>
+						<td>
+							<a href =""><font color="Green">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td>
+							<font color="Red">Full</font>
+						</td>
+					</tr>
+					<tr class="table-success">
+						<td class="table-active">
+							10:30
+						</td>
+						<td class="table-active">
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td class="table-active">
+							<font color="Green">Avaiable</font>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							11:00
+						</td>
+						<td>
+							<a href =""><font color="Green">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td >
+							<font color="Red">Full</font>
+						</td>
+					</tr>
+					<tr >
+						<td>
+							11:30
+						</td>
+						<td>
+							<a href =""><font color="Green">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td>
+							<font color="Red">Full</font>
+						</td>
+					</tr>
+					<tr class="table-success">
+						<td>
+							12:00
+						</td>
+						<td>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td>
+							<font color="Green">Avaiable</font>
+						</td>
+					</tr>
+					<tr >
+						<td>
+							12:30
+						</td>
+						<td>
+							<a href =""><font color="Green">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td>
+							<font color="Red">Full</font>
+						</td>
+					</tr>
+					<tr class="table-success">
+						<td class="table-active">
+							13:00
+						</td>
+						<td class="table-active">
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td class="table-active">
+							<font color="Green">Avaiable</font>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							13:30
+						</td>
+						<td>
+							<a href =""><font color="Green">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td >
+							<font color="Red">Full</font>
+						</td>
+					</tr>
+					<tr >
+						<td>
+							14:00
+						</td>
+						<td>
+							<a href =""><font color="Green">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td>
+							<font color="Red">Full</font>
+						</td>
+					</tr>
+					<tr class="table-success">
+						<td>
+							14:30
+						</td>
+						<td>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td>
+							<font color="Green">Avaiable</font>
+						</td>
+					</tr>
+					<tr >
+						<td>
+							15:00
+						</td>
+						<td>
+							<a href =""><font color="Green">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td>
+							<font color="Red">Full</font>
+						</td>
+					</tr>
+					<tr class="table-success">
+						<td class="table-active">
+							15:30
+						</td>
+						<td class="table-active">
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td class="table-active">
+							<font color="Green">Avaiable</font>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							16:00
+						</td>
+						<td>
+							<a href =""><font color="Green">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td >
+							<font color="Red">Full</font>
+						</td>
+					</tr>
+					<tr >
+						<td>
+							16:30
+						</td>
+						<td>
+							<a href =""><font color="Green">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td>
+							<font color="Red">Full</font>
+						</td>
+					</tr>
+					<tr class="table-success">
+						<td>
+							17:00
+						</td>
+						<td>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td>
+							<font color="Green">Avaiable</font>
+						</td>
+					</tr>
+					<tr >
+						<td>
+							17:30
+						</td>
+						<td>
+							<a href =""><font color="Green">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td>
+							<font color="Red">Full</font>
+						</td>
+					</tr>
+					<tr class="table-success">
+						<td class="table-active">
+							18:00
+						</td>
+						<td class="table-active">
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td class="table-active">
+							<font color="Green">Avaiable</font>
+						</td>
+					</tr>
+					<tr >
+						<td>
+							18:30
+						</td>
+						<td>
+							<a href =""><font color="Green">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td>
+							<font color="Red">Full</font>
+						</td>
+					</tr>
+					<tr class="table-success">
+						<td class="table-active">
+							19:00
+						</td>
+						<td class="table-active">
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td class="table-active">
+							<font color="Green">Avaiable</font>
+						</td>
+					</tr>
+					<tr >
+						<td>
+							19:30
+						</td>
+						<td>
+							<a href =""><font color="Green">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td>
+							<font color="Red">Full</font>
+						</td>
+					</tr>
+					<tr class="table-success">
+						<td class="table-active">
+							20:00
+						</td>
+						<td class="table-active">
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td class="table-active">
+							<font color="Green">Avaiable</font>
+						</td>
+					</tr>
+					<tr >
+						<td>
+							20:30
+						</td>
+						<td>
+							<a href =""><font color="Green">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+							<a href =""><font color="Blown">CN-ABC123</font></a>
+						</td>
+						<td>
+							<font color="Red">Full</font>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<HR style="border:3 double #987cb9" width="100%" color=#987cb9 SIZE=3>
+	<div class="row">
+		<div class="col-md-12">
+			<address>
+				 <strong>© DCG 2020 All Rights Reserved</strong>
+			</address>
+		</div>
+	</div>
+</div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/scripts.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
+	<script>
+
+    $(document).ready(function () {
+        var time = new Date();
+        var day = ("0" + time.getDate()).slice(-2);
+        var month = ("0" + (time.getMonth() + 1)).slice(-2);
+        var today = time.getFullYear() + "-" + (month) + "-" + (day);
+        $('#PickingDate').val(today);
+    })
+
+	</script>
+  </body>
+</html>

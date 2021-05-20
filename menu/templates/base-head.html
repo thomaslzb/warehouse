@@ -1,0 +1,28 @@
+{% extends 'basic_base.html' %}
+{% load static %}
+
+{% block title %}DCG Quote Price System{% endblock %}
+
+{% block header %}
+      <!--logo start-->
+      <a href="{% url 'users:my_profile'  request.user.id %}" class="logo"><b>DCG-UK<span>&nbsp;Quote System</span></b></a>
+      <!--logo end-->
+      <div class="top-menu">
+        <ul class="nav pull-right top-menu">
+          {% if "BOOKING-SYSTEM" in request.user.profile.system_menu %}
+              <li><a class="logout" href="{% url 'slot:slot_list' %}">Booking System</a></li>
+          {% endif %}
+          <li><a class="logout" href="{% url 'users:logout' %}">Logout</a></li>
+        </ul>
+      </div>
+{% endblock %}
+
+{% block aside-menu %}
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

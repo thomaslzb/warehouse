@@ -1,0 +1,151 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+    <div class="row mt">
+    <div class="col-lg-12">
+        <div class="form-panel">
+            <h4><i class="fa fa-angle-right"></i>&nbsp;&nbsp;Reset User Permission - Username:
+                <span class="text-danger h3">{{ user.username }}</span>
+                &nbsp;&nbsp;&nbsp;Email:
+                <span class="text-info h4">{{ user.email }}</span></h4>
+            <hr>
+            <div class=" form">
+                <form class="cmxform form-horizontal style-form" id="reset_permission" method="post" action="">
+                    {% csrf_token %}
+                    <div class="container">
+                      <h3 class="col-lg-offset-0">Set user grant to access the SYSTEM</h3>
+                      <ul class="list-group ">
+                        <li class="list-group-item">
+                            <label class="text-info h5 col-lg-offset-0" >
+                            <input type="checkbox" class="control-label" id="booking_system" name="booking_system"
+                                   value="1" style="margin-right: 5px"
+                                {% if "BOOKING-SYSTEM" in user.profile.system_menu %}
+                                    checked
+                                {% endif %}>Could access BOOKING-SYSTEM
+                            </label>
+                            <label class="text-info h5 col-lg-offset-1" >
+                            <input type="checkbox" class="col-lg-offset-1" id="quote_system" name="quote_system"
+                                   value="1"  style="margin-right: 5px" {% if "QUOTE-SYSTEM" in user.profile.system_menu %}checked{% endif %}>
+                                Could access QUOTE-SYSTEM
+                            </label>
+                        </li>
+                      </ul>
+                    </div>
+                    <div id="conditional_part"{% if "QUOTE-SYSTEM" in user.profile.system_menu %}
+                                style=""{% else %}style="display: none"{% endif %}>
+                        <div class="container">
+                             <h4 class="col-lg-offset-0 text-info">User permissions For Quote-System</h4>
+                             <ul class="list-group ">
+                                <li class="list-group-item">
+                                    <div>
+                                        <label class="text-info h5 col-lg-offset-0">
+                                        <input type="checkbox" id="express_price" name="express_price" value="1"
+                                            {% if permission_list.0 == '1' %}checked{% endif %}
+                                               style="margin-right: 5px">Could access Quote Express Price
+                                        </label>
+                                        <label class="text-info h5 col-lg-offset-1">
+                                            <input type="checkbox" id="sku_list" name="sku_list" value="1" style="margin-right: 5px"
+                                                    {% if permission_list.1 != '0' %}checked{% endif %} >Could access Customer's SKU List
+                                        </label>
+                                        <label class="text-info h5 col-lg-offset-1">
+                                        <input type="checkbox" id="air_freight" name="air_freight" value="1"
+                                            {% if permission_list.2 != '0' %} checked {% endif %} style="margin-right: 5px">
+                                            Could access Air Freight Price
+                                        </label>
+                                    </div>
+                                </li>
+
+                                <li class="list-group-item">
+                                    <div class="text-info h5">
+                                       <label><input type="radio" name="lcl_price"  value="0"
+                                               {% if permission_list.3 == '0' %} checked {% endif %} style="margin-right:5px">
+                                           Don't allow to access LCL Price
+                                        </label>
+                                        <label class="col-lg-offset-1"><input type="radio" name="lcl_price" value="1"
+                                               {% if permission_list.3 == '1' %} checked {% endif %} style="margin-right: 5px">
+                                            Allow to access display all costs.
+                                        </label>
+                                        <label class="col-lg-offset-1"><input type="radio" name="lcl_price" value="2"
+                                               {% if permission_list.3 == '2' %} checked {% endif %} style="margin-right: 5px">
+                                            Allow to access but only display sales price.
+                                        </label>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="text-info h5">
+                                        <label class="col-lg-offset-0">
+                                        <input type="checkbox" id="user_maintenance" name="user_maintenance" value="1"
+                                            {% if permission_list.4 != '0' %} checked {% endif %} style="margin-right: 5px">
+                                            Could access User Maintenance
+                                        </label>
+                                        <label class="col-lg-offset-1">
+                                        <input type="checkbox" id="xiaomi_bill" name="xiaomi_bill" value="1"
+                                            {% if permission_list.5 != '0' %} checked {% endif %} style="margin-right: 5px">
+                                            &nbsp;Could access Xiaomi Bill
+                                        </label>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="text-info h5">
+                                        <label class="col-lg-offset-0">
+                                        <input type="checkbox" id="lcl_data_maintenance" name="lcl_data_maintenance" value="1"
+                                            {% if permission_list.6 != '0' %} checked {% endif %} style="margin-right: 5px">
+                                            LCL Data Maintenance
+                                        </label>
+                                        <label class="col-lg-offset-1">
+                                        <input type="checkbox" id="flc_data_maintenance" name="flc_data_maintenance" value="1"
+                                            {% if permission_list.8 != '0' %} checked {% endif %} style="margin-right: 5px">
+                                            FLC Data Maintenance
+                                        </label>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="text-info h5">
+                                        <label class="col-lg-offset-0">
+                                        <input type="checkbox" id="flc_quote" name="flc_quote" value="1"
+                                            {% if permission_list.7 != '0' %} checked {% endif %} style="margin-right: 5px">
+                                            FLC Quote
+                                        </label>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="text-info h5">
+                                        <label class="col-lg-offset-0">
+                                        <input type="checkbox" id="ocean_quote" name="ocean_quote" value="1"
+                                            {% if permission_list.9 != '0' %} checked {% endif %} style="margin-right: 5px">
+                                            海运费用查询
+                                        </label>
+                                    </div>
+                                </li>
+                             </ul>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <div class="col-lg-offset-1">
+                            <button class="btn btn-info col-lg-1" type="submit" style="float:left; margin-left: 0px">Save</button>
+                            <a href="{% url 'users:edit_quote_user' user.id %}" class="btn btn-theme04 col-lg-1" type="button" style="float:left; margin-left: 20px">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /form-panel -->
+    </div>
+    </div>
+    </div>
+{% endblock %}
+{% block myscript %}
+    <script>
+    const quote_system_checkbox = document.getElementById('quote_system')
+    quote_system_checkbox.addEventListener('change', function() {
+        console.log('coming in');
+        if (this.checked !=true){
+            $("#conditional_part").hide();
+        }else {
+            $("#conditional_part").show();
+        }
+    })
+    </script>
+{% endblock %}

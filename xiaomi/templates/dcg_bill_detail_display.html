@@ -1,0 +1,85 @@
+{% extends 'mi_base.html' %}
+{% load static %}
+{% block new_content %}
+    <div class="form-panel col-lg-8">
+        <div colspan="2" class="list-group-item-success">
+            <a href="{% url 'xiaomi:dcg_bill_list' %}" class="pull-left btn btn-danger"
+               role="button" style="margin-left: 20px">Back
+            </a>
+        </div>
+        <div colspan="1" class="text-center list-group-item-success ">
+            <a href="{% url 'xiaomi:file_load' bill_year bill_month %}" class="pull-right btn btn-success"
+               role="button" style="margin-right: 20px" >Download Bill
+            </a>
+        </div>
+        <div colspan="1" class="text-center list-group-item-success ">
+            <a href="{% url 'xiaomi:file_load_cost' bill_year bill_month %}" class="pull-right btn btn-warning"
+               role="button" style="margin-right: 50px" >Download With Cost
+            </a>
+        </div>
+    </div>
+    <div class="form-panel col-lg-8">
+        <table class="table  table-striped " >
+            <thead>
+                <th colspan="5" class="text-center list-group-item-success " style="font-size:18px;">
+                    DCG Bill Detail -
+                    {% if bill_month < 10 %}
+                        {{ bill_year }}-0{{ bill_month }}
+                    {% else %}
+                        {{ bill_year }}-{{ bill_month }}
+                    {% endif %}
+                </th>
+                <tr >
+                    <th class="text-left list-group-item-info">
+                        Fee Type
+                    </th>
+                    <th class="text-left list-group-item-info">
+                        Company
+                    </th>
+                    <th class="text-left list-group-item-info">
+                        Item Description
+                    </th>
+                    <th class="text-right list-group-item-info">
+                        Total PCs.
+                    </th>
+                    <th class="text-right list-group-item-info">
+                        Records
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in object_list %}
+                    {% if forloop.counter0 == delivery_dpd_count %}
+                        <tr>
+                            <td colspan="5" class="text-right list-group-item-warning">
+                                <strong>DPD Delivery Packages Total:&nbsp&nbsp&nbsp&nbsp&nbsp{{ total_package_dpd }}</strong></td>
+                        <tr>
+                    {% endif %}
+                    {% if forloop.counter0 == delivery_ups_count %}
+                        <tr>
+                            <td colspan="5" class="text-right list-group-item-warning"><strong>
+                                UPS Delivery Packages Total:&nbsp&nbsp&nbsp&nbsp&nbsp{{ total_package_ups }}</strong></td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <td class="">{{ record.item_type }}</td>
+                        <td class="">{{ record.express_company }}</td>
+                        <td class="">{{ record.item }}</td>
+                        <td class="text-right">{{ record.qty }}</td>
+                        {% if record.record_num != 0 %}
+                            <td class="text-right">{{ record.record_num }}</td>
+                        {% else %}
+                            <td class="text-right"></td>
+                        {% endif %}
+                    </tr>
+
+                {% endfor %}
+                <tr>
+                    <td colspan="5" class="text-right list-group-item-warning">
+                        <strong>Handle Packages Total:&nbsp&nbsp&nbsp&nbsp&nbsp{{ total_package_handle }} </strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

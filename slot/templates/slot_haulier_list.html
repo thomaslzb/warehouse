@@ -1,0 +1,108 @@
+{% extends 'warehouse_base.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid">
+    <div class="col-md-12">
+        <label class="h3 text-info">Haulier List</label>
+        <div class="form-group form-inline" >
+            <form role="search" action="" method="get">
+            <div class="row col-lg-7">
+                {% csrf_token %}
+                <label for="email" class="control-label" style="margin-left: 0px">Code: </label>
+                <input type="text" class="form-control" id="code" name="code"  placeholder="Haulier Code">
+                <label for="username" class="control-label">Name </label>
+                <input type="text" class="form-control" id="name" name="name"  placeholder="Haulier Name">
+                <label for="username" class="control-label">Status </label>
+                <select name = "status" class="form-control">
+                <option value = 99 selected>All</option>
+                <option value = 1>Normal</option>
+                <option value = 0>Suspend</option>
+                </select>
+                <input type="submit" class="btn btn-primary " value="Search" style="margin-left: 30px">
+            </div>
+            </form>
+            <div>
+                {% if request.user.profile.staff_role == 3 %}
+                    <a href="{% url 'slot:slot_haulier_add' %}" >
+                        <button type="text" class="btn btn-info col-lg-offset-3" >
+                            Add New Haulier
+                        </button>
+                    </a>
+                {% else %}
+                    <br>
+                    <br>
+                {% endif %}
+            </div>
+        </div>
+        </div>
+        <div><br></div>
+        <br>
+        <br>
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Telephone</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Create Date</th>
+                <th>Operator</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for haulier in object_list %}
+            <tr  class="{% if not haulier.is_use %}danger{% endif %}">
+                <td>
+                    {% if request.user.profile.staff_role == 3 %}
+                        <a href="{% url 'slot:slot_haulier_update' haulier.id %}">{{ haulier.code }}</a>
+                    {% else %}
+                        {{ haulier.code }}
+                    {% endif %}
+
+                </td>
+                <td>
+                    {% if request.user.profile.staff_role == 3 %}
+                        <a href="{% url 'slot:slot_haulier_update' haulier.id %}">{{ haulier.name }}</a>
+                    {% else %}
+                        {{ haulier.name }}
+                    {% endif %}
+                </td>
+                <td>{{ haulier.contact }}</td>
+                <td>{{ haulier.telephone }}</td>
+                <td>{{ haulier.email }}</td>
+                <td>
+                   {% if haulier.is_use %}
+                       Normal
+                   {% else %}
+                       Suspend
+                   {% endif %}
+                </td>
+                <td>{{ haulier.op_datetime }}</td>
+                <td>{{ haulier.op_user.username }}</td>
+            </tr>
+            {% empty %}
+                <tr>No User Listing</tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+{% endblock %}

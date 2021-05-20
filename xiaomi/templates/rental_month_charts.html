@@ -1,0 +1,24 @@
+{% extends 'mi_base.html' %}
+{% load static %}
+{% block new_content %}
+<div class="col-lg-12 main-chart">
+<!--CUSTOM CHART START -->
+    <div class="border-head">
+        <h3>Rental Fee in {{ bill_year }} - {{ bill_month }}</h3>
+    </div>
+    <div class="custom-bar-chart">
+        <ul class="y-axis">
+            {% for y_value in y_axis %}
+                <li><span>{{ y_value }}</span></li>
+            {% endfor %}
+        </ul>
+        {% for x_title, x_value, x_percent in data_list %}
+            <div class="bar">
+                <div class="title">{{ x_title }}</div>
+                <div class="value tooltips" data-original-title="{{ x_value }}" data-toggle="tooltip" data-placement="top">{{ x_percent }}</div>
+            </div>
+        {% endfor %}
+    </div>
+    <!--custom chart end-->
+</div>
+{% endblock %}

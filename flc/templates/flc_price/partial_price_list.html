@@ -1,0 +1,26 @@
+{% for record in object_list %}
+    <tr>
+        <td>{{ record.company_code_id }}</td>
+        <td>{{ record.port_code_id }} - {{ record.port_code }}</td>
+        <td>{{ record.destination }} - {{ record.destination_type }}</td>
+        <td>{{ record.container.name }}</td>
+        <td>{{ record.begin_date }}</td>
+        <td>{{ record.expire_date }}</td>
+        <td>{{ record.date_type }}</td>
+        <td class="text-right">{{ record.price }}</td>
+        <td>{{ record.op_datetime }}</td>
+        <td>{{ record.op_user }}</td>
+        <td>
+            <button type="button"
+                    class="btn btn-warning btn-sm js-update-flc-price"
+                    data-url="{% url 'flc:flc_price_update' record.company_code_id record.port_code_id record.destination_type record.destination  record.container_id record.begin_date %}">
+                    <span class="glyphicon glyphicon-pencil"></span>Edit
+            </button>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan = "11" class="text-center bg-warning">No Found Price Data List</td>
+    </tr>
+{% endfor %}
+

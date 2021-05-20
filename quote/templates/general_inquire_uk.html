@@ -1,0 +1,81 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+<h3>Quote Express Price</h3>
+<ul class="nav nav-tabs">
+    <li><a href="{% url 'quote:inquire-uk' %}"><i class="fa fa-bell"></i><span>&nbsp&nbspSpecial Quote to UK</span></a></li>
+    <li><a href="{% url 'quote:inquire-euro' %}"><i class="fa fa-bell-o"></i><span>&nbsp&nbspSpecial Quote to Euro</span></a></li>
+    <li class="active"><a href="{% url 'quote:general-quote-uk' %}"><i class="fa fa-gbp"></i><span>&nbsp&nbspGeneral To UK</span></a></li>
+    <li><a href="{% url 'quote:general-quote-euro' %}"><i class="fa fa-euro"></i><span>&nbsp&nbspGeneral To Euro</span></a></li>
+</ul>
+<br>
+<div class="col-lg-12">
+    <div class="form-panel">
+        <div class="row">
+            <div class="col-sm-6">
+                <!-- Table -->
+            <table class="table  table-hover">
+                <thead>
+                    <h3 class="text-center">DGC Express Price List - Unite Kingdom</h3>
+                </thead>
+                <tbody>
+                <tr>
+                    <th class="col-sm-2"  style="font-size:16px;">Area</th>
+                    <th class="col-sm-2"  style="font-size:16px;">Express Company</th>
+                    <th class="col-sm-1 text-right" style="font-size:16px;">Express Price</th>
+                </tr>
+                {% for area in parcel_price %}
+                    {% for company in area %}
+                        <tr>
+                            {% if forloop.counter0 == 0 %}
+                                <td class="" data-toggle="collapse" data-target="#demo" style="font-size:14px;"><strong>{{ company.0 }}</strong></td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                            <td>
+                                {% if company.1 == "HERM" %}
+                                    <a href="https://www.myhermes.co.uk/" target="_blank">
+                                    <img src='{% static 'images/hermes-sm.png' %}' alt='Hermes Logo' width='50' height='20' >
+                                {% elif company.1 == "PASC" %}
+                                    <a href="https://www.parcelforce.com" target="_blank">
+                                    <img src='{% static 'images/parcelforce-sm.jpg' %}' alt='ParcelForce Logo' width='50' height='20' >
+                                {% elif company.1 == "DHL" %}
+                                    <a href="https://www.dhl.com" target="_blank">
+                                    <img src='{% static 'images/dhl-sm.png' %}' alt='DHL Logo' width='50' height='20' >
+                                {% elif company.1 == "DPD" %}
+                                    <a href="https://www.dpd.com" target="_blank">
+                                    <img src='{% static 'images/dpd-sm.jpg' %}' alt='DPD Logo' width='50' height='20' >
+                                {% elif company.1 == "UPS" %}
+                                    <a href="https://www.ups.com" target="_blank">
+                                    <img src='{% static 'images/ups-sm.png' %}' alt='UPS Logo' width='50' height='20' >
+                                {% endif %}
+                                {{ company.2 }}
+                                </a>
+                            </td>
+                            {% if  company.4 == 0 %}
+                                <td class="text-right text-success" style="font-size:14px;">
+                                <strong>£&nbsp{{ company.3 }}</strong></td>
+                            {% else %}
+                                <td class="text-right text-info" style="font-size:14px;">
+                                £&nbsp{{ company.3 }}</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

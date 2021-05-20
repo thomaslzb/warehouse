@@ -1,0 +1,59 @@
+<div class="container-fluid ">
+    {% csrf_token %}
+    <div class="form-group ">
+        <label for="company_code" class="control-label col-lg-2">Company</label>
+        <div class="col-lg-4">
+            <select name = "company_code" class="form-control"
+                value = "{{ form.initial.company_code }}">
+                {% for company in all_company %}
+                    <option
+                        {% if company.code == form.instance.company_code_id %}
+                            selected
+                        {% endif %}>
+                        {{ company.code }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group ">
+        <label for="begin_date" class="control-label col-lg-2">RangeDate</label>
+        <div class="col-lg-4">
+            <input type="date" name="begin_date" id="begin_date" min="2021-01-01" max="2030-12-31"
+                   class="form-control"
+                   {% if form.instance.begin_date %}
+                       value = "{{ form.instance.begin_date }}">
+                   {% elif form.initial.begin_date %}
+                       value = "{{ form.initial.begin_date }}">
+                   {% else %}
+                       value = "{{ form.data.begin_date }}">
+                   {% endif %}
+        </div>
+        <label for="expire_date" class="control-label col-lg-1">TO</label>
+        <div class="col-lg-4">
+            <input type="date" name="expire_date" id="expire_date" min="2021-01-01" max="2030-12-31"
+                   class="form-control"
+                   {% if form.instance.expire_date %}
+                       value = "{{ form.instance.expire_date }}">
+                   {% elif form.initial.expire_date %}
+                       value = "{{ form.initial.expire_date }}">
+                   {% else %}
+                       value = "{{ form.data.expire_date }}">
+                   {% endif %}
+        </div>
+    </div>
+    <div class="form-group ">
+        <label for="fuel_charge" class="control-label col-lg-2">Fuel Rate</label>
+        <div class="col-lg-3">
+            <input class="form-control " id="fuel_charge" name="fuel_charge" value="{{ form.instance.fuel_charge }}"
+                   oninput="verify_decimal2(this)"  placeholder="fuel rate(%)" />
+        </div>
+    </div>
+    {% if form.errors %}
+        <label id="save_fail" class="control-label text-danger">{{ form.non_field_errors.data.0.messages.0 }}</label>
+        <label id="save_fail" class="control-label text-danger">{{ form.errors.begin_date.data.0.message }}</label>
+        <label id="save_fail" class="control-label text-danger">{{ form.errors.expire_date.data.0.message }}</label>
+        <label id="save_fail" class="control-label text-danger">{{ form.errors.fuel_charge.data.0.message }}</label>
+    {% endif %}
+    <input type="hidden" name="op_user" value="{{ request.user.id }}">
+</div>

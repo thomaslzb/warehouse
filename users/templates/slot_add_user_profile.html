@@ -1,0 +1,109 @@
+{% extends 'warehouse_base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+    <div class="col-lg-12">
+        <div class="form-panel">
+            <label class="text-info h4">Add New User</label>
+            <hr>
+            <div class=" form">
+                <form class="cmxform form-horizontal style-form" id="commentForm" method="post" action="{% url 'users:slot_add_user' %}">
+                    {% csrf_token %}
+                    <div class="form-group ">
+                        <label for="email" class="control-label col-lg-1">Email: </label>
+                        <div class="col-lg-2">
+                            <input class=" form-control " id="email" name="email" type="email"
+                                   value="{{ user_form.data.email }}"  placeholder="Email" required />
+                        </div>
+                        {% if user_form.errors %}
+                           <label class="control-label text-danger">{{ user_form.errors.email.0 }}</label>
+                        {% endif %}
+                        <label for="username" class="control-label col-lg-1">User Name</label>
+                        <div class="col-lg-2">
+                          <input class=" form-control" id="username" name="username" minlength="4" maxlength="20" type="text"
+                                 value="{{ user_form.data.username }}"  placeholder="Username" required />
+                        </div>
+                        {% if user_form.errors %}
+                           <label class="control-label text-danger">{{ user_form.errors.username.0 }}</label>
+                        {% endif %}
+                    </div>
+                    <div class="form-group ">
+                        <label for="first_name" class="control-label col-lg-1">First Name</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="first_name" name="first_name"
+                                   value="{{ user_form.data.first_name }}"  placeholder="First name" />
+                        </div>
+                        <label for="last_name" class="control-label col-lg-1">Last Name</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="last_name"  name="last_name"
+                                   value="{{ user_form.data.last_name }}"  placeholder="Last name" />
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="telephone" class="control-label col-lg-1">Telephone</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="telephone" name="telephone"
+                                   value="{{ user_form.data.telephone }}"  placeholder="Telephone" />
+                        </div>
+                        <label for="status" class="control-label col-lg-1">Status</label>
+                        <div class="col-lg-2">
+                            <select name = "status" class="form-control">
+                                <option value = '1' selected>Normal</option>
+                                <option value = '0'>Suspend</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="telephone" class="control-label col-lg-1">Email Group</label>
+                        <div class="col-lg-2">
+                            <select name = "email_group" class="form-control">
+                            {% for email in all_email_group %}
+                                <option value = {{ email.id }} {% if email.id == 2 %}selected{% endif %}>{{ email.desc }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                        <label for="telephone" class="control-label col-lg-1">Role</label>
+                        <div class="col-lg-2">
+                            <select name = "role" class="form-control">
+                                <option value = '1' selected>Operator</option>
+                                <option value = '2'>Warehouse-Operator</option>
+                                <option value = '3'>Manager</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="Password" class="control-label col-lg-1">Password</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="password"  name="password" type="password"  maxlength="128" minlength="8"
+                                   value="{{ user_form.data.password }}"  placeholder="Password" required/>
+                        </div>
+                        {% if user_form.errors %}
+                           <label class="control-label text-danger">{{ user_form.errors.password.0 }}</label>
+                        {% endif %}
+                        <label for="re_password" class="control-label col-lg-1">Repeat Password</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="re_password"  name="re_password" type="password"  maxlength="128" minlength="8"
+                                   value="{{ user_form.data.re_password }}"  placeholder="Repeat Password" required/>
+                        </div>
+                        {% if user_form.errors %}
+                           <label class="control-label text-danger">{{ user_form.errors.re_password.0 }}</label>
+                        {% endif %}
+                    </div>
+                    <hr>
+                    {% if error %}
+                        <label class="alert alert-danger">Save Failure,  {{ error }}</label>
+                    {% endif %}
+                    <div class="form-group">
+                        <div class="col-lg-offset-1">
+                            <button class="btn btn-primary col-lg-1" type="submit" style="float:left; margin-left: 0px">Save</button>
+                            <a href="{% url 'slot:slot_user_list' %}" class="btn btn-danger col-lg-1" type="button" style="float:left; margin-left: 20px">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /form-panel -->
+    </div>
+    </div>
+    </div>
+{% endblock %}

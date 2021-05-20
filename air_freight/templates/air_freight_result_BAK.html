@@ -1,0 +1,188 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row mt">
+            <div class="col-lg-12">
+                <div class="form-panel">
+                      <h4><i class="fa fa-angle-right"></i> Air Freight Delivery Price Calculation </h4>
+                    <hr>
+                    <div class=" form">
+                        <form class="cmxform form-horizontal style-form" id="commentForm" method="post"
+                              action="" >
+                            {% csrf_token %}
+                            <div class="form-group ">
+                                <label for="quote_type" class="control-label col-lg-1">Quote Type</label>
+                                <div class="col-lg-2">
+                                <select name = "quote_type" class="form-control">
+                                    {% if quote_type == "24HOURS" %}
+                                        <option value="24HOURS" selected>24 HOURS</option>
+                                        <option value="48HOURS">48 HOURS</option>
+                                    {% else %}
+                                        <option value="24HOURS">24 HOURS</option>
+                                        <option value="48HOURS" selected>48 HOURS</option>
+                                    {% endif %}
+                                </select>
+                                </div>
+                                <label for="cname" class="control-label col-lg-1">Volume(CBM)</label>
+                                <div class="col-lg-1">
+                                    <input class=" form-control" id="volume" name="volume" minlength="2" value="{{ volume }}"
+                                           placeholder="Volume" oninput="verify_decimal2(this)" type="text" required />
+                                </div>
+                                <label for="cemail" class="control-label col-lg-1">Weight(KG)</label>
+                                <div class="col-lg-1">
+                                    <input class="form-control " id="weight" name="weight"  value="{{ weight }}"
+                                           placeholder="Weight" type="text" oninput="verify_decimal2(this)"  required />
+                                </div>
+                                <label for="cemail" class="control-label col-lg-1">UK Postcode</label>
+                                <div class="col-lg-1">
+                                    <input class="form-control " id="postcode"  name="postcode"  value="{{ uk_postcode }}"
+                                           placeholder="Postcode"  type="text"  required />
+                                </div>
+                                <div class="col-lg-2">
+                                    {% if error %}
+                                        <label class="control-label text-danger">Error: {{ error }}</label>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <div class="col-lg-offset-1 col-lg-10">
+                                    <button class="btn btn-info col-lg-1" type="submit">Quote</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-7">
+                                <table class="table table-bordered table-striped " >
+                                <thead>
+                                    <tr >
+                                        <th colspan="4" class="text-center list-group-item-success " style="font-size:18px;">
+                                            General Air Freight Cargo
+                                        </th>
+                                        <th colspan="3" class="text-center list-group-item-success " style="font-size:18px;">
+                                            General Air Freight Cargo CARGO COST - {{  }}
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center col-lg-2 list-group-item-success " style="font-size:14px;">
+                                            Item Charges
+                                        </th>
+                                        <th class="text-center col-lg-1 list-group-item-success " style="font-size:14px;">
+                                            Rate
+                                        </th>
+                                        <th class="text-center col-lg-2 list-group-item-success " style="font-size:14px;">
+                                            Unit
+                                        </th>
+                                        <th class="text-center col-lg-3 list-group-item-success " style="font-size:14px;">
+                                            Remark
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="">Airline Handing</td>
+                                        <td class="text-right">{{ Airline_Handing }}</td>
+                                        <td class="text-center">Per Volumetric Weight</td>
+                                        <td class="text-left">Minimum Charges {{ AirlineHanding_minimum }} Pound</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="">Clearance Fee </td>
+                                        <td class="text-right">{{ Clearance }}</td>
+                                        <td class="text-center">Per Entry </td>
+                                        <td class="text-left"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="">Agent Fee1</td>
+                                        <td class="text-right">{{ Agent_Fee1 }}</td>
+                                        <td class="text-center">Per Entry</td>
+                                        <td class="text-left">Less than 1000</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="">Agent Fee2</td>
+                                        <td class="text-right">{{ Agent_Fee2 }}</td>
+                                        <td class="text-center">Per Entry</td>
+                                        <td class="text-left">Greater than 1000</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="">Covid19 Fee</td>
+                                        <td class="text-right">{{ Covid19_Fee }}</td>
+                                        <td class="text-center">Per Entry</td>
+                                        <td class="text-left">Minimum Charges {{ Covid19_Fee_minimum }} Pound</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="">Use of deferment</td>
+                                        <td class="text-right">{{ Use_of_deferment }}</td>
+                                        <td class="text-center">Per Entry</td>
+                                        <td class="text-left">Minimum per entry, if Duty&Vat greater than 5000, then will be charged 2% of duty&Vat</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                                </div>
+                                {% if zone_id != 0 %}
+                                    <div class="col-sm-3">
+                                        <table class="table table-bordered table-striped " >
+                                        <thead>
+                                            <tr >
+                                                {% if quote_type == "24HOURS" %}
+                                                    <th colspan="2" class="text-center list-group-item-danger " style="font-size:18px;">Result</th>
+                                                {% else %}
+                                                    <th colspan="2" class="text-center list-group-item-info " style="font-size:18px;">Result</th>
+                                                {% endif %}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                {% if quote_type == "24HOURS" %}
+                                                    <td class="list-group-item-danger">Service Time Limit</td>
+                                                    <td class="text-center list-group-item-danger">{{ Service_Time_Limit }}</td>
+                                                {% else %}
+                                                    <td class="list-group-item-info">Service Time Limit</td>
+                                                    <td class="text-center list-group-item-info">{{ Service_Time_Limit }}</td>
+                                                {% endif %}
+                                            </tr>
+                                            <tr>
+                                                <td class="">Calc Volumetric Weight </td>
+                                                <td class="text-center">{{ Counted_CBM }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="">Sale Delivery Price( Cost: {{ cost_price }})</td>
+                                                <td class="text-right">{{ Delivery_Price }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="">Airline Handing Fee</td>
+                                                <td class="text-right">{{ Airline_Handing_Fee }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="">Clearance Fee</td>
+                                                <td class="text-right">{{ Clearance_Fee }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="">Agency Fee</td>
+                                                <td class="text-right">{{ Agency_Fee }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="">COVID19 Fee</td>
+                                                <td class="text-right">{{ COVID19_Fee }}</td>
+                                            </tr>
+                                            <tr>
+                                                {% if quote_type == "24HOURS" %}
+                                                    <td class="list-group-item-danger" style="font-size:16px;">Total Amount</td>
+                                                    <td class="list-group-item-danger text-right " style="font-size:16px;"><strong>{{ Total_amount }}</strong></td>
+                                                {% else %}
+                                                    <td class="list-group-item-info" style="font-size:16px;">Total Amount</td>
+                                                    <td class="list-group-item-info text-right " style="font-size:16px;"><strong>{{ Total_amount }}</strong></td>
+                                                {% endif %}
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- /form-panel -->
+            </div>
+        </div>
+    </div>
+{% endblock %}

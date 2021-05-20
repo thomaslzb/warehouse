@@ -1,0 +1,530 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{% url 'lcl:lcl_quote_felixstowe' %}"><span>Via FELIXSTOWE</span></a></li>
+        <li><a href="{% url 'lcl:lcl_quote_southampton' %}">Via SOUTHAMPTON</a></li>
+    </ul>
+    <div class="card-primary card-outline">
+        <div class="col-lg-12">
+            <div class="form-panel">
+                  <h4><i class="fa fa-angle-right"></i> LCL CALCULATOR via FELIXSTOWE </h4>
+                <hr>
+                <div class=" form">
+                    <form class="cmxform form-horizontal style-form" id="commentForm" method="post"
+                          action="" >
+                        {% csrf_token %}
+                        <div class="form-group ">
+                            <label for="cname" class="control-label col-lg-1">Volume(CMB)</label>
+                            <div class="col-lg-1">
+                                <input class=" form-control" id="volume" name="volume" minlength="2"
+                                       value="{{ volume }}" placeholder="volume" type="text"
+                                       oninput="verify_decimal2(this)" required />
+                            </div>
+                            <label for="cemail" class="control-label col-lg-1">Weight(KG)</label>
+                            <div class="col-lg-1">
+                                <input class="form-control " id="weight" name="weight"
+                                       value="{{ weight }}" placeholder="Weight"
+                                       type="text" oninput="verify_decimal2(this)" required />
+                            </div>
+                            <label for="cemail" class="control-label col-lg-1">Pallet Qty.</label>
+                            <div class="col-lg-1">
+                                <input class="form-control " id="qty"  name="qty" placeholder="Pallet Qty."
+                                       value="{{ qty }}" oninput="onlyNumber(this)"  type="text" required/>
+                            </div>
+                            <label for="cemail" class="control-label col-lg-1">UK Postcode</label>
+                            <div class="col-lg-1">
+                                <input class="form-control " id="postcode"  name="postcode" placeholder="Postcode"
+                                       value="{{ uk_postcode }}"   type="text" required />
+                            </div>
+                            <div class="col-lg-2">
+                                <input class="form-control " id="uk_area"  name="uk_area" placeholder="UK Area"
+                                       value="{{ uk_area }}"   type="text" readonly />
+                            </div>
+                            <div class="col-lg-2">
+                                {% if error %}
+                                    <label class="control-label text-danger">Error: {{ error }}</label>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group"> <!-- button -->
+                            <div class="col-lg-offset-1 col-lg-10">
+                                <button class="btn btn-info pull-left col-sm-1" type="submit">Quote</button>
+                                <!-- Trigger the modal with a button -->
+                                {% if display_all_company != 2 %}
+                                    <button type="button" class="btn btn-success pull-right col-sm-1" data-toggle="modal"
+                                            data-target="#myModal-SIMARCO" style="float:left; margin-left: 10px">SIMARCO</button>
+                                    <button type="button" class="btn btn-success pull-right col-sm-1" data-toggle="modal"
+                                            data-target="#myModal-ANGLIA" style="float:left; margin-left: 10px">ANGLIA</button>
+                                    <button type="button" class="btn btn-success pull-right col-sm-1" data-toggle="modal"
+                                            data-target="#myModal-BARTRUMS" style="float:left; margin-left: 10px">BARTRUMS</button>
+                                    <button type="button" class="btn btn-success pull-right col-sm-1" data-toggle="modal"
+                                            data-target="#myModal-BENNETTS" style="float:left; margin-left: 10px">BENNETTS</button>
+                                    <button type="button" class="btn btn-success pull-right col-sm-1" data-toggle="modal"
+                                            data-target="#myModal-AS" style="float:left; margin-left: 10px">AS London</button>
+                                    <button type="button" class="btn btn-success pull-right col-sm-1" data-toggle="modal"
+                                            data-target="#myModal-gma" style="float:left; margin-left: 10px">GMA</button>
+                                {% endif %}
+                                <div class="modal fade" id="myModal-SIMARCO" role="dialog">
+                                    <div class="modal-dialog">
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">SIMARCO Information</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table class="table table-bordered table-striped " >
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="">Fuel Charge Rate</td>
+                                                            <td class="text-right">
+                                                                {% for fuel in fuel_percent %}
+                                                                    {% if fuel.0 == 'ANGLIA' %}
+                                                                        {{ fuel.1 }}%
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">Booked window</td>
+                                                            <td class="text-right">£20.00</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">Pre 10:00AM</td>
+                                                            <td class="text-right">£25.00</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">AM</td>
+                                                            <td class="text-right">£15.00</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">Saturday(AM Only)</td>
+                                                            <td class="text-right">£75.00</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">Saturday(AM)</td>
+                                                            <td class="text-right">£75.00</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4" class="">Tel: 0161 302 3490</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4" class="">Email: Sales@simarco.com</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modal -->
+                                <div class="modal fade" id="myModal-ANGLIA" role="dialog">
+                                    <div class="modal-dialog">
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">ANGLIA Information</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table class="table table-bordered table-striped " >
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="">Fuel Charge Rate</td>
+                                                            <td class="text-right">
+                                                                {% for fuel in fuel_percent %}
+                                                                    {% if fuel.0 == 'ANGLIA' %}
+                                                                        {{ fuel.1 }}%
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">Delivery(09:00-09:59)</td>
+                                                            <td class="text-right">£33.00</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">Delivery(10:00-17:00)</td>
+                                                            <td class="text-right">£22.00</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">AM/PM</td>
+                                                            <td class="text-right">£15.00</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">Saturday(AM Only)</td>
+                                                            <td class="text-right">£60.00</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">Amazon Fee(Per Consinment)</td>
+                                                            <td class="text-right">£5.00</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">Saturday Delivery</td>
+                                                            <td class="text-center">CFR</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4" class="text-center">CFR = Call For Rate</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4" class="">Tel: 01379 872872</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4" class="">Email: sales@angliafreight.co.uk</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Trigger the modal with a button -->
+                                <!-- Modal -->
+                                <div class="modal fade" id="myModal-BARTRUMS" role="dialog">
+                                    <div class="modal-dialog">
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">BARTRUMS Information</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table class="table table-bordered table-striped " >
+                                                    <thead>
+                                                        <tr >
+                                                            <th colspan="4" class="text-center list-group-item-success " style="font-size:18px;">
+                                                                Premium Deliveries(per consignment)
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="">Fuel Charge Rate</td>
+                                                            <td colspan="3" class="text-center">
+                                                                {% for fuel in fuel_percent %}
+                                                                    {% if fuel.0 == 'BARTRUMS' %}
+                                                                        {{ fuel.1 }}%
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">AM or PM</td>
+                                                            <td class="text-right">£12.00</td>
+                                                            <td class="">Saturday Express AM</td>
+                                                            <td class="text-right">£35.00</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">Timed between 09:00 & 09:59</td>
+                                                            <td class="text-right">£30.00</td>
+                                                            <td class="">Saturday Express PM</td>
+                                                            <td class="text-right">£45.00</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">Timed between 10:00 & 17:00</td>
+                                                            <td class="text-right">£25.00</td>
+                                                            <td class="">Saturday Express timed</td>
+                                                            <td class="text-right">£55.00</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">Amazon Deliveries</td>
+                                                            <td class="text-right">£25.00</td>
+                                                            <td class="">FORS(where available)</td>
+                                                            <td class="text-right">£30.00</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4" class="">Tel: 01379 873022   Fax: 01379 873022</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4" class="">Email: pallet-track@bartrums.com </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4" class=""><a href="https://bartrumsroadservices.vigoportal.com" target=”_blank” >https://bartrumsroadservices.vigoportal.com</a>    username: DCG002  Pwd: Bartrums</td>
+                                                        </tr>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Trigger the modal with a button -->
+                                <!-- Modal -->
+                                <div class="modal fade" id="myModal-BENNETTS" role="dialog">
+                                    <div class="modal-dialog">
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">BENNETTS Information</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table class="table table-bordered table-striped " >
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="">Fuel Charge Rate</td>
+                                                            <td class="text-right">
+                                                                {% for fuel in fuel_percent %}
+                                                                    {% if fuel.0 == 'BENNETTS' %}
+                                                                        {{ fuel.1 }}%
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">Timed Delivery</td>
+                                                            <td class="text-right">£20.00</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">Tail Lift</td>
+                                                            <td class="text-right">£30.00</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">Fabric Delivery</td>
+                                                            <td class="text-center">CFR</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">Extra Man</td>
+                                                            <td class="text-center">CFR</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="">Saturday Delivery</td>
+                                                            <td class="text-center">CFR</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4" class="text-center">CFR = Call For Rate</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4" class="">Tel: 07786 395074</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4" class="">Email: paul@bennetts-transport.co.uk </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Trigger the modal with a button -->
+                                <!-- Modal -->
+                                <div class="modal fade" id="myModal-AS" role="dialog">
+                                    <div class="modal-dialog">
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">AS London Information</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <ul class="list-group" >
+                                                    <li class="list-group-item">
+                                                        * Fuel Charge Rate: &nbsp&nbsp
+                                                        {% for fuel in fuel_percent %}
+                                                            {% if fuel.0 == 'ASLONDON' %}
+                                                                {{ fuel.1 }}%
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        </td>
+                                                    </li>
+                                                    <li class="list-group-item">1. AM surcharge £15.00 based on delivery between 08:00 and 12:00 </li>
+                                                    <li class="list-group-item">2. Timed Deliveries incur £25.00 surcharge.</li>
+                                                    <li class="list-group-item">3. London congestion Charge £10.00.</li>
+                                                    <li class="list-group-item">4. Tail Lift 1-7 pallets £20.00; 8-16 pallets £40.00 (per delivery point not pallet)</li>
+                                                    <li class="list-group-item">5. Loads above 12001kgs or over 24Cbm. Please call for an instant quote</li>
+                                                    <li class="list-group-item">Telephone: 01449 761757</li>
+                                                    <li class="list-group-item">Email: asyard@btconnect.com</li>
+                                                </ul>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Trigger the modal with a button -->
+                                <!-- Modal -->
+                                <div class="modal fade" id="myModal-gma" role="dialog">
+                                    <div class="modal-dialog">
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">GMA Information</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <ul class="list-group" >
+                                                    <li class="list-group-item">
+                                                        * Fuel Charge Rate: &nbsp&nbsp
+                                                        {% for fuel in fuel_percent %}
+                                                            {% if fuel.0 == 'GMA' %}
+                                                                {{ fuel.1 }}%
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        </td>
+                                                    </li>
+                                                    <li class="list-group-item">1. External Shed Collections £ 10.00 per UCN</li>
+                                                    <li class="list-group-item">2. Tail-lift charge £25.00</li>
+                                                    <li class="list-group-item">3. Timed Delivery £25.00</li>
+                                                    <li class="list-group-item">4. Am delivery £10.00</li>
+                                                    <li class="list-group-item">5. Hazardous plus 15% (min £25.00)</li>
+                                                    <li class="list-group-item">6. Standard, Non stackable pallets charged based on minimum of 1000 Kgs per pallet</li>
+                                                    <li class="list-group-item">7. NB. ALL CARGO IS CARRIED IN ACCORDANCE WITH CURRENT ROAD HAULAGE ASSOCIATION CONDITIONS OF CARRIAGE</li>
+                                                    <li class="list-group-item">8. Out of gauge items, bulky unshakable products, ie rolls of fabric quoted upon request.</li>
+                                                    <li class="list-group-item">Telephone: 01473 271707</li>
+                                                    <li class="list-group-item">Email: bookings@GMA-WAREHOUSING.CO.UK</li>
+                                                </ul>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <!-- Surcharges Table -->
+                                <table class="table table-bordered table-striped " >
+                                    <thead>
+                                        <tr >
+                                            <th colspan="2" class="text-center list-group-item-success " style="font-size:18px;">
+                                                DCG Surcharges - Per Consignment
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="">Tail Lift (if needed) </td>
+                                            <td class="text-right">£35.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="">Waiting Time after 1 Hour </td>
+                                            <td class="text-right">£45.00/Hr</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="">AM/PM Delivery</td>
+                                            <td class="text-right">£50.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="">Timed Delivery</td>
+                                            <td class="text-right">£50.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="">Handling fee(via co-loader's groupages)</td>
+                                            <td class="text-right">£50.00/ Shipment</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="">Free waiting time: 30min, After 30min will be charge</td>
+                                            <td class="text-right">£60.00/Hours</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="">Agent fee</td>
+                                            <td class="text-right">£15.00/Shipment</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="">Handover fee for other agent</td>
+                                            <td class="text-right">£50.00/Shipment</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="">Handover fee to BG/Gravitas</td>
+                                            <td class="text-right">£25.00/Shipment</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% if zone_id != 0 %}
+                                <div class="col-sm-3">
+                                    <!-- Result Table -->
+                                    <table class="table table-bordered table-striped " >
+                                    <thead>
+                                        <tr>
+                                           <th colspan="4" class="text-center list-group-item-info " style="font-size:18px;">Result</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody >
+                                        <tr>
+                                            <td class="">Sales Price</td>
+                                            {% if display_all_company != 2 %}
+                                                <td class="">Fuel Charge Rate</td>
+                                                <td colspan="2" class="text-center" style="font-size:14px;"><strong>{{ sales_price }}</strong></td>
+                                            {% else %}
+                                                <td colspan="3" class="text-center" style="font-size:14px;"><strong>{{ sales_price }}</strong></td>
+                                            {% endif %}
+                                        </tr>
+                                        {% if display_all_company != 2 %}
+                                            <tr>
+                                                <td class="">GMA</td>
+                                                <td class="text-center">{{ GMA_fuel }}</td>
+                                                <td colspan="2" class="text-center" style="font-size:14px;"><strong>{{ gma }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="">AS London</td>
+                                                <td class="text-center">{{ ASLONDON_fuel }}</td>
+                                                <td colspan="2" class="text-center" style="font-size:14px;"><strong>{{ as_london }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="">BENNETTS</td>
+                                                <td class="text-center">{{ BENNETTS_fuel }}</td>
+                                                <td colspan="2" class="text-center" style="font-size:14px;"><strong>{{ bennetts }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="2" class="">BARTRUMS</td>
+                                                <td rowspan="2" class="text-center">{{ BARTRUMS_fuel }}</td>
+                                                <td class="text-center">Express</td>
+                                                <td class="text-center">Economy</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center" style="font-size:14px;"><strong>{{ bartrums_express }}</strong></td>
+                                                <td class="text-center" style="font-size:14px;"><strong>{{ bartrums_economy }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="2" class="">ANGLIA</td>
+                                                <td rowspan="2" class="text-center">{{ ANGLIA_fuel }}</td>
+                                                <td class="text-center">Next Day</td>
+                                                <td class="text-center">Economy</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center" style="font-size:14px;"><strong>{{ anglia_next_day }}</strong></td>
+                                                <td class="text-center" style="font-size:14px;"><strong>{{ anglia_economy }}</strong></td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="2" class="">SIMARCO</td>
+                                                <td rowspan="2" class="text-center">{{ SIMARCO_fuel }}</td>
+                                                <td class="text-center">24HOURS</td>
+                                                <td class="text-center">48HOURS</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center" style="font-size:14px;"><strong>{{ simarco_24hours }}</strong></td>
+                                                <td class="text-center" style="font-size:14px;"><strong>{{ simarco_48hours }}</strong></td>
+                                            </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+                <!-- /form-panel -->
+        </div>
+        </div>
+    </div>
+{% endblock %}

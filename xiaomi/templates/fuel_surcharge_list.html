@@ -1,0 +1,92 @@
+{% extends 'mi_base.html' %}
+{% load static %}
+{% block new_content %}
+    <div class="panel">
+        <table class="table table-striped table-advance table-hover">
+            <h4>&nbsp;<i class="fa fa-angle-right"></i> Fuel Surcharge List</h4>
+            <hr>
+                <form role="search" action="" method="get">
+                    {% csrf_token %}
+                    <div class="form-group form-inline ">
+                        <label for="express_company">&nbsp;Express Company  </label>
+                        <select class="form-control" type="text" id="express_company" name="express_company" style="margin-right: 20px">
+                            <option {% if express_company == 'UPS' %}selected{% endif %}>UPS</option>
+                            <option {% if express_company == 'DPD' %}selected{% endif %}>DPD</option>
+                        </select>
+                        <label for="begin_year">&nbsp;Year </label>
+                        <select class="form-control" type="text" id="begin_year" name="begin_year" style="margin-right: 20px">
+                            <option {% if bill_year == 2021 %}selected{% endif %}>2021</option>
+                            <option {% if bill_year == 2022 %}selected{% endif %}>2022</option>
+                        </select>
+                            <label for="begin_month">&nbsp;Month </label>
+                            <select class="form-control" type="text" id="begin_month" name="begin_month" style="margin-right: 10px">
+                                <option value=0 {% if bill_month == 0 %}selected{% endif %}>All</option>
+                                <option value=1 {% if bill_month == 1 %}selected{% endif %}>01</option>
+                                <option value=2 {% if bill_month == 2 %}selected{% endif %}>02</option>
+                                <option value=3 {% if bill_month == 3 %}selected{% endif %}>03</option>
+                                <option value=4 {% if bill_month == 4 %}selected{% endif %}>04</option>
+                                <option value=5 {% if bill_month == 5 %}selected{% endif %}>05</option>
+                                <option value=6 {% if bill_month == 6 %}selected{% endif %}>06</option>
+                                <option value=7 {% if bill_month == 7 %}selected{% endif %}>07</option>
+                                <option value=8 {% if bill_month == 8 %}selected{% endif %}>08</option>
+                                <option value=9 {% if bill_month == 9 %}selected{% endif %}>09</option>
+                                <option value=10 {% if bill_month == 10 %}selected{% endif %}>10</option>
+                                <option value=11 {% if bill_month == 11 %}selected{% endif %}>11</option>
+                                <option value=12 {% if bill_month == 12 %}selected{% endif %}>12</option>
+                            </select>
+                        <input type="submit" class="btn btn-primary" value="Search"  style="margin-right: 20px">
+                        <a type="button" class="btn btn-warning pull-right" href="{% url 'xiaomi:fuel-surcharge-add' %}"
+                                style="cursor:pointer; margin-right:20px">
+                            Add New Fuel Charge
+                        </a>
+                    </div>
+                </form>
+            <thead>
+            <tr>
+                <th class="text-left">Express</th>
+                <th class="text-left">Begin-Date</th>
+                <th class="text-left">End-Date</th>
+                <th class="text-right">Fuel Surcharge</th>
+                <th class="text-left">Range</th>
+                <th class="text-left">Op datetime</th>
+                <th class="text-left">Operator</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for record in object_list %}
+                <tr>
+                    <td class="text-left">{{ record.express_company }}</td>
+                    <td class="text-left">{{ record.begin_date }}</td>
+                    {% if record.end_date.year == 2030 and record.end_date.month == 12 and record.end_date.day == 31 %}
+                        <td class="text-left">-----</td>
+                    {% else %}
+                        <td class="text-left">{{ record.end_date }}</td>
+                    {% endif %}
+                    <td class="text-right">{{ record.fuel_surcharge }}%</td>
+                    <td class="text-left">{{ record.range }}</td>
+                    <td>{{ record.op_datetime }}</td>
+                    <td>{{ record.op_user.username }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tr></tr>
+        </table>
+        <div class="pagination pagination-lg">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1"><span class="page-first">&laquo; first</span></a>
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+{% endblock %}

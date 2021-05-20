@@ -1,0 +1,75 @@
+{% extends 'warehouse_base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+    <div class="col-lg-12">
+        <div class="form-panel">
+            <div class="form-group">
+                <label class="h3 control-label text-info  col-sm-offset-1">Modify Haulier Profile</label>
+            </div>
+            <div class=" form">
+                <form class="cmxform form-horizontal style-form" id="commentForm" method="post"
+                      action="{% url 'slot:slot_haulier_update' haulier.id %}">
+                    {% csrf_token %}
+                    <div class="form-group ">
+                        <label for="email" class="control-label col-lg-1">Code</label>
+                        <div class="col-lg-1">
+                            <input class=" form-control " id="code" name="code" minlength="1" maxlength="4"
+                                   value="{{ object.code }}"  placeholder="Code" style="text-transform:uppercase;" readonly />
+                        </div>
+                        {% if form.errors %}
+                           <label class="control-label text-danger">{{ form.errors.code.data.0.messages.0 }}</label>
+                        {% endif %}
+                    </div>
+                    <div class="form-group ">
+                        <label for="username" class="control-label col-lg-1">Name</label>
+                        <div class="col-lg-2">
+                          <input class=" form-control" id="name" name="name" minlength="4" maxlength="50" type="text"
+                                 value="{{ object.name }}"  placeholder="Username" required />
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="first_name" class="control-label col-lg-1">Contact</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="contact" name="contact"
+                                   value="{{ object.contact }}"  placeholder="Contact" />
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="email" class="control-label col-lg-1">Email</label>
+                        <div class="col-lg-3">
+                            <input class=" form-control " id="email" name="email" type="email"
+                                   value="{{ object.email }}"  placeholder="Email" />
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="telephone" class="control-label col-lg-1">Telephone</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="telephone" name="telephone"
+                                   value="{{ object.telephone }}"  placeholder="Telephone" />
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="status" class="control-label col-lg-1">Status</label>
+                        <div class="col-lg-2">
+                            <select name = "is_use" class="form-control">
+                                <option value = '1' {% if object.is_use == 1 %}selected{% endif %}>Normal</option>
+                                <option value = '0' {% if object.is_use == 0 %}selected{% endif %}>Suspend</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <div class="col-lg-offset-1">
+                            <button class="btn btn-primary col-lg-1" type="submit" style="float:left; margin-left: 0px">Save</button>
+                            <a href="{% url 'slot:slot_haulier_list' %}" class="btn btn-danger col-lg-1" type="button" style="float:left; margin-left: 20px">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /form-panel -->
+    </div>
+    </div>
+    </div>
+{% endblock %}

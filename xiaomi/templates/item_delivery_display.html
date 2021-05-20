@@ -1,0 +1,67 @@
+{% extends 'mi_base.html' %}
+{% load static %}
+{% block new_content %}
+    <div class="form-panel col-lg-5">
+        <table class="table table-bordered table-striped " >
+            <thead>
+                <tr >
+                    <th colspan="6" class="text-center list-group-item-success " style="font-size:18px;">
+                        Reference - Delivery Fee Price List - {{ express_company }}
+                    </th>
+                </tr>
+                <tr >
+                    {% if express_company == 'UPS' %}
+                        <th class="text-center list-group-item-info">
+                            Zone Name
+                        </th>
+                    {% endif %}
+                    <th class="text-center list-group-item-info">
+                        Item Description
+                    </th>
+                    {% if express_company == 'UPS' %}
+                        <th class="text-center list-group-item-info">
+                            Min weight
+                        </th>
+                        <th class="text-center list-group-item-info">
+                            Max weight
+                        </th>
+                    {% else %}
+                        <th class="text-center list-group-item-info">
+                            Min Price
+                        </th>
+                        <th class="text-center list-group-item-info">
+                            Max Price
+                        </th>
+                    {% endif %}
+                    <th class="text-center list-group-item-info">
+                        Price
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in object_list %}
+                    <tr>
+                        {% if express_company == 'UPS' %}
+                            {% if forloop.counter0 == 0 %}
+                                <td rowspan="{{ zone1_count }}" class="text-left">{{ record.zone }}</td>
+                            {% else %}
+                                {% if forloop.counter0 == zone1_count %}
+                                    <td rowspan="{{ zone2_count }}" class="text-left">{{ record.zone }}</td>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                        {% if express_company == 'UPS' %}
+                            <td class="text-left">{{ record.item_desc }}</td>
+                        {% else %}
+                            <td class="text-left">{{ record.item }}
+                                {% if record.zone != '' %}- {{ record.zone }}{% endif %}</td>
+                        {% endif %}
+                        <td class="text-right">{{ record.min_weight }}</td>
+                        <td class="text-right">£{{ record.max_weight }}</td>
+                        <td class="text-right">£{{ record.unit_price }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

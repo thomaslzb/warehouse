@@ -1,0 +1,88 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+<div class="row mt container-fluid">
+    <div class="col-lg-12">
+        <div class="form-panel">
+            <h4><i class="fa fa-angle-right"></i>&nbsp;&nbsp;Express To <span class="text-info">European</span></h4>
+            <hr>
+            <form class="cmxform form-horizontal style-form" id="commentForm" role="form" action="{% url 'sku:sku-euro' object.id %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="length" class="control-label col-lg-1">&nbsp;SKU NO. : </label>
+                    <div class="col-lg-2">
+                        <input type="text" class="form-control " id="length"
+                               name="length"  placeholder="Length"  value="{{ object.sku_no }}" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="length" class="control-label col-lg-1">&nbsp;Product : </label>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control " id="length"
+                               name="length"  placeholder="Length"  value="{{ object.sku_name }}" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="length" class="control-label col-lg-1">&nbsp;Length(CM) : </label>
+                    <div class="col-lg-1">
+                        <input type="text" class="form-control " id="length"
+                               name="length"  placeholder="Length"  value="{{ object.sku_length }}" readonly>
+                    </div>
+                    <label for="length" class="control-label col-lg-1">&nbsp;Width(CM) : </label>
+                    <div class="col-lg-1">
+                        <input type="text" class="form-control " id="length"
+                               name="length"  placeholder="Length"  value="{{ object.sku_width }}" readonly>
+                    </div>
+                    <label for="length" class="control-label col-lg-1">&nbsp;High(CM) : </label>
+                    <div class="col-lg-1">
+                        <input type="text" class="form-control " id="length"
+                               name="length"  placeholder="Length"  value="{{ object.sku_high }}" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="length" class="control-label col-lg-1">&nbsp;Weight(KG) : </label>
+                    <div class="col-lg-1">
+                        <input type="text" class="form-control " id="length"
+                               name="length"  placeholder="Length"  value="{{ object.sku_weight }}" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="length" class="control-label col-lg-1">&nbsp;Quantity : </label>
+                    <div class="col-lg-1">
+                    <input type="text" class="form-control " id="quantity" name="qty" placeholder="Quantify"
+                           value="{% if sku_uk_form.data.qty == isnull %}1{% else %}{{ sku_uk_form.data.qty }}{% endif %}"
+                                               oninput="onlyNumber(this)" required>
+                    </div>
+                    <label class="control-label text-danger col-lg-2">
+                        {{ sku_uk_form.errors.qty.0 }}
+                    </label>
+\               </div>
+                <div class="form-group">
+                    <label for="length" class="control-label col-lg-1">&nbsp;Country : </label>
+                    <div class="col-lg-2">
+                        <select name = "euro" class="form-control">
+                            {% for country in all_euro %}
+                                <option>{{ country.country }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="length" class="control-label col-lg-1">&nbsp;Address Type : </label>
+                    <input type="radio" class="form-check-input" id="radio_business" name="addresstype" value="business" checked>
+                    <label class="form-check-label" for="InboundRadios">&nbsp;Business&nbsp;&nbsp;</label>
+                    <input type="radio" class="form-check-input" id="radio_resident" name="addresstype" VALUE="resident" >
+                    <label class="form-check-label" for="OutboundRadios">&nbsp;Resident</label>
+                </div>
+                <hr>
+                <div class="panel-footer text-left">
+                    <div class="panel-body">
+                        <a href="{% url 'sku:sku-list' %}"  class="btn btn-info pull-right" role="button">Go Back</a>
+                        <input type="submit" class="btn btn-primary" value="Quote">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

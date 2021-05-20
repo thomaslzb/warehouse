@@ -1,0 +1,253 @@
+{% extends 'ocean_base.html' %}
+{#我已经在此文件中引入了JS 和 CSS#}
+{#  <link href="{% static 'lzb/css/amsify.select.css' %}" rel="stylesheet">#}
+{#  <script href="{% static 'lzb/js/jquery.amsifyselect.js' %}" rel="stylesheet"></script>#}
+
+{% load static %}
+{% block new_content %}
+<div class="panel-body">
+    <div class="tab-content">
+        <form class="" id="quoteForm" method="post" action="" >
+            {% csrf_token %}
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="port">提货地点（POD）</label>
+                    <select name = "port" class="form-control" style="margin-right: 20px">
+                    {% for port in all_port %}
+                        <option value= "{{ port.port_code }} - {{ port.port_name }}"
+                        {% if forms.data.port|slice:"3" == port.port_code %}
+                            selected
+                        {% endif %}>
+                            {{ port.port_code }} - {{ port.port_name }}
+                        </option>
+                    {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label >清关HS Code 数量</label>
+                    <input class=" form-control " id="hs_code_number" name="hs_code_number"
+                           value="{{ forms.data.hs_code_number }}" placeholder="HS Code数量" type="text"
+                           onkeyup="this.value=this.value.replace(/\D|^0/g,'')" onafterpaste="this.value=this.value.replace(/\D|^0/g,'')"
+                           required />
+                    {% if forms.errors.hs_code_number.data.0.message %}
+                        <label id="hs_code_number_fail" class="text-danger">{{ forms.errors.hs_code_number.data.0.message }}</label>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label>FBA 数量</label>
+                    <input class="form-control" id="fba_number" name="fba_number"
+                           value="{{ forms.data.fba_number }}" placeholder="FBA 数量" type="text"
+                           onkeyup="this.value=this.value.replace(/\D|^0/g,'')" onafterpaste="this.value=this.value.replace(/\D|^0/g,'')"
+                           required />
+                    {% if forms.errors.fba_number.data.0.message %}
+                        <label id="fba_number_fail" class="text-danger">{{ forms.errors.fba_number.data.0.message }}</label>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <div class="checkbox form-control">
+                        <label><input type="checkbox" name="first_delivery" value="1"
+                         {% if forms.data.first_delivery == '1' %}checked{% endif %}>
+                            头程自行安排在英国监管仓</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" type="submit">开始询价</button>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="form-group">
+                    <!-- Amazon Address Table -->
+                    <table id="warehouse_table" class="table table-bordered table-striped " >
+                        <thead>
+                            <tr>
+                                <th class="text-center list-group-item-info" width="40%">
+                                    亚马孙仓库
+                                </th>
+                                <th class="text-center list-group-item-info"  width="25%">
+                                    体积(立方米)
+                                </th>
+                                <th class="text-center list-group-item-info"  width="25%">
+                                    重量(公斤)
+                                </th>
+                                <th class="text-center list-group-item-info"  width="10%">
+                                    操作
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <select id="fba_code0" name="fba_code0" class="form-control" style="margin-right: 20px" searchable>
+                                        <option value= "{% if warehouse_data.0.0 == '' %}{{ warehouse_data.0.0 }}{% endif %}">选择需要派送的仓库代码</option>
+                                        {% for amazon in amazon_warehouse %}
+                                            <option value= {{ amazon.amazon }}
+                                                    {% if amazon.amazon.fba_code == warehouse_data.0.0 %}
+                                                        selected
+                                                    {% endif %}>
+                                                {{ amazon.amazon.fba_code }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td>
+                                    <input class=" form-control" id="volume0" name="volume0"
+                                           value="{{ warehouse_data.0.1 }}" placeholder="体积" type="text"
+                                           oninput="limit_Decimal_2(this)"
+                                           required />
+                                </td>
+                                <td>
+                                    <input class=" form-control" id="weight0" name="weight0"
+                                           value="{{ warehouse_data.0.2 }}" placeholder="重量" type="text"
+                                           oninput="limit_Decimal_2(this)"
+                                           required />
+                                </td>
+                                <td>
+                                    <button type="button" id="add_warehouse", class="btn btn-warning " onclick="appendRow()">
+                                        <span class="glyphicon glyphicon-plus-sign"></span>
+                                        新增仓库
+                                    </button>
+                                </td>
+                            </tr>
+                            {% for w_code, w_volume, w_weight in warehouse_data %}
+                                {% if forloop.counter0 > 0 %}
+                                    <tr>
+                                        <td>
+                                            <select id="fba_code{{ forloop.counter0 }}" name="fba_code{{ forloop.counter0 }}" class="form-control" style="margin-right: 20px" searchable>
+                                                <option value= "{% if w_code == '' %}{{ warehouse_data.0.0 }}{% endif %}">选择需要派送的仓库代码</option>
+                                                {% for amazon in amazon_warehouse %}
+                                                    <option value= {{ amazon.amazon }}
+                                                        {% if amazon.amazon.fba_code == w_code %}
+                                                            selected
+                                                        {% endif %}>
+                                                        {{ amazon.amazon.fba_code }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input class=" form-control" id="volume{{ forloop.counter0 }} " name="volume{{ forloop.counter0 }}"
+                                                   value="{{ w_volume }}"
+                                                   placeholder="体积" type="text" oninput="limit_Decimal_2(this)"
+                                                   required />
+                                        </td>
+                                        <td>
+                                            <input class=" form-control" id="weight{{ forloop.counter0 }} " name="weight{{ forloop.counter0 }}"
+                                                   value="{{ w_weight }}"
+                                                   placeholder="重量" type="text" oninput="limit_Decimal_2(this)"
+                                                   required />
+                                        </td>
+                                        <td>
+                                            <button type="button" id="add_warehouse", class="btn btn-danger " onclick="deleteCurrentRow(this)">
+                                                <span class="glyphicon glyphicon-minus-sign"></span>
+                                                删除仓库
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                        {% if error_msg %}
+                            <label class="text-left text-danger">{{ error_msg }}</label>
+                        {% else %}
+                            <label class="text-left"></label>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block myscript %}
+    <script type="text/javascript">
+        $('#warehouse_table select').amsifySelect({
+            classes: {
+                    clear : 'btn btn-danger',
+                    close : 'btn btn-primary'
+                }
+        });
+
+        // 新增仓库用
+        {#$('#fba_code0').amsifySelect({#}
+        {#    classes: {#}
+        {#            clear : 'btn btn-danger',#}
+        {#            close : 'btn btn-primary'#}
+        {#        }#}
+        {#});#}
+
+    </script>
+    <script type="text/javascript">
+        //如果有输入， 清除错误提示
+         $("#fba_number").bind('input propertychange', function () {
+             $('#fba_number_fail').html('')
+         })
+
+         $("#hs_code_number").bind('input propertychange', function () {
+             $('#hs_code_number_fail').html('')
+         })
+
+
+		let num=document.getElementById("warehouse_table").rows.length-2;
+        /* 添加行 */
+        const add_btn = document.getElementById("add_warehouse");
+        const max_number = 9
+        function appendRow(){
+            if (num < max_number) {
+                num++;
+                console.log('add after num = '+num)
+                const trHTML = '<tr> <td>' +
+                    '<select id="fba_code' + num + '" name="fba_code' + num + '"' +
+                    ' class="form-control" style="margin-right: 20px" searchable>' +
+                    '<option value= "">选择需要派送的仓库代码</option>' +
+                    '   {% for amazon in amazon_warehouse %}' +
+                        '       <option value= {{ amazon.amazon }}> ' +
+                        '{{ amazon.amazon }}'  +
+                        '</option>' +
+                        '{% endfor %}' +
+                    '</select>' +
+                    '</td>' +
+                    '<td>' +
+                    '<input class=" form-control" id="volume' + num + '"' + 'name="volume' + num + '"' +
+                    'value="" placeholder="体积" type="text"' +
+                    'oninput="limit_Decimal_2(this)" required />' +
+                    '</td>' +
+                    '<td>' +
+                    '<input class=" form-control" id="weight' + num + '"' + 'name="weight' + num + '"' +
+                    'value="" placeholder="重量" type="text"' +
+                    'oninput="limit_Decimal_2(this)" required />' +
+                    '</td>' +
+                    '<td>' +
+                    '<button type="button" id="del_warehouse", class="btn btn-danger " onclick="deleteCurrentRow(this)">' +
+                    '<span class="glyphicon glyphicon-minus-sign"></span>' +
+                    ' 删除仓库' +
+                    '</button>' +
+                    '</td></tr>' +
+                    '<script type="text/javascript"> ' +
+                    '$("#warehouse_table select").amsifySelect({' +
+                    'classes: {' +
+                    'clear : "btn btn-danger",' +
+                    'close : "btn btn-primary"' +
+                    '}' +
+                    '})<' + '/script>';
+
+                $("#warehouse_table").append(trHTML);
+                if (num === max_number){
+                    add_btn.disabled = true;  // 新增按钮设置为不可用
+                }
+            }
+            else {
+                add_btn.disabled = true;  // 达到10行后，新增按钮设置为不可用
+              }
+        }
+
+      /* 删除行 */
+      function deleteCurrentRow(obj) {
+          obj.parentNode.parentNode.remove();   //  jQuery 对象删除当前行
+
+          //===================================================
+          num--;
+          add_btn.disabled = false;  //重置新增按钮
+      }
+    </script>
+
+{% endblock %}

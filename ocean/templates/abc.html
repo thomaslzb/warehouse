@@ -1,0 +1,410 @@
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="Dashboard">
+  <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+  <title>DCG Quote Price System</title>
+
+  <!-- Favicons -->
+  <link href="/static/new/img/favicon.png " rel="icon">
+  <link href="/static/new/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- 时间范围的选择 -->
+  <link href="/static/bootstrap/css/daterangepicker.css" rel="stylesheet">
+
+  <!-- Bootstrap core CSS -->
+  <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!--external css-->
+  <link href="/static/new/lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="/static/new/css/style.css" rel="stylesheet">
+  <link href="/static/new/css/style-responsive.css" rel="stylesheet">
+
+  <!-- 弹窗提示 -->
+  <link href="/static/toastr/toastr.css" rel="stylesheet">
+  <link href="/static/toastr/toastr.min.css" rel="stylesheet">
+
+  <!-- 下拉框+搜索 -->
+  <link href="/static/lzb-extra-tools/dropdown-search-box-amsify-select/css/amsify.select.css" rel="stylesheet">
+
+</head>
+
+<body data-new-gr-c-s-check-loaded="14.1008.0" data-gr-ext-installed="">
+    <!--header start-->
+    <header class="header black-bg">
+      <div class="sidebar-toggle-box">
+        <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+      </div>
+      
+      <!--logo start-->
+      <a href="/user/myprofile/17/" class="logo"><b>DCG-UK<span>&nbsp;Quote System</span></b></a>
+      <!--logo end-->
+      <div class="top-menu">
+        <ul class="nav pull-right top-menu">
+          
+              <li><a class="logout" href="/slot/list/">Booking System</a></li>
+          
+          <li><a class="logout" href="/user/logout/">Logout</a></li>
+        </ul>
+      </div>
+
+    </header>
+    <!--header end-->
+
+    <!-- **********************************************************************************************************************************************************
+        MAIN SIDEBAR MENU
+        *********************************************************************************************************************************************************** -->
+    <!--sidebar start-->
+    <aside>
+      <div id="sidebar" class="nav-collapse " tabindex="5000" style="overflow: hidden; outline: none;">
+        <!-- sidebar menu start-->
+        
+        <!--sidebar start-->
+        <aside>
+            <div id="sidebar" class="nav-collapse ">
+                  <!-- sidebar menu start-->
+                  <ul class="sidebar-menu" id="nav-accordion">
+                      <p class="centered"><a href="/user/myprofile/update/17/">
+                          <img src="/static/new/img/friends/fr-02.jpg" class="img-circle" width="80"></a></p>
+                      <h5 class="centered"><a href="/user/myprofile/update/17/">Admin</a></h5>
+                      <li class="mt">
+                          <a href="/user/myprofile/17/">
+                              <i class="fa fa-user-md"></i>
+                              <span>My Profile</span>
+                          </a>
+                      </li>
+                      
+                          <li class="sub-menu">
+                              <a href="/quote/uk/">
+                                  <i class="fa fa-gbp"></i>
+                                  <span>Quote Express Price</span>
+                              </a>
+                          </li>
+                      
+                      
+                          <li class="sub-menu">
+                              <a href="/sku/sku-list/">
+                                  <i class="fa fa-file-text"></i>
+                                  <span>Customer's SKU List</span>
+                              </a>
+                          </li>
+                      
+                      
+                          <li class="sub-menu">
+                              <a href="/air_freight/quote/">
+                                  <i class="fa fa-plane"></i>
+                                  <span>Air Freight Price</span>
+                              </a>
+                          </li>
+                      
+                      
+                          <li class="sub-menu">
+                              <a href="/lcl/calc/">
+                                  <i class="fa fa-truck"></i>
+                                  <span>LCL Price Calculator</span>
+                              </a>
+                          </li>
+                      
+                      
+                          <li class="sub-menu">
+                              <a href="/quote/users/">
+                                  <i class="fa fa-wrench"></i>
+                                  <span>User Maintenance</span>
+                              </a>
+                          </li>
+                      
+                      
+                          <li class="sub-menu">
+                              <a href="/xiaomi/mi-list/">
+                                  <i class="fa fa-wrench"></i>
+                                  <span>XiaoMi Bill</span>
+                              </a>
+                          </li>
+                      
+                      
+                          <li class="sub-menu">
+                              <a href="/lcl/fuel-surcharge/">
+                                  <i class="fa fa-wrench"></i>
+                                  <span>LCL Data Maintenance</span>
+                              </a>
+                          </li>
+                      
+                      
+                          <li class="sub-menu">
+                              <a href="/flc/quote/">
+                                  <i class="fa fa-wrench"></i>
+                                  <span>FLC Quote</span>
+                              </a>
+                          </li>
+                      
+                      
+                          <li class="sub-menu">
+                              <a href="/flc/company/">
+                                  <i class="fa fa-wrench"></i>
+                                  <span>FLC Data Maintenance</span>
+                              </a>
+                          </li>
+                      
+                      
+                          <li class="sub-menu">
+                              <a class="active" href="/ocean/fba/">
+                                  <i class="fa fa-wrench"></i>
+                                  <span>海运费用查询</span>
+                              </a>
+                          </li>
+                      
+                  </ul>
+                  <!-- sidebar menu end-->
+            </div>
+        </aside>
+        <!--sidebar end-->
+    
+        <!-- sidebar menu end-->
+      </div>
+    </aside>
+    <!--sidebar end-->
+    <!--main content start-->
+    <section id="main-content">
+      <section class="wrapper">
+          
+<h3>海运费用查询abc</h3>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="/ocean/fba/"><span>海运散货FBA</span></a></li>
+    <li><a href="/ocean/private/"><span>海运散货私人仓</span></a></li>
+    <li><a href="/lcl/company/"><span>海运整柜</span></a></li>
+</ul>
+<br>
+
+    <div class="form-panel row">
+          <h4>输入查询条件abc</h4>
+        <hr>
+            <form class="" id="quoteForm" method="post" action="">
+                <input type="hidden" name="csrfmiddlewaretoken" value="kxIHwNDZWoiEiM0FMNhhUgaRhELOSJKLOtEgft1lDh32I6ZHMt07ZcSuE6URqxHE">
+                <div class="col-lg-4">
+		<div class="form-group">
+			<select class="form-control" name="country">
+				<option value="">Select Country</option>
+				<option value="1">India</option>
+				<option value="2">Afghanistan</option>
+				<option value="3">USA</option>
+				<option value="4">Russia</option>
+				<option value="5">South Africa</option>
+				<option value="6">West Indies</option>
+			</select>
+		</div>
+                    <div class="form-group">
+                        <label for="port">提货地点（POD）</label>
+                        <select name="port" class="form-control" style="margin-right: 20px">
+                        
+                            <option value="FXT">
+                                FXT - Felixstowe
+                            </option>
+                        
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>清关HS Code 数量</label>
+                        <input class=" form-control" id="hs_code_number" name="hs_code_number" value="" placeholder="HS Code数量" type="text" oninput="onlyNumber(this)" required="">
+                    </div>
+                    <div class="form-group">
+                        <label>FBA 数量</label>
+                        <input class="form-control" id="fba_number" name="fba_number" value="" placeholder="Numbers" type="text" oninput="onlyNumber(this)" required="">
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox form-control">
+                            <label><input type="checkbox">头程自行安排在英国监管仓</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">开始询价</button>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="form-group">
+                        <div class="col-lg-6">
+                            <!-- Amazon Address Table -->
+                            <table class="table table-bordered table-striped ">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center list-group-item-info">
+                                            亚马孙仓库
+                                        </th>
+                                        <th class="text-center list-group-item-info">
+                                            体积
+                                        </th>
+                                        <th class="text-center list-group-item-info">
+                                            操作
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <select name="fba_code1" class="form-control" style="margin-right: 20px">
+                                            
+                                                <option value="BHX1">
+                                                    BHX1
+                                                </option>
+                                            
+                                                <option value="BHX2">
+                                                    BHX2
+                                                </option>
+                                            
+                                                <option value="BHX4">
+                                                    BHX4
+                                                </option>
+                                            
+                                                <option value="BRS1">
+                                                    BRS1
+                                                </option>
+                                            
+                                                <option value="CWL1">
+                                                    CWL1
+                                                </option>
+                                            
+                                                <option value="EDI4">
+                                                    EDI4
+                                                </option>
+                                            
+                                                <option value="EMA1">
+                                                    EMA1
+                                                </option>
+                                            
+                                                <option value="EMA2">
+                                                    EMA2
+                                                </option>
+                                            
+                                                <option value="EUK5">
+                                                    EUK5
+                                                </option>
+                                            
+                                                <option value="GLA1">
+                                                    GLA1
+                                                </option>
+                                            
+                                                <option value="LBA1">
+                                                    LBA1
+                                                </option>
+                                            
+                                                <option value="LBA2">
+                                                    LBA2
+                                                </option>
+                                            
+                                                <option value="LBA3">
+                                                    LBA3
+                                                </option>
+                                            
+                                                <option value="LCY1">
+                                                    LCY1 
+                                                </option>
+                                            
+                                                <option value="LCY2">
+                                                    LCY2
+                                                </option>
+                                            
+                                                <option value="LTN1">
+                                                    LTN1
+                                                </option>
+                                            
+                                                <option value="LTN2">
+                                                    LTN2
+                                                </option>
+                                            
+                                                <option value="LTN4">
+                                                    LTN4
+                                                </option>
+                                            
+                                                <option value="MAN1">
+                                                    MAN1
+                                                </option>
+                                            
+                                                <option value="MAN2">
+                                                    MAN2
+                                                </option>
+                                            
+                                                <option value="MAN3">
+                                                    MAN3
+                                                </option>
+                                            
+                                                <option value="MAN4">
+                                                    MAN4
+                                                </option>
+                                            
+                                                <option value="MME1">
+                                                    MME1
+                                                </option>
+                                            
+                                                <option value="MME2">
+                                                    MME2
+                                                </option>
+                                            
+                                                <option value="XBH1">
+                                                    XBH1
+                                                </option>
+                                            
+                                                <option value="XBH2">
+                                                    XBH2
+                                                </option>
+                                            
+                                                <option value="XUKA">
+                                                    XUKA 
+                                                </option>
+                                            
+                                                <option value="XUKC">
+                                                    XUKC 
+                                                </option>
+                                            
+                                                <option value="XUKD">
+                                                    XUKD
+                                                </option>
+                                            
+                                                <option value="XUKK">
+                                                    XUKK 
+                                                </option>
+                                            
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input class=" form-control" id="volume1" name="volume1" value="" placeholder="Volume" type="text" oninput="verify_decimal2(this)">
+                                        </td>
+                                        <td>
+                                            <button type="button" id="add_address" ,="" class="btn btn-warning " onclick="add()">
+                                                <span class="glyphicon glyphicon-plus-sign"></span>
+                                                新增地址
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    
+    <!-- /form-panel -->
+
+
+      </section>
+      <!-- /wrapper -->
+    </section>
+
+  <!-- js placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+  <!-- 下拉框+搜索 -->
+  <script href="/static/lzb-extra-tools/dropdown-search-box-amsify-select/js/jquery.amsifyselect.js" rel="stylesheet"></script>
+
+    <script type="text/javascript">
+        $('select').amsifySelect({
+            classes: {
+                    clear : 'btn btn-danger',
+                    close : 'btn btn-primary'
+                }
+        });
+    </script>
+
+
+</body></html>

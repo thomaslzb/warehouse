@@ -1,0 +1,1588 @@
+{% extends 'warehouse_base.html' %}
+{% load static %}
+{% block search %}
+{% endblock %}
+{% block content %}
+    <div class="container-fluid"
+        <!--  主页面 -->
+        <div class="row col-sm-12" >
+            <!-- 左侧的输入框 -->
+            <div class="col-md-2">
+                <form role="form" action="{% url 'slot:slot_list' %}" method="post" >
+                    {% csrf_token %}
+                    <div class="form-group" >
+                        <button type="submit" class="btn btn-primary" name="btn_Save">Save Data</button>
+                    </div>
+                    <div class="form-group" >
+                        <label class="form-inline">
+                            Haulier :
+                            <select name = "hailer" class="form-control">
+                                {% for hailer in all_Hailers %}
+                                    <option>{{ hailer.code }}</option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Delivery Reference <input type="text" class="form-control" value="{{ deliveryref }}"
+                                                      name="deliveryref"  placeholder="Delivery Reference">
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Vehcle Reg.<input type="text" class="form-control" name="vehiclereg" id="VehcleReg" placeholder="Vehcle Reg.">
+                        </label>
+                    </div>
+                    <div class="form-group">
+                          <input type="radio" class="form-check-input" id="radio_Inbound" name="status" value="INBOUND" checked>
+                          <label class="form-check-label" for="InboundRadios">&nbspINBOUND</label>
+                          <input type="radio" class="form-check-input" id="radio_Outbound" name="status" VALUE="OUTBOUND" >
+                          <label class="form-check-label" for="OutboundRadios">&nbspOUTBOUND</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" class="form-check-input" name="haveTime" value="0" id="NotHaveSlotTime">
+                        <label class="form-check-label" for="NotHaveSlotTime">&nbspHaven't Slot Time</label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Date</label>
+                        <span class="controls input-append date form_date" data-date-format="dd MM yyyy"
+                              data-link-field="dtp_input2" >
+                            <input type="date" name="workdate" id="PickingDate" max="3000-12-31" min="2020-08-01"
+                                   class="form-control" value="{{ searching_date }}">
+                        </span>
+                     </div>
+                     <div class="form-group">
+                        <label class="control-label">Slot Time</label>
+                        <span class="controls input-append date form_date" data-date="" data-date-format="dd MM yyyy"
+                              data-link-field="dtp_input2" >
+                            <input type="Time" name="slottime" id="PickingTime" max="20:30" min="06:00"
+                                   class="form-control" value = "08:00" required>
+                        </span>
+                     </div>
+                    <hr>
+                </form>
+                    <div class="form-group" >
+                        <a href="{% url 'slot:slot_list_search' %}" class="btn-info btn" name="btn btn_Save" >Delivery Reference Listing</a>
+                    </div>
+            </div>
+
+            <!-- 列出所有有时间的 slot -->
+            <div class="col-md-4">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <form role="form" action="{% url 'slot:slot_list' %}" method="get" >
+                                <div class="form-group">
+                                    <div class="controls input-append date form_date" data-date-format="dd MM yyyy"
+                                         data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                                        <label class="form-inline">
+                                        <input type="date" name="searching_date" value="{{ searching_date }}"
+                                               id="SearchingDate" max="3000-12-31" min="2020-08-01" class="form-control">
+                                        </label>
+                                        <button type="submit" class="btn btn-success">Searching</button>
+                                        <label><span class="text-primary alert-info well-sm"> Inbound</span>
+                                        <span class="text-primary alert-success well-sm"> Outbound </span></label>
+                                    </div>
+                                </div>
+                            </form>
+                        </tr>
+                    </thead>
+                    <!-- 列出当前时间的所有 slot -->
+                    <tbody>
+                        <tr>
+                            <td>06:00</td>
+                            <td>
+                                {% for slottime in all_slots0600 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                    </span>
+                                {% endfor %}
+                                </td>
+                            <td>
+                                {% if all_slots0600.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>06:30</td>
+                            <td>
+                                {% for slottime in all_slots0630 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                    </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots0630.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>07:00</td>
+                            <td>
+                                {% for slottime in all_slots0700 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                    </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots0700.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>07:30</td>
+                            <td>
+                                {% for slottime in all_slots0730 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                    </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots0730.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>08:00</td>
+                            <td>
+                                {% for slottime in all_slots0800 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                    </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots0800.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>08:30</td>
+                            <td>
+                                {% for slottime in all_slots0830 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                    </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots0830.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>09:00</td>
+                            <td>
+                                {% for slottime in all_slots0900 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                    </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots0900.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>09:30</td>
+                            <td>
+                                {% for slottime in all_slots0930 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                    </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots0930.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>10:00</td>
+                            <td>
+                                {% for slottime in all_slots1000 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                    </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots1000.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>10:30</td>
+                            <td>
+                                {% for slottime in all_slots1030 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                    </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots1030.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>11:00</td>
+                            <td>
+                                {% for slottime in all_slots1100 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                    </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots1100.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>11:30</td>
+                            <td>
+                                {% for slottime in all_slots1130 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                    </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots1130.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>12:00</td>
+                            <td>
+                                {% for slottime in all_slots1200 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                    </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots1200.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>12:30</td>
+                            <td>
+                                {% for slottime in all_slots1230 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                    </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots1230.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>13:00</td>
+                            <td>
+                                {% for slottime in all_slots1300 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                    </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots1300.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>13:30</td>
+                            <td>
+                                {% for slottime in all_slots1330 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                    </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots1330.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>14:00</td>
+                            <td>
+                                {% for slottime in all_slots1400 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                    </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots1400.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>14:30</td>
+                            <td>
+                                {% for slottime in all_slots1430 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                    </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots1430.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>15:00</td>
+                            <td>
+                                {% for slottime in all_slots1500 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                 </span>
+                               {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots1500.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>15:30</td>
+                            <td>
+                                {% for slottime in all_slots1530 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots1530.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>16:00</td>
+                            <td>
+                                {% for slottime in all_slots1600 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots1600.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>16:30</td>
+                            <td>
+                                {% for slottime in all_slots1630 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots1630.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>17:00</td>
+                            <td>
+                                {% for slottime in all_slots1700 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                {% endfor %}
+                                </span>
+                            </td>
+                            <td>
+                                {% if all_slots1700.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>17:30</td>
+                            <td>
+                                {% for slottime in all_slots1730 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots1730.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>18:00</td>
+                            <td>
+                                {% for slottime in all_slots1800 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots1800.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>18:30</td>
+                            <td>
+                                {% for slottime in all_slots1830 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots1830.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>19:00</td>
+                            <td>
+                                {% for slottime in all_slots1900 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots1900.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>19:30</td>
+                            <td>
+                                {% for slottime in all_slots1930 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots1930.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>20:00</td>
+                            <td>
+                                {% for slottime in all_slots2000 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_use.name }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots2000.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>20:30</td>
+                            <td>
+                                {% for slottime in all_slots2030 %}
+                                    {% if slottime.progress != 4 %}
+                                        {% if slottime.status == 'INBOUND' %}
+                                            <span class="alert-info well-sm">
+                                        {% else %}
+                                            <span class="alert-success well-sm">
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' slottime.id %}">
+                                        {% if slottime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ slottime.op_user.username }} - {{ slottime.status }}">{{ slottime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Arrived:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Loading:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Finished:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if slottime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ slottime.status }} - Abnormal:{{ slottime.last_update }}">{{ slottime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                </span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if all_slots2030.count >= max_slot_number %}
+                                    <span class="text-danger">Full</span>
+                                {% else %}
+                                    <span class="text-success">Available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 列出当天所有订单的状态统计情况 -->
+            {% if all_progress_arrived.count != 0 or all_progress_loading.count != 0 or all_progress_abnormal.count != 0 or all_progress_finished.count != 0  %}
+                <div class="col-md-4">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <p class="text-muted">{{ search_date }}</P>
+                                </th>
+                                <th>
+                                    <p class="text-muted">Progress Status</P>
+                                </th>
+                                <th>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Arrieved 情况 -->
+                            {% if all_progress_arrived.count != 0 %}
+                            <tr class="info">
+                                <td class="h4">Arrived: <span class="badge">{{ all_progress_arrived.count }}</span></td>
+                                <td></td><td></td>
+                            </tr>
+                            <tr class="info">
+                               {% for progress_arrived in all_progress_arrived %}
+                                   {% if forloop.counter >= 3 %}
+                                       {% if forloop.counter0|divisibleby:3 %}
+                                            <tr class="info">
+                                   {% endif %}
+                                   {% endif %}
+                                    <td>
+                                        <a href ="{% url 'slot:slot_detail' progress_arrived.id %}">
+                                            <span data-toggle="popover" title="{{ progress_arrived.status }} - {{ progress_arrived.last_update }}">
+                                                {{ progress_arrived.deliveryref }}</span>
+                                        </a>
+                                    </td>
+                               {% endfor %}
+                            </tr>
+                            <tr><td></td><td></td><td></td></tr>
+                            {% endif %}
+                            <!-- Loading 情况 -->
+                            {% if all_progress_loading.count != 0 %}
+                            <tr>
+                            <tr class="warning">
+                                <td class="h4">Loading: <span class="badge">{{ all_progress_loading.count }}</span></td>
+                                <td></td><td></td>
+                            </tr>
+                            <tr class="warning">
+                               {% for progress_loading in all_progress_loading %}
+                                   {% if forloop.counter >= 3 %}
+                                       {% if  forloop.counter0|divisibleby:3 %}
+                                            <tr class="warning">
+                                   {% endif %}
+                                   {% endif %}
+                                    <td>
+                                        <a href ="{% url 'slot:slot_detail' progress_loading.id %}">
+                                            <span data-toggle="popover" title="{{ progress_loading.status }} - {{ progress_loading.last_update }}">{{ progress_loading.deliveryref }}</span>
+                                        </a>
+                                    </td>
+                               {% endfor %}
+                            </tr>
+                            <tr><td></td><td></td><td></td></tr>
+                            {% endif %}
+                            <!-- Finished 情况 -->
+                            {% if all_progress_finished.count != 0 %}
+                            <tr class="success">
+                                <td class="h4">Finished: <span class="badge">{{ all_progress_finished.count }}</span></td>
+                                <td></td><td></td>
+                            </tr>
+                            <tr class="success">
+                               {% for progress_finished in all_progress_finished %}
+                                   {% if forloop.counter >= 3 %}
+                                       {% if  forloop.counter0|divisibleby:3 %}
+                                            <tr class="success">
+                                   {% endif %}
+                                   {% endif %}
+                                    <td>
+                                        <a href ="{% url 'slot:slot_detail' progress_finished.id %}">
+                                            <span data-toggle="popover" title="{{ progress_finished.status }} - {{ progress_finished.last_update }}">
+                                                {{ progress_finished.deliveryref }}</span>
+                                        </a>
+                                    </td>
+                               {% endfor %}
+                            </tr>
+                            <tr><td></td><td></td><td></td></tr>
+                            {% endif %}
+                            <!-- Abnormal 情况 -->
+                            {% if all_progress_abnormal.count != 0 %}
+                            <tr class="danger">
+                                <td class="h4">Abnormal: <span class="badge">{{ all_progress_abnormal.count }}</span></td>
+                                <td></td><td></td>
+                            </tr>
+                            <tr class="danger">
+                               {% for progress_abnormal in all_progress_abnormal %}
+                                   {% if forloop.counter >= 3 %}
+                                       {% if  forloop.counter0|divisibleby:3 %}
+                                            <tr class="danger">
+                                   {% endif %}
+                                   {% endif %}
+                                    <td>
+                                        <a href ="{% url 'slot:slot_detail' progress_abnormal.id %}">
+                                            <span data-toggle="popover" title="{{ progress_abnormal.status }} - {{ progress_abnormal.last_update }}">
+                                                {{ progress_abnormal.deliveryref }}</span>
+                                        </a>
+                                    </td>
+
+                               {% endfor %}
+                            </tr>
+                            {% endif %}
+                            <tr>
+                               <td></td><td></td><td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+            <!-- 列出所有没有时间的 slot -->
+            <div class="col-md-4">
+                {% if all_NoInSlotsTimes.count > 0 %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <p class="text-muted">{{ search_date }}</P>
+                            </th>
+                            <th>
+                                <p class="text-muted">Inbound</P>
+                            </th>
+                            <th>
+                                <p class="text-muted">No Slot Time</P>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                           {% for NoSlotTime in all_NoInSlotsTimes %}
+                               {% if forloop.counter >= 3 %}
+                               {% if  forloop.counter0|divisibleby:3 %}
+                                    <tr>
+                               {% endif %}
+                               {% endif %}
+                                <td>
+                                    {% if slottime.progress != 4 %}
+                                        <span class="alert-warning well-sm">
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' NoSlotTime.id %}">
+                                        {% if NoSlotTime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if NoSlotTime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if NoSlotTime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if NoSlotTime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ NoSlotTime.status }} - {{ NoSlotTime.last_update }}">{{ NoSlotTime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if NoSlotTime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                    </span>
+                                </td>
+                           {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                {% endif %}
+                {% if all_NoOutSlotsTimes.count > 0 %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <p class="text-muted">{{ search_date|date:"d-m-Y" }}</P>
+                            </th>
+                            <th>
+                                <p class="text-muted">Outbound</P>
+                            </th>
+                            <th>
+                                <p class="text-muted">No Slot Time</P>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                           {% for NoSlotTime in all_NoOutSlotsTimes %}
+                               {% if forloop.counter >= 3 %}
+                               {% if  forloop.counter0|divisibleby:3 %}
+                                    <tr>
+                               {% endif %}
+                               {% endif %}
+                                <td>
+                                    {% if slottime.progress != 4 %}
+                                        <span class="alert-warning well-sm">
+                                    {% else %}
+                                        <span class="alert-dismissable">
+                                    {% endif %}
+                                    <a href ="{% url 'slot:slot_detail' NoSlotTime.id %}">
+                                        {% if NoSlotTime.progress == 1 %}
+                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Booked</span>
+                                        {% endif %}
+                                        {% if NoSlotTime.progress == 2 %}
+                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Arrived</span>
+                                        {% endif %}
+                                        {% if NoSlotTime.progress == 3 %}
+                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Loading</span>
+                                        {% endif %}
+                                        {% if NoSlotTime.progress == 4 %}
+                                            <span data-toggle="popover" title="{{ NoSlotTime.status }} - {{ NoSlotTime.last_update }}">{{ NoSlotTime.deliveryref }}-Finished</span>
+                                        {% endif %}
+                                        {% if NoSlotTime.progress == 5 %}
+                                            <span data-toggle="popover" title="{{ NoSlotTime.op_user.username }} - {{ NoSlotTime.status }}">{{ NoSlotTime.deliveryref }}-Abnormal</span>
+                                        {% endif %}
+                                    </a>
+                                    </span>
+                                </td>
+                           {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block  myscript %}
+    <script>
+
+    $(document).ready(function () {
+
+        var time = new Date("{{ searching_date }}");
+        if (isNaN(time)){
+            time = new Date();
+        }
+        var day = ("0" + time.getDate()).slice(-2);
+        var month = ("0" + (time.getMonth() + 1)).slice(-2);
+        var today = time.getFullYear() + "-" + (month) + "-" + (day);
+        $('#PickingDate').val(today);
+    })
+
+    $(document).ready(function () {
+        var strdate = new Date("{{ searching_date }}");
+        if (isNaN(strdate)){
+            strdate = new Date();
+        }
+        var searchtime = new Date(strdate);
+        var day = ("0" + searchtime.getDate()).slice(-2);
+        var month = ("0" + (searchtime.getMonth() + 1)).slice(-2);
+        var today = searchtime.getFullYear() + "-" + (month) + "-" + (day);
+        $('#SearchingDate').val(today);
+    })
+    </script>
+{% endblock %}

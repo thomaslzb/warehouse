@@ -1,0 +1,98 @@
+{% extends 'ocean_base.html' %}
+{#我已经在此文件中引入了JS 和 CSS#}
+{#  <link href="{% static 'lzb/css/amsify.select.css' %}" rel="stylesheet">#}
+{#  <script href="{% static 'lzb/js/jquery.amsifyselect.js' %}" rel="stylesheet"></script>#}
+
+{% load static %}
+{% block new_content %}
+<div class="panel-body">
+    <div class="tab-content">
+        <form class="" id="quoteForm" method="post" action="" >
+            {% csrf_token %}
+            <div class="col-lg-5">
+                <label for="port">提货地点（POD）</label>
+                <div class="form-group">
+                    <select name = "port" class="form-control" style="margin-right: 20px">
+                    {% for port in all_port %}
+                        <option value= "{{ port.port_code }} - {{ port.port_name }}"
+                        {% if forms.data.port|slice:"3" == port.port_code %}
+                            selected
+                        {% endif %}>
+                            {{ port.port_code }} - {{ port.port_name }}
+                        </option>
+                    {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>英国派送地址邮编(Postcode)</label>
+                    <input class="form-control" id="postcode" name="postcode" maxlength="8" minlength="4"
+                           value="{{ forms.data.postcode }}" placeholder="postcode" type="text"
+                           style="text-transform: uppercase" required />
+                    {% if forms.errors.postcode.data.0.message %}
+                        <label id="postcode_fail" class="text-danger">{{ forms.errors.postcode.data.0.message }}</label>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label>体积（立方米）</label>
+                    <input class="form-control" id="volume" name="volume" maxlength="8"
+                           value="{{ forms.data.postcode }}" placeholder="体积" type="text"
+                           style="text-transform: uppercase"
+                           oninput="limit_Decimal_2(this)" required />
+                    {% if forms.errors.postcode.data.0.message %}
+                        <label id="volume_fail" class="text-danger">{{ forms.errors.volume.data.0.message }}</label>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label>重量（公斤）</label>
+                    <input class="form-control" id="weight" name="weight"
+                           value="{{ forms.data.postcode }}" placeholder="重量" type="text"
+                           style="text-transform: uppercase" oninput="limit_Decimal_2(this)" required />
+                    {% if forms.errors.weight.data.0.message %}
+                        <label id="weight_fail" class="text-danger">{{ forms.errors.weight.data.0.message }}</label>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label >清关HS Code 数量</label>
+                    <input class=" form-control " id="hs_code_number" name="hs_code_number"
+                           value="{{ forms.data.hs_code_number }}" placeholder="HS Code数量" type="text"
+                           onkeyup="this.value=this.value.replace(/\D|^0/g,'')" onafterpaste="this.value=this.value.replace(/\D|^0/g,'')" required />
+                    {% if forms.errors.hs_code_number.data.0.message %}
+                        <label id="hs_code_number_fail" class="text-danger">{{ forms.errors.hs_code_number.data.0.message }}</label>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <div class="checkbox form-control">
+                        <label><input type="checkbox" name="first_delivery" value="1"
+                         {% if forms.data.first_delivery == '1' %}checked{% endif %}>
+                            头程自行安排在英国监管仓</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" type="submit">开始询价</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+    <!-- /form-panel -->
+{% endblock %}
+{% block myscript %}
+    <script type="text/javascript">
+        //如果有输入， 清除错误提示
+         $("#postcode").bind('input propertychange', function () {
+             $('#postcode_fail').html('')
+         })
+
+         $("#hs_code_number").bind('input propertychange', function () {
+             $('#hs_code_number_fail').html('')
+         })
+
+         $("#volume").bind('input propertychange', function () {
+             $('#volume_fail').html('')
+        })
+
+         $("#weight").bind('input propertychange', function () {
+             $('#weight_fail').html('')
+         })
+    </script>
+{% endblock %}

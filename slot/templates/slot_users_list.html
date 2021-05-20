@@ -1,0 +1,145 @@
+{% extends 'warehouse_base.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid">
+    <div class="col-md-12">
+        <label class="h3 text-info">User List</label>
+        <div class="form-group form-inline" >
+            <form role="search" action="" method="get">
+                <div class="row col-lg-7">
+                    {% csrf_token %}
+                    <label for="email" class="control-label" style="margin-left: 0px">Email: </label>
+                    <input type="text" class="form-control" id="email" name="email"  placeholder="Email">
+                    <label for="username" class="control-label">Username </label>
+                    <input type="text" class="form-control" id="username" name="username"  placeholder="Username">
+                    <label for="username" class="control-label">Role</label>
+                    <select name = "role" class="form-control">
+                    <option value = 99 selected>All</option>
+                    <option value = 1>Operator</option>
+                    <option value = 2>Warehouse-Operator</option>
+                    <option value = 3>Manage</option>
+                    </select>
+                    <label for="username" class="control-label">Status </label>
+                    <select name = "status" class="form-control">
+                    <option value = 99 selected>All</option>
+                    <option value = 1>Normal</option>
+                    <option value = 0>Suspend</option>
+                    </select>
+                    <input type="submit" class="btn btn-primary " value="Search" style="margin-left: 30px">
+                </div>
+            </form>
+            {% if request.user.profile.staff_role == 3 %}
+            <div>
+                <a href="{% url 'users:slot_add_user' %}" >
+                    <button type="text" class="btn btn-info col-lg-offset-3" >
+                        Add New User
+                    </button>
+                </a>
+             </div>
+            {% else %}
+                <div><br><br></div>
+            {% endif %}
+        </div>
+    </div>
+    <div><br></div>
+    <br>
+    <br>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Email</th>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Telephone</th>
+            <th>Email Group</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Last Login</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for this_user in object_list %}
+        <tr  class="{% if this_user.user.id == request.user.id %}success{% endif %}">
+            {% if request.user.profile.staff_role == 3 or this_user.user.email == request.user.email %}
+                <td>
+                    <a href="{% url 'users:slot_user_profile' this_user.user.id %}">
+                        {% if this_user.user.email == request.user.email %}
+                            <strong>{{ this_user.user.email }}</strong>
+                        {% else %}
+                            {{ this_user.user.email }}
+                        {% endif %}
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url 'users:slot_user_profile' this_user.user.id %}">
+                        {% if this_user.user.email == request.user.email %}
+                            <strong>{{ this_user.user.username }}</strong>
+                        {% else %}
+                            {{ this_user.user.username }}
+                        {% endif %}
+                    </a>
+                </td>
+            {% else %}
+                <td>
+                    {{ this_user.user.email }}
+                </td>
+                <td>{{ this_user.user.username }}</td>
+            {% endif %}
+
+            <td>{{ this_user.user.first_name }}</td>
+            <td>{{ this_user.user.last_name }}</td>
+            <td>{{ this_user.telephone }}</td>
+            <td>
+               {% for email_group in all_email_group %}
+                    {% if email_group.id == this_user.user.profile.email_group_id %}
+                        {% if not email_group.desc == "None" %}
+                            {{ email_group.desc }}
+                        {% endif %}
+                    {% endif %}
+               {% endfor %}
+            </td>
+            <td>
+               {% if this_user.user.profile.staff_role == 1 %}
+                    Operator
+               {% endif %}
+               {% if this_user.user.profile.staff_role == 2 %}
+                    Warehouse-Operator
+               {% endif %}
+               {% if this_user.user.profile.staff_role == 3 %}
+                    Manager
+               {% endif %}
+            </td>
+            <td>
+               {% if this_user.user.is_active %}
+                   <span class="">Normal</span>
+               {% else %}
+                   <span class="text-danger"><strong>Suspend</strong></span>
+               {% endif %}
+            </td>
+            <td>{{ this_user.user.last_login }}</td>
+        </tr>
+        {% empty %}
+            <tr>No User Listing</tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+{% endblock %}

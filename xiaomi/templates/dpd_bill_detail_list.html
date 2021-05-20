@@ -1,0 +1,95 @@
+{% extends 'mi_base.html' %}
+{% load static %}
+{% block new_content %}
+    <div class="panel">
+            <table class="table table-striped table-advance table-hover">
+                <h4>&nbsp;<i class="fa fa-angle-right"></i> DPD Bill Detail List</h4>
+                <hr>
+                    <form role="search" action="" method="get">
+                        {% csrf_token %}
+                        <div class="form-group form-inline ">
+                            <label for="mi_code" class="control-label ">&nbsp;Mi-Code : </label>
+                            <input type="text" class="form-control" id="mi_code" name="mi_code"
+                                   value="{{ mi_code }}" placeholder="Mi code" style="margin-right: 10px">
+                            <label for="parcel_id">&nbsp;Parcel-No </label>
+                            <input type="text" class="form-control " id="parcel_id" name="parcel_id"
+                                   value="{{ parcel_id }}" placeholder="Parcel No." style="margin-right: 10px">
+                            <label for="qty_compare" class="control-label ">&nbsp;Qty : </label>
+                            <select class="form-control" type="text" id="qty_compare" name="qty_compare" style="margin-right: 10px">
+                                <option {% if qty_compare == 'less than' or qty_compare == '' %}selected{% endif %}>less than</option>
+                                <option {% if qty_compare == 'equal' %}selected{% endif %}>equal</option>
+                                <option {% if qty_compare == 'more than' %}selected{% endif %}>more than</option>
+                            </select>
+                            <input type="text" class="form-control" id="qty" name="qty"
+                                   value="{{ qty }}" placeholder="Qty." style="margin-right: 10px">
+                            <label for="revenue_compare" class="control-label ">&nbsp;Revenue : </label>
+                            <select class="form-control" type="text" id="revenue_compare" name="revenue_compare" style="margin-right: 10px">
+                                <option {% if revenue_compare == 'less than' or revenue_compare == ''  %}selected{% endif %}>less than</option>
+                                <option {% if revenue_compare == 'equal' %}selected{% endif %}>equal</option>
+                                <option {% if revenue_compare == 'more than' %}selected{% endif %}>more than</option>
+                            </select>
+                            <input type="text" class="form-control" id="revenue" name="revenue"
+                                   value="{{ revenue }}" placeholder="Revenue" style="margin-right: 10px">
+                            <input type="submit" class="btn btn-primary" value="Search" style="margin-right: 20px">
+                            <a class="btn btn-warning" href="{% url 'xiaomi:dpd_bill_list_detail' %}">Reset</a>
+                            <a href="{% url 'xiaomi:dpd_bill_list_main' %}" class="pull-right btn btn-danger"
+                               role="button" style="margin-right: 40px">Back</a>
+                        </div>
+                    </form>
+                <thead>
+                <tr>
+                    <th class="text-left">Bill Date</th>
+                    <th class="text-left">Invoice No.</th>
+                    <th class="text-left">Mi Code</th>
+                    <th class="text-left">Parcel No.</th>
+                    <th class="text-left">Product Desc.</th>
+                    <th class="text-left">Service Desc.</th>
+                    <th class="text-left">Weight</th>
+                    <th class="text-right">Qty.</th>
+                    <th class="text-right">Revenue</th>
+                    <th class="text-right">Fuel Surcharge</th>
+                    <th class="text-left">Operator</th>
+                    <th class="text-left">Op datetime</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for this_bill in object_list %}
+                <tr>
+                    <td>{{ this_bill.bill_date }}</td>
+                    <td>{{ this_bill.dpd_invoice_no }}</td>
+                    <td>{{ this_bill.mi_code }}</td>
+                    <td>{{ this_bill.parcel_id }}</td>
+                    <td>{{ this_bill.product_description }}</td>
+                    <td>{{ this_bill.service_description }}</td>
+                    <td class="text-right">{{ this_bill.weight }}</td>
+                    <td class="text-right">{{ this_bill.qty }}</td>
+                    <td class="text-right">£{{ this_bill.revenue }}</td>
+                    <td class="text-right">£{{ this_bill.fuel_surcharge }}</td>
+                    <td>{{ this_bill.op_user.username }}</td>
+                    <td>{{ this_bill.op_datetime }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+                <tr></tr>
+            </table>
+            <div class="pagination pagination-lg">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1"><span class="page-first">&laquo; first</span></a>
+                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+<div class="col-lg-12 mt">
+    <div class="row content-panel">
+        <ul class="nav nav-tabs nav-justified">
+            <li {% if page_tab == 1 %}class="active"{% endif %}><a href="{% url 'ocean:ocean_fba' %}"><span>海运散货FBA</span></a></li>
+            <li {% if page_tab == 2 %}class="active"{% endif %}><a href="{% url 'ocean:ocean_cabinet' %}"><span>海运整柜</span></a></li>
+            <li {% if page_tab == 3 %}class="active"{% endif %}><a href="{% url 'ocean:ocean_private' %}"><span>海运散货私人仓</span></a></li>
+        </ul>
+        <br>
+        {% block new_content %}{% endblock %}
+        {% endblock %}
+    </div>
+</div>

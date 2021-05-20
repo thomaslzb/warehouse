@@ -1,0 +1,101 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+    <div class="row mt">
+    <div class="col-lg-12">
+        <div class="form-panel">
+            <h4><i class="fa fa-angle-right"></i>&nbsp;&nbsp;User Profiles Detail</h4>
+            <hr>
+            <div class=" form">
+                <form class="cmxform form-horizontal style-form" id="commentForm" method="post" action="">
+                    {% csrf_token %}
+                    <div class="form-group ">
+                        <label for="email" class="control-label col-lg-1">Email: </label>
+                        <div class="col-lg-3">
+                            <input class=" form-control " id="email" name="email" minlength="2" type="email"
+                                   value="{{ user.email }}" readonly />
+                            {% if user_form.errors %}
+                               <label class="control-label text-danger">{{ user_form.errors.email.0 }}</label>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="username" class="control-label col-lg-1">User Name</label>
+                        <div class="col-lg-2">
+                          <input class=" form-control" id="username" name="username" minlength="4"  type="text"
+                                 value="{{ user.username }}" readonly />
+                            {% if user_form.errors %}
+                               <label class="control-label text-danger">{{ user_form.errors.username.0 }}</label>
+                            {% endif %}
+                        </div>
+                        <div class="col-lg-1" style="float:left; margin-left: 10px">
+                                <a href="{% url 'users:set_user_permission' user.id %}" class="btn btn-info " type="button">Set user permissions</a>
+                        </div>
+                        {% if request.user.id != user.id %}
+                            <div class="col-lg-1" style="float:left; margin-left: 60px">
+                                    <a href="{% url 'users:reset_password' user.id %} " class="btn btn-danger " type="button">Reset User Password</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group ">
+                        <label for="first_name" class="control-label col-lg-1">First Name</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="first_name" name="first_name" value="{{ user.first_name }}" readonly />
+                        </div>
+                        <label for="last_name" class="control-label col-lg-1">Last Name</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="last_name"  name="last_name" value="{{ user.last_name }}" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="telephone" class="control-label col-lg-1">Telephone</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="telephone" name="telephone" value="{{ user.profile.telephone }}" readonly />
+                        </div>
+                        <label for="last_login" class="control-label col-lg-1">Last Login</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="last_login" name="last_login" value="{{ user.last_login }}" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label class="text-info h5 col-lg-2" >
+                        <input type="checkbox" class="control-label" id="booking_system" name="booking_system"
+                               value="1" style="margin-right: 5px"
+                            {% if "BOOKING-SYSTEM" in user.profile.system_menu %}
+                                checked
+                            {% endif %} onclick="return false;">Could access BOOKING-SYSTEM
+                        </label>
+                    </div>
+                    <div class="form-group ">
+                        <label class="text-info h5 col-lg-2" >
+                        <input type="checkbox" class="col-lg-offset-1" id="quote_system" name="quote_system"
+                               value="1"  style="margin-right: 5px" {% if "QUOTE-SYSTEM" in user.profile.system_menu %}checked{% endif %} onclick="return false;">
+                            Could access QUOTE-SYSTEM
+                        </label>
+                        {% if "QUOTE-SYSTEM" in user.profile.system_menu %}
+                            <label class="text-info h5 col-lg-4" >
+                                <a href="{% url 'quote:profit-rate' user.id %}" class="" style="float:left; text-decoration: underline; margin-left: 0px">
+                                    Setup User Profit&nbsp;Rating
+                                </a>
+                                <a href="{% url 'quote:profit-detail' user.id %}" class="" style="float:left;  text-decoration: underline;margin-left: 20px">
+                                    Setup User Profit for each country detail Profit
+                                </a>
+                            </label>
+                        {% endif %}
+
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <div class="col-lg-offset-1">
+                            <a href="{% url 'quote:user-list' %} " class="btn btn-primary col-lg-1" type="button">Back User List</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /form-panel -->
+    </div>
+    </div>
+    </div>
+{% endblock %}

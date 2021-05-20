@@ -1,0 +1,109 @@
+{% extends 'base-head.html' %}
+{% load static %}
+
+{% if request.user.is_authenticated %}
+    {% block aside-menu %}
+        <!--sidebar start-->
+        <aside>
+            <div id="sidebar" class="nav-collapse ">
+                  <!-- sidebar menu start-->
+                  <ul class="sidebar-menu" id="nav-accordion">
+                      <p class="centered"><a href="{% url 'users:my_profile_update'  request.user.id %}">
+                          <img src="{% static 'new/img/friends/fr-02.jpg' %}" class="img-circle" width="80"></a></p>
+                      <h5 class="centered"><a href="{% url 'users:my_profile_update'  request.user.id %}">{{ request.user }}</a></h5>
+                      <li class="mt">
+                          <a {% if menu_active == 'MY_PROFILE' %}class="active"{% endif %}  href="{% url 'users:my_profile'  request.user.id %}">
+                              <i class="fa fa-user-md"></i>
+                              <span>My Profile</span>
+                          </a>
+                      </li>
+                      {% if menu_grant.0 != '0' %}
+                          <li class="sub-menu">
+                              <a {% if menu_active == 'EXPRESS' %}class="active"{% endif %} href="{% url 'quote:inquire-uk' %}">
+                                  <i class="fa fa-gbp"></i>
+                                  <span>Quote Express Price</span>
+                              </a>
+                          </li>
+                      {% endif %}
+                      {% if menu_grant.1 != '0' %}
+                          <li class="sub-menu">
+                              <a {% if menu_active == 'MY_SKU' %}class="active"{% endif %}  href="{% url 'sku:sku-list' %}">
+                                  <i class="fa fa-file-text"></i>
+                                  <span>Customer's SKU List</span>
+                              </a>
+                          </li>
+                      {% endif %}
+                      {% if menu_grant.2 != '0' %}
+                          <li class="sub-menu">
+                              <a {% if menu_active == 'AIR' %}class="active"{% endif %} href="{% url 'air_freight:air_quote'  %}">
+                                  <i class="fa fa-plane"></i>
+                                  <span>Air Freight Price</span>
+                              </a>
+                          </li>
+                      {% endif %}
+                      {% if menu_grant.3 != '0' %}
+                          <li class="sub-menu">
+                              <a {% if menu_active == 'LCL' %}class="active"{% endif %} href="{% url 'lcl:lcl_calculation'%}">
+                                  <i class="fa fa-truck"></i>
+                                  <span>LCL Price Calculator</span>
+                              </a>
+                          </li>
+                      {% endif %}
+                      {% if menu_grant.4 != '0' %}
+                          <li class="sub-menu">
+                              <a {% if menu_active == 'USERS' %}class="active"{% endif %}  href="{% url 'quote:user-list' %}">
+                                  <i class="fa fa-wrench"></i>
+                                  <span>User Maintenance</span>
+                              </a>
+                          </li>
+                      {% endif %}
+                      {% if menu_grant.5 != '0' %}
+                          <li class="sub-menu">
+                              <a {% if menu_active == 'XIAOMI' %}class="active"{% endif %}  href="{% url 'xiaomi:mi_bill_list_main' %}">
+                                  <i class="fa fa-wrench"></i>
+                                  <span>XiaoMi Bill</span>
+                              </a>
+                          </li>
+                      {% endif %}
+                      {% if menu_grant.6 != '0' %}
+                          <li class="sub-menu">
+                              <a {% if menu_active == 'LCL_DATA' %}class="active"{% endif %}  href="{% url 'lcl:lcl_fuel_surcharge_list' %}">
+                                  <i class="fa fa-wrench"></i>
+                                  <span>LCL Data Maintenance</span>
+                              </a>
+                          </li>
+                      {% endif %}
+                      {% if menu_grant.7 != '0' %}
+                          <li class="sub-menu">
+                              <a {% if menu_active == 'FLC_QUOTE' %}class="active"{% endif %}  href="{% url 'flc:flc_quote' %}">
+                                  <i class="fa fa-wrench"></i>
+                                  <span>FLC Quote</span>
+                              </a>
+                          </li>
+                      {% endif %}
+                      {% if menu_grant.8 != '0' %}
+                          <li class="sub-menu">
+                              <a {% if menu_active == 'FLC_DATA' %}class="active"{% endif %}  href="{% url 'flc:flc_company_list' %}">
+                                  <i class="fa fa-wrench"></i>
+                                  <span>FLC Data Maintenance</span>
+                              </a>
+                          </li>
+                      {% endif %}
+                      {% if menu_grant.9 != '0' %}
+                          <li class="sub-menu">
+                              <a {% if menu_active == 'OCEAN' %}class="active"{% endif %}  href="{% url 'ocean:ocean_fba' %}">
+                                  <i class="fa fa-wrench"></i>
+                                  <span>海运费用查询</span>
+                              </a>
+                          </li>
+                      {% endif %}
+                  </ul>
+                  <!-- sidebar menu end-->
+            </div>
+        </aside>
+        <!--sidebar end-->
+    {% endblock %}
+    {% block content %}
+    {% endblock %}
+
+{% endif %}

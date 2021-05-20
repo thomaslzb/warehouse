@@ -1,0 +1,102 @@
+{% extends 'base-menu.html' %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid">
+    <div class="row mt">
+    <div class="col-lg-12">
+        <div class="form-panel">
+            <h4><i class="fa fa-angle-right"></i>&nbsp;&nbsp;Add New User</h4>
+            <hr>
+            <div class=" form">
+                <form class="cmxform form-horizontal style-form" id="commentForm" method="post" action="{% url 'users:add_quote_user' %}">
+                    {% csrf_token %}
+                    <div class="form-group ">
+                        <label for="email" class="control-label col-lg-1">Email: </label>
+                        <div class="col-lg-3">
+                            <input class=" form-control " id="email" name="email" type="email"
+                                   value="{{ user_form.data.email }}"  placeholder="Email" required />
+                        </div>
+                        {% if user_form.errors %}
+                           <label class="control-label text-danger">{{ user_form.errors.email.0 }}</label>
+                        {% endif %}
+                    </div>
+                    <div class="form-group ">
+                        <label for="username" class="control-label col-lg-1">User Name</label>
+                        <div class="col-lg-2">
+                          <input class=" form-control" id="username" name="username" minlength="4" maxlength="20" type="text"
+                                 value="{{ user_form.data.username }}"  placeholder="Username" required />
+                        </div>
+                        {% if user_form.errors %}
+                           <label class="control-label text-danger">{{ user_form.errors.username.0 }}</label>
+                        {% endif %}
+                    </div>
+                    <div class="form-group ">
+                        <label for="first_name" class="control-label col-lg-1">First Name</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="first_name" name="first_name"
+                                   value="{{ user_form.data.first_name }}"  placeholder="First name" />
+                        </div>
+                        <label for="last_name" class="control-label col-lg-1">Last Name</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="last_name"  name="last_name"
+                                   value="{{ user_form.data.last_name }}"  placeholder="Last name" />
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="telephone" class="control-label col-lg-1">Telephone</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="telephone" name="telephone"
+                                   value="{{ user_form.data.telephone }}"  placeholder="Telephone" />
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="Password" class="control-label col-lg-1">Password</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="password"  name="password" type="password" maxlength="20" minlength="8"
+                                   value="{{ user_form.data.password }}"  placeholder="Password" required/>
+                        </div>
+                        {% if user_form.errors %}
+                           <label class="control-label text-danger">{{ user_form.errors.password.0 }}</label>
+                        {% endif %}
+                    </div>
+                    <div class="form-group ">
+                        <label for="re_password" class="control-label col-lg-1">Repeat Password</label>
+                        <div class="col-lg-2">
+                            <input class="form-control " id="re_password"  name="re_password" type="password"  maxlength="20" minlength="8"
+                                   value="{{ user_form.data.re_password }}"  placeholder="Repeat Password" required/>
+                        </div>
+                        {% if user_form.errors %}
+                           <label class="control-label text-danger">{{ user_form.errors.re_password.0 }}</label>
+                        {% endif %}
+                    </div>
+                    <div class="form-group ">
+                        <label class="col-lg-2" >
+                            <input type="checkbox" class="control-label" id="booking_system" name="booking_system"
+                                   value="1" style="margin-right: 5px">Could access BOOKING-SYSTEM
+                        </label>
+                        <label class="col-lg-2" >
+                            <input type="checkbox" class="control-label" id="quote_system" name="quote_system"
+                                   value="1" style="margin-right: 5px">Could access QUOTE-SYSTEM
+                        </label>
+                            {% if user_form.errors %}
+                                   <label class="control-label text-danger">{{ user_form.errors.booking_system.0 }}</label>
+                            {% endif %}
+                    </div>
+                    <hr>
+                    {% if error %}
+                        <label class="alert alert-danger">Save Failure,  {{ error }}</label>
+                    {% endif %}
+                    <div class="form-group">
+                        <div class="col-lg-offset-1">
+                            <button class="btn btn-theme col-lg-1" type="submit" style="float:left; margin-left: 0px">Save</button>
+                            <a href="{% url 'quote:user-list' %}" class="btn btn-theme04 col-lg-1" type="button" style="float:left; margin-left: 20px">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /form-panel -->
+    </div>
+    </div>
+    </div>
+{% endblock %}
